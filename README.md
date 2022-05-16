@@ -1,7 +1,3 @@
-## Contributing
-
-Please commit all code to the development branch for review. Codes in the main branch are considered finalised and ready for presentation. 
-
 ## Installation
 
 Use npm to install the required dependencies.
@@ -9,6 +5,11 @@ Use npm to install the required dependencies.
 ```bash
 $ npm install
 ```
+
+## Contributing
+
+Please commit all code to the development branch for review. Codes in the main branch are considered finalised and ready for presentation. 
+Please DO NOT commit your `Node Modules` folder into the repo. Add new dependencies into `package.json` and commit it instead.
 
 ## Technologies
 
