@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="card card-body">
+        <h4 style="text-align:center">Create New Badge</h4>
+        <form action="/badge/createbadge" method="post">
+            <div class="row my-4">
+                <div class="col">
+                    <div class="form-group">
+                        <input class="form-control bg-light" id="badgename" name="badgename" placeholder="Badge Name" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control bg-light" id="points" name="points" placeholder="Points Required" />
+                    </div>
+
+                    <div class="form-group">
+                        <div class="card">
+                            <div class="card-body text-left">
+                                <label class="" for="color">Color</label>
+                                <input class="form-control" id="color" type="color" name="color" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {{!-- <div class="form-group"> --}}
+                        {{!-- <div class="card"> --}}
+                            {{!-- <div class="card-body text-left"> --}}
+                                {{!-- <label class="" for="icon">Icon</label> --}}
+                                {{!-- <input class="form-control" id="icon" type="file" name="icon" /> --}}
+                            {{!-- </div> --}}
+                        {{!-- </div> --}}
+                    {{!-- </div> --}}
+
+                </div>
+
+                <div class="col card" style="position: relative;">
+                    <div style="position: absolute; bottom: 0; left: 40%">
+                        <button class="btn btn-primary px-4" type="submit"
+                            style="background-color: #282A35; border-color: #282A35">
+                            Create</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </form>
+</div>
+</div>
