@@ -156,4 +156,27 @@ router.post('/signup/parent-tutor', async function (req, res) {
   }
 });
 
+// Temporary code pulled from idk whose code
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+      // Success redirect URL
+      successRedirect: '/badge/badges',
+      // Failure redirect URL 
+      failureRedirect: '/user/login',
+      /* Setting the failureFlash option to true instructs Passport to flash 
+      an error message using the message given by the strategy's verify callback.
+      When a failure occur passport passes the message object as error */
+      failureFlash: true
+  })(req, res, next);
+});
+
+router.get('/logout',(req,res) => {
+  req.logout(function(err){
+      if(err){
+          return next(err);
+      }
+      res.redirect('/')
+  });
+});
+
 module.exports = router;

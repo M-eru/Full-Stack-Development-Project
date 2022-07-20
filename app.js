@@ -17,6 +17,7 @@ const app = express();
 app.engine(
   "handlebars",
   engine({
+    helpers: helpers,
     handlebars: allowInsecurePrototypeAccess(Handlebars),
     defaultLayout: "main", // Specify default template views/layout/main.handlebar
   })
@@ -68,27 +69,43 @@ const DBConnection = require("./config/DBConnection");
 // Connects to MySQL database
 DBConnection.setUpDB(false); // True to set up database with new tables
 
-// Messaging libraries
+// Messaging library
 const flash = require('connect-flash');
 app.use(flash());
 const flashMessenger = require('flash-messenger');
 app.use(flashMessenger.middleware);
 
+// Passport Config 
+const passport = require('passport');
+const passportConfig = require('./config/passportConfig');
+passportConfig.localStrategy(passport);
+
+// Initilize Passport middleware 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Place to define global variables
 app.use(function (req, res, next) {
   res.locals.messages = req.flash('message');
-  res.locals.errors = req.flash('error');
+	res.locals.errors = req.flash('error');
+	res.locals.user = req.user || null;
   next();
 });
 
 // mainRoute is declared to point to routes/main.js
 const mainRoute = require("./routes/main");
 const tutorRoute = require("./routes/tutor");
+const userRoute = require('./routes/user');
+const badgeRoute = require('./routes/badge');
+const cardRoute = require('./routes/card');
+
 
 // Any URL with the pattern ‘/*’ is directed to routes/main.js
 app.use("/", mainRoute);
 app.use("/tutor", tutorRoute);
 app.use('/user', userRoute);
+app.use('/badge', badgeRoute);
+app.use('/card', cardRoute);
 
 // Creates a port for express server.
 const port = 5000;

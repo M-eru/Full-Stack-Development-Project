@@ -1,0 +1,43 @@
+.logo{
+  width:130px;
+  margin:auto;
+}
+
+/* Search Bar (_leftNavbar)*/
+#mySearch {
+  width: 100%;
+  font-size: 18px;
+  padding: 11px;
+  border: 1px solid #ddd;
+}
+
+/* Search Menu (_leftNavbar) */
+#myMenu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myMenu li a {
+  padding: 12px;
+  text-decoration: none;
+  color: white;
+  display: block
+}
+
+#myMenu li a:hover {
+  background-color: #878999;
+}
+
+/* Check Button (tuitionFee) */
+.check_btn {
+  position: absolute;
+  top: 8%;
+  right: 6%;
+  background-color: rgba(92, 92, 92, .4);
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: .5rem;
+}
