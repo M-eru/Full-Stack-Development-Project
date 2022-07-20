@@ -31,4 +31,48 @@ router.get("/", (req, res) => {
   res.render("index", { title });
 });
 
+router.get('/studentProfile', (req, res) => {
+    res.render('parent/studentProfile')
+});
+
+
+router.get('/studentProgress', (req, res) => {
+    res.render('parent/studentProgress')
+});
+
+
+router.get('/tuitionFee', (req, res) => {
+    Card.findAll({
+        order: [['expiryDate', 'DESC']],
+        raw: true
+    })
+    .then((cards) => {
+        res.render('parent/tuitionFee', { cards });
+    })
+    .catch(err => console.log(err));
+});
+
+
+router.post('/tuitionFee', (req, res) => {
+    var card_id = req.body.tuition_card;
+    let isValid = true;
+    if (!card_id) {
+        flashMessage(res, 'error', 'No payment card selected.');
+        isValid = false;
+    }
+    if (!isValid) {
+        Card.findAll({
+            order: [['expiryDate', 'DESC']],
+            raw: true
+        })
+        .then((cards) => {
+            res.render('parent/tuitionFee', { cards });
+        })
+        .catch(err => console.log(err));
+        return;
+    }
+    flashMessage(res, 'success', 'Payment complete!');
+    res.render('parent/tuitionFee');
+});
+
 module.exports = router;

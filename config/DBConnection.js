@@ -5,6 +5,8 @@ const QnType = require("../models/QnType");
 const Tutorial = require("../models/Tutorial");
 const User = require('../models/User');
 const Badge = require('../models/Badge');
+const Student = require('../models/Student');
+const Card = require('../models/Card');
 
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
@@ -25,6 +27,11 @@ const setUpDB = (drop) => {
 
       User.hasMany(Badge);
       Badge.belongsTo(User);
+
+      Student.hasMany(Card);
+      Card.belongsTo(Student);
+      // Student is just for my code to work. Will be changed to user accordingly.
+      // Student = User
 
       mySQLDB.sync({
         force: drop,

@@ -1,0 +1,77 @@
+<div class="container-fluid h-100">
+<div class="row h-100">
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-11 mt-4 ml-3" style="text-align: justify;">
+            <!-- Title -->
+            <div class="card_title" style="margin-left: 130px;">
+                <h1>Payment Cards</h1>
+                <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
+            </div>
+            <!-- Payment Card Information -->
+            <div class="col-3 float-right pt-4" style="height: 85%; background-color: #C4C4C4;">
+                <h5><u>Payment Card(s) Information</u></h5>
+                <br>
+                <p>Up to <b>3 payment cards</b> can be saved, whether Credit or Debit.</p>
+                <br>
+                <p>You may choose which card to use to pay for your child(ren)'s tuition fee.</p>
+            </div>
+            <!-- Body -->
+            <div class="container">
+                <!-- Display each card details -->
+                {{#if cards}}
+                <div class="card card-body">
+                    {{#each cards}}
+                    <div class="card mb-3 w-100 mx-auto" style="border-color: #C4C4C4;">
+                        <div class="card-header" style="background-color: #9BD6EB;">
+                            <h5 class="card-title">{{cardName}}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <p class="font-italic">Card Number</p>
+                                    <p class="text-info">{{cardNo}}</p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="font-italic">Card</p>
+                                    <p class="text-info">{{debitCredit}}</p>
+                                </div>
+                                <div class="col-4">
+                                    <p class="font-italic">Expiry Date</p>
+                                    <p class="text-info">{{formatDate expiryDate 'MMM YYYY'}}</p>
+                                </div>
+                                <div class="col-3">
+                                    <p>
+                                        <a href="/card/editCard/{{id}}" class="card-link mb-2">
+                                            <i class="fas fa-pencil-alt"></i> Edit
+                                        </a>
+                                    </p>
+                                    <p>
+                                        <a href="/card/deleteCard/{{id}}" class="card-link" data-toggle="confirmation"
+                                            data-title="Confirm delete?" style="color: red;">
+                                            <i class="far fa-trash-alt"></i> Delete
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                <!-- No cards saved -->
+                {{else}}
+                <h3>No payment card saved</h3>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+	$('[data-toggle=confirmation]').confirmation({
+		rootSelector: '[data-toggle=confirmation]',
+	});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
