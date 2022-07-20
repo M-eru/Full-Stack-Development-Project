@@ -1,0 +1,197 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #96D4D4;">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none text-dark" href="/tutor/content"><i
+                        class='fas fa-angle-left'></i></a>
+            </li>
+        </ul>
+    </div>
+    <div class="mx-auto order-0">
+        {{#with tutorial}}
+        <a class="navbar-brand mx-auto" href="#">{{tutName}}</a>
+        {{/with}}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".creationNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 creationNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button type="button" class="btn btn-dark me-3" data-toggle="modal" data-target="#qnModal">
+                    New Question +
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
+    {{#if mcqqn}}
+    {{#each mcqqn}}
+    <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+        <div class="row">
+            <div class="col d-flex align-items-center mt-2">
+                <h5>Question {{id}}</h5>
+            </div>
+            <div class="col-6"></div>
+            <div class="col d-flex justify-content-end">
+                <button type="button" class="btn btn-info mr-2"><a class="text-decoration-none text-light"
+                        href="/tutor/editMcq/{{id}}"><i class="fas fa-pencil-alt"></i></a></button>
+                <button type="button" class="btn btn-danger btn-sm"><a class="text-decoration-none text-light"
+                        href="/tutor/deleteMcq/{{id}}"><i class="material-icons">delete</i></a></button>
+            </div>
+        </div>
+        <hr class="my-3 border border-dark" />
+        <p class="lead">{{question}}</p>
+        <fieldset class="form-group row">
+            {{#with qnOption}}
+            <div class="col-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="options" id="option1" value="1">
+                    <label class="form-check-label" for="option1">
+                        {{ans1}}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="options" id="option2" value="2">
+                    <label class="form-check-label" for="option2">
+                        {{ans2}}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="options" id="option3" value="3">
+                    <label class="form-check-label" for="option3">
+                        {{ans3}}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="options" id="option4" value="4">
+                    <label class="form-check-label" for="option4">
+                        {{ans4}}
+                    </label>
+                </div>
+            </div>
+            {{/with}}
+        </fieldset>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+        <h5 class="mt-1">No multiple choice questions added.</h5>
+    </div>
+    {{/if}}
+
+    {{#if oeqn}}
+    {{#each oeqn}}
+    <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+        <div class="row">
+            <div class="col d-flex align-items-center mt-2">
+                <h5>Question {{id}}</h5>
+            </div>
+            <div class="col-6"></div>
+            <div class="col d-flex justify-content-end">
+                <button type="button" class="btn btn-info mr-2"><a class="text-decoration-none text-light"
+                        href="/tutor/editOe/{{id}}"><i class="fas fa-pencil-alt"></i></a></button>
+                <button type="button" class="btn btn-danger btn-sm"><a class="text-decoration-none text-light"
+                        href="/tutor/deleteOe/{{id}}"><i class="material-icons">delete</i></a></button>
+            </div>
+        </div>
+        <hr class="my-3 border border-dark" />
+        <p class="lead">{{question}}</p>
+        <fieldset class="form-group row">
+            <div class="col-10">
+                <label for="ans" class="col-form-label h4">Answer:</label>
+                <textarea type="text" class="form-control" id="ans" name="ans">{{correctAns}}</textarea>
+            </div>
+        </fieldset>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+        <h5 class="mt-1">No open ended questions added.</h5>
+    </div>
+    {{/if}}
+
+    <div class="d-flex justify-content-end submit">
+        <button type="submit" class="btn btn-outline-light mb-2">Save</button>
+    </div>
+</div>
+
+<div class="modal fade" id="qnModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qnModalLabel">New Question</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form action="" method="post" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="qnType" class="col-form-label">Question Type</label>
+                        <select id="qnType" name="qnType" class="custom-select" required>
+                            <option selected disabled value="">Choose...</option>
+                            {{#if qnType}}
+                            {{#each qnType}}
+                            <option value="{{qnType}}">{{qnType}}</option>
+                            {{/each}}
+                            {{/if}}
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a valid question type.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                        data-target="#warningModal">Exit</button>
+                    <button type="submit" class="btn btn-outline-info">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="warningModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to exit?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#qnModal"
+                    data-dismiss="modal">Exit</button>
+                <button type="button" class="btn btn-outline-success" data-dismiss="modal">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Bootstrap form validation --}}
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
