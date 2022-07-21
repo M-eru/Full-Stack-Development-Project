@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const flashMessage = require('../helpers/messenger');
+const Card = require("../models/Card");
 
 router.get('/', (req, res) => {
 	const title = 'Video Jotter';

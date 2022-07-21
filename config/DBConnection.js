@@ -7,7 +7,6 @@ const ParentTutor = require('../models/ParentTutor');
 const Student = require('../models/Student');
 const User = require('../models/User');
 const Badge = require('../models/Badge');
-const Student = require('../models/Student');
 const Card = require('../models/Card');
 
 // If drop is true, all existing tables are dropped and recreated
@@ -24,7 +23,7 @@ const setUpDB = (drop) => {
       Tutorial.hasMany(Question);
       Question.belongsTo(Tutorial);
 
-      Question.hasOne(QnOption);
+      Question.hasOne(QnOption, { onDelete: "CASCADE" });
       QnOption.belongsTo(Question);
 
       // Parent and tutor accounts are grouped in the same table.

@@ -11,13 +11,13 @@ router.get('/badges', ensureAuthenticated, (req, res) => {
         raw: true
     })
         .then((badges) => {
-            res.render('tutor/badges', { badges });
+            res.render('tutor_badges/badges', { badges });
         })
         .catch(err => console.log(err));
 });
 
 router.get('/createbadge', ensureAuthenticated, (req, res) => {
-    res.render('tutor/createbadge');
+    res.render('tutor_badges/createbadge');
 });
 
 router.post('/createbadge', ensureAuthenticated, (req, res) => {
