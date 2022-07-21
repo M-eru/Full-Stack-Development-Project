@@ -173,11 +173,11 @@ router.post("/signup/parent-tutor", async function (req, res) {
 
 // Temporary code pulled from idk whose code
 router.post("/login/student", (req, res, next) => {
-  passport.authenticate("local", {
+  passport.authenticate("student", {
     // Success redirect URL
     successRedirect: "/badge/badges",
     // Failure redirect URL
-    failureRedirect: "/tutor/qns",
+    failureRedirect: "/user/login/student",
     /* Setting the failureFlash option to true instructs Passport to flash 
       an error message using the message given by the strategy's verify callback.
       When a failure occur passport passes the message object as error */

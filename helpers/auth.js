@@ -2,6 +2,7 @@ const ensureAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/user/login');
+    flashMessage(res, "error", "Authentication failed. Redirected to homepage.");
+    res.redirect('/');
 };
 module.exports = ensureAuthenticated;
