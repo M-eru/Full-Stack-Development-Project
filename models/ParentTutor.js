@@ -3,7 +3,7 @@ const db = require('../config/DBConfig');
 const bcrypt = require('bcryptjs');
 
 // Create users table in MySQL Database
-const ParentTutor = db.define('parent',
+const ParentTutor = db.define('parentTutor',
 {
   name: { type: Sequelize.STRING },
   email: { type: Sequelize.STRING },

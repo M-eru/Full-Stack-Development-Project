@@ -2,21 +2,60 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const ParentTutor = require("../models/ParentTutor");
 const Student = require("../models/Student");
+
 function localStrategy(passport) {
+
+  // Strategy for student accounts
   passport.use(
     "student",
     new LocalStrategy({ usernameField: "admno" }, (admno, password, done) => {
       Student.findOne({ where: { admno: admno } }).then((user) => {
+        console.log('Passport: Searched for user (student)');
         console.log(JSON.stringify(user, null, 2));
+        if (password.length < 6) {
+          console.log('Password is less than 6 characters, failed authentication');
+          return done(null, false, { message: "Password must be at least 6 characters"});
+        }
         if (!user) {
-          console.log('No user found')
+          console.log('No user found, failed authentication');
           return done(null, false, { message: "Incorrect username or password" });
         }
         // Match password
         isMatch = bcrypt.compareSync(password, user.password);
         if (!isMatch) {
+          console.log('Password incorrect, failed authentication')
           return done(null, false, { message: "Incorrect username or password" });
         }
+        // Authenticated
+        // flashMessage(res, "success", admno + " logged in successfully");
+        return done(null, user);
+      });
+    })
+  );
+
+  // Strategy for parent/tutor accounts
+  passport.use(
+    "parent-tutor",
+    new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
+      ParentTutor.findOne({ where: { email: email } }).then((user) => {
+        console.log('Passport: Searched for user (parent-tutor)');
+        console.log(JSON.stringify(user, null, 2));
+        if (password.length < 6) {
+          console.log('Password is less than 6 characters, failed authentication');
+          return done(null, false, { message: "Password must be at least 6 characters"});
+        }
+        if (!user) {
+          console.log('No user found, failed authentication')
+          return done(null, false, { message: "Incorrect username or password" });
+        }
+        // Match password
+        isMatch = bcrypt.compareSync(password, user.password);
+        if (!isMatch) {
+          console.log('Password incorrect, failed authentication')
+          return done(null, false, { message: "Incorrect username or password" });
+        }
+        // Authenticated
+        // flashMessage(res, "success", email + " logged in successfully");
         return done(null, user);
       });
     })
@@ -31,7 +70,7 @@ function localStrategy(passport) {
   // put into req.user
   passport.deserializeUser((user, done) => {
     if (user.role == 'student') {
-      console.log('User role is student; searching Student table')
+      console.log('Passport: Confirmed user role as student')
       Student.findByPk(user.id)
       .then((user) => {
         done(null, user);
@@ -43,8 +82,8 @@ function localStrategy(passport) {
       });
     }
 
-    else if (user.role in ('parent', 'tutor')) {
-      console.log('User role is parent/tutor; searching ParentTutor table')
+    else if (user.role == 'parent' || user.role == 'tutor') {
+      console.log('Passport: Confirmed user role as', user.role)
       ParentTutor.findByPk(user.id)
       .then((user) => {
         done(null, user);

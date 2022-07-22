@@ -6,51 +6,20 @@ const ParentTutor = require("../models/ParentTutor");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 
+router.get("/signup/student", (req, res) => {
+  res.render("user/signup_std");
+});
+
+router.get("/signup/parent-tutor", (req, res) => {
+  res.render("user/signup_pt");
+});
+
 router.get("/login/student", (req, res) => {
   res.render("user/login_std");
 });
 
 router.get("/login/parent-tutor", (req, res) => {
   res.render("user/login_pt");
-});
-
-router.post("/login/parent-tutor", async function (req, res) {
-  let { email, password } = req.body;
-
-  // Validate password length (>=6)
-  if (password.length < 6) {
-    flashMessage(res, "error", "Password must be at least 6 characters");
-    res.render("user/login_pt", { email });
-  } else {
-    try {
-      // If all is well, checks if user exists
-      let user = await ParentTutor.findOne({ where: { email: email } });
-      // console.log(JSON.stringify(user, null, 2));
-      if (user == null) {
-        // If user is not found, reject login attempt
-        flashMessage(res, "error", "Incorrect username or password");
-        res.render("user/login_pt", { email });
-      } else {
-        // Compare hashed password
-        const match = await bcrypt.compare(password, user.password);
-        console.log("Password match; allow login");
-        if (match == true) {
-          // If match, allow login
-          flashMessage(res, "success", "Logged in successfully");
-          res.render("index");
-        } else {
-          flashMessage(res, "error", "Incorrect username or password");
-          res.render("user/login_pt", { email });
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-});
-
-router.get("/signup/student", (req, res) => {
-  res.render("user/signup_std");
 });
 
 router.post("/signup/student", async function (req, res) {
@@ -108,10 +77,6 @@ router.post("/signup/student", async function (req, res) {
   } catch (err) {
     console.log(err);
   }
-});
-
-router.get("/signup/parent-tutor", (req, res) => {
-  res.render("user/signup_pt");
 });
 
 router.post("/signup/parent-tutor", async function (req, res) {
@@ -178,9 +143,18 @@ router.post("/login/student", (req, res, next) => {
     successRedirect: "/badge/badges",
     // Failure redirect URL
     failureRedirect: "/user/login/student",
-    /* Setting the failureFlash option to true instructs Passport to flash 
-      an error message using the message given by the strategy's verify callback.
-      When a failure occur passport passes the message object as error */
+    // boolean to generate a flash message
+    failureFlash: true,
+  })(req, res, next);
+});
+
+router.post("/login/parent-tutor", (req, res, next) => {
+  passport.authenticate("parent-tutor", {
+    // Success redirect URL
+    successRedirect: "/",
+    // Failure redirect URL
+    failureRedirect: "/user/login/parent-tutor",
+    // boolean to generate a flash message
     failureFlash: true,
   })(req, res, next);
 });

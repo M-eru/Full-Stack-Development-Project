@@ -1,38 +1,44 @@
-<div class="row">
-  <div class="col-sm-3" style="background-color: #96D4D4;">
-    <!-- Left section header -->
-    <a href="#"><img src="/img/logo.png" class="mx-auto d-block mt-5" style="width:40%; height: auto;" alt=""></a>
-    <p class="text-center">Tuition Academy</p>
-    <p class="text-center">Simplify your Learning</p>
-  </div>
-  <div class="col-sm-9" style="background-color: #282A35;">
-    <!-- Top-Right Buttons -->
-    <div class="row justify-content-end my-4">
-      <div class="btn-group">
-        <a class="btn disabled" style="background-color: #96D4D4; opacity: 1;" href="" role="button">Login</a>
-        <a class="btn btn-light mr-4" href="/user/signup/student" role="button">Sign Up</a>
+{{!-- Partials --}}
+{{!-- {{> _navbar }} --}}
+
+<div class="container">
+  {{> _flashmsg }}
+  <div class="row">
+    <div class="col-sm-3" style="background-color: #96D4D4;">
+      <!-- Left section header -->
+      <a href="#"><img src="/img/logo.png" class="mx-auto d-block mt-5" style="width:40%; height: auto;" alt=""></a>
+      <p class="text-center">Tuition Academy</p>
+      <p class="text-center">Simplify your Learning</p>
+    </div>
+    <div class="col-sm-9" style="background-color: #282A35;">
+      <!-- Top-Right Buttons -->
+      <div class="row justify-content-end my-4">
+        <div class="btn-group">
+          <a class="btn disabled" style="background-color: #96D4D4; opacity: 1;" href="" role="button">Login</a>
+          <a class="btn btn-light mr-4" href="/user/signup/student" role="button">Sign Up</a>
+        </div>
       </div>
-    </div>
 
-    <!-- Form Header -->
-    <div class="row ml-5 my-3">
-      <p class="lead" style="color: white; font-size: 2.5rem;">Login</p>
-    </div>
+      <!-- Form Header -->
+      <div class="row ml-5 my-3">
+        <p class="lead" style="color: white; font-size: 2.5rem;">Login</p>
+      </div>
 
-    <!-- Form -->
-    <div class="row ml-5">
-      <form class="mb-5" method="post" action="">
-        <div>
-          <input type="text" name="admno" class="form-control my-4" style="width: 300px;" placeholder="Admin Number" required>
-        </div>
-        <div>
-          <input type="password" name="password" class="form-control my-4" style="width: 300px;" placeholder="Password" required>
-        </div>
-        <div class="row mb-5" style="margin-left: 0;">
-          <a style="color: white; text-decoration: underline;" href="/user/login/parent-tutor">Login as a Parent/Tutor</a>
-        </div>
-        <button type="submit" class="btn btn-light mb-5">Confirm</button>
-      </form>
+      <!-- Form -->
+      <div class="row ml-5">
+        <form class="mb-5" method="post" action="">
+          <div>
+            <input type="text" name="admno" class="form-control my-4" style="width: 300px;" placeholder="Admin Number" required>
+          </div>
+          <div>
+            <input type="password" name="password" class="form-control my-4" style="width: 300px;" placeholder="Password" required>
+          </div>
+          <div class="row mb-5" style="margin-left: 0;">
+            <a style="color: white; text-decoration: underline;" href="/user/login/parent-tutor">Login as a Parent/Tutor</a>
+          </div>
+          <button type="submit" class="btn btn-light mb-5">Confirm</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
