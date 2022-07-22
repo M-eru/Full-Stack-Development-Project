@@ -55,9 +55,7 @@ router.get("/editOe/:id", (req, res) => {
 // Delete Questions
 router.get("/deleteMcq/:id", async function (req, res) {
   let result = await Question.destroy({ where: { id: req.params.id } });
-  let option = await QnOption.destroy({ where: { qnId: req.params.id } });
   console.log(result + " question deleted.");
-  console.log(option + " question options deleted.")
   res.redirect("/tutor/qns");
 });
 
