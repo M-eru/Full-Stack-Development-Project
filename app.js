@@ -96,6 +96,7 @@ app.use(function (req, res, next) {
 // mainRoute is declared to point to routes/main.js
 const mainRoute = require("./routes/main");
 const tutorRoute = require("./routes/tutor");
+const studentRoute = require("./routes/student");
 const userRoute = require("./routes/user");
 const badgeRoute = require("./routes/badge");
 const cardRoute = require("./routes/card");
@@ -103,6 +104,7 @@ const cardRoute = require("./routes/card");
 // Any URL with the pattern ‘/*’ is directed to routes/main.js
 app.use("/", mainRoute);
 app.use("/tutor", tutorRoute);
+app.use("/student", studentRoute);
 app.use("/user", userRoute);
 app.use("/badge", badgeRoute);
 app.use("/card", cardRoute);

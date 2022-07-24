@@ -1,59 +1,54 @@
 {{> _tutorNavBar}}
 <div class="container">
-    <ul class="nav nav-tabs mt-5" id="Tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active text-decoration-none" id="s1-tab" data-toggle="tab" href="#s1"
-                role="tab">Secondary
-                1</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link text-decoration-none" id="s2-tab" data-toggle="tab" href="#s2" role="tab">Secondary 2</a>
-        </li>
-    </ul>
-    <div class="tab-content" id="TabContent">
-        <div class="tab-pane fade show active" id="s1" role="tabpanel">
-            <div class="container p-4 rounded-lg" style="background-color: #96D4D4;">
-                <div class="container">
-                    <div class="p-4 bg-light text-dark rounded-lg text-center">
-                        <h1 class="display-4">Content</h1>
-                        <button type="button" class="btn btn-outline-dark me-3" data-toggle="modal"
-                            data-target="#qnModal">
-                            New +
-                        </button>
-                    </div>
-                </div>
-                <div class="container mt-4">
-                    <div class="p-4 bg-light text-dark rounded-lg text-center">
-                        <h4>Tutorial 1: Algebra</h1>
-                            <a class="btn btn-outline-dark mx-3 mt-3 mb-2" href="#" target="_blank">View ▸</a>
-                    </div>
-                </div>
-                <div class="container mt-4">
-                    <div class="p-4 bg-light text-dark rounded-lg text-center">
-                        <h4>Tutorial 2: Prime Numbers</h1>
-                            <a class="btn btn-outline-dark mx-3 mt-3 mb-2" href="#" target="_blank">View ▸</a>
-                    </div>
-                </div>
-                <nav class="mt-5 d-flex justify-content-center align-items-center">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                <span>&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="content">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                <span>&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+    <div class="container mt-5 p-4 rounded-lg" style="background-color: #96D4D4;">
+        <div class="container">
+            {{> _flashmsg}}
+        </div>
+        <div class="container">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h1 class="display-4">Content</h1>
+                <button type="button" class="btn btn-outline-dark me-3" data-toggle="modal" data-target="#qnModal">
+                    New +
+                </button>
             </div>
         </div>
-        <div class="tab-pane fade" id="s2" role="tabpanel">...</div>
+        {{#if tutorials}}
+        {{#each tutorials}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>{{tutName}}</h4>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/tutor/qns/{{id}}">Edit</a>
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/tutor/tutorials/{{id}}" target="_blank">View</a>
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/tutor/deleteTut/{{id}}">Delete</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>No tutorials added!</h4>
+            </div>
+        </div>
+        {{/if}}
+        <nav class="mt-5 d-flex justify-content-center align-items-center">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="content">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 

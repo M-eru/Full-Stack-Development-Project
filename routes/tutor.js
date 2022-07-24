@@ -4,10 +4,14 @@ const Question = require("../models/Question");
 const QnOption = require("../models/QnOption");
 const QnType = require("../models/QnType");
 const Tutorial = require("../models/Tutorial");
+const flashMessage = require("../helpers/messenger");
+const { success } = require("flash-messenger/Alert");
 
 // Content Pages
 router.get("/content", (req, res) => {
-  res.render("tutor/content");
+  Tutorial.findAll().then((tutorials) => {
+    res.render("tutor/content", { tutorials: tutorials });
+  });
 });
 
 router.get("/qns", (req, res) => {
@@ -26,6 +30,47 @@ router.get("/qns", (req, res) => {
       tutorial: data[3],
     });
   });
+});
+
+router.get("/qns/:id", (req, res) => {
+  Promise.all([
+    Question.findAll(
+      { include: { model: QnOption, required: true } },
+      { where: { tutorialId: req.params.id } }
+    ),
+    Question.findAll({ where: { tutorialId: req.params.id, qnTypeId: 2 } }),
+    QnType.findAll(),
+    Tutorial.findByPk(req.params.id),
+  ]).then((data) => {
+    // console.log(JSON.stringify(data, null, 2));
+    res.render("tutor/qns", {
+      mcqqn: data[0],
+      oeqn: data[1],
+      qnType: data[2],
+      tutorial: data[3],
+    });
+  });
+});
+
+router.get("/tutorials/:id", (req, res) => {
+  Promise.all([
+    Question.findAll(
+      { include: { model: QnOption, required: true } },
+      { where: { tutorialId: req.params.id } }
+    ),
+    Question.findAll({ where: { tutorialId: req.params.id, qnTypeId: 2 } }),
+    Tutorial.findByPk(req.params.id),
+  ]).then((data) => {
+    res.render("tutor/preview", {
+      mcqqn: data[0],
+      oeqn: data[1],
+      tutorial: data[2],
+    });
+  });
+});
+
+router.get("/preview", (req, res) => {
+  res.render("tutor/preview");
 });
 
 // Question Forms
@@ -65,6 +110,12 @@ router.get("/deleteOe/:id", async function (req, res) {
   res.redirect("/tutor/qns");
 });
 
+router.get("/deleteTut/:id", async function (req, res) {
+  let result = await Tutorial.destroy({ where: { id: req.params.id } });
+  console.log(result + " tutorial deleted.");
+  res.redirect("/tutor/content");
+});
+
 // Posts
 router.post("/content", (req, res) => {
   let ssn = req.session;
@@ -75,13 +126,14 @@ router.post("/content", (req, res) => {
     tutName,
   })
     .then((tut) => {
+      ssn.tutId = tut.id;
       console.log(tut.toJSON());
       res.redirect("/tutor/qns");
     })
     .catch((err) => console.log(err));
 });
 
-router.post("/qns", (req, res) => {
+router.post("/qnSubmit", (req, res) => {
   let qnType = req.body.qnType;
   if (qnType == "Multiple Choice") {
     res.redirect("/tutor/mcq");
@@ -90,7 +142,13 @@ router.post("/qns", (req, res) => {
   }
 });
 
+router.post("/tutSubmit", (req, res) => {
+  flashMessage(res, "success", "Tutorial has been updated");
+  res.redirect("/tutor/content");
+});
+
 router.post("/mcq", (req, res) => {
+  ssn = req.session;
   let question = req.body.qn;
   let ans1 = req.body.ans1;
   let ans2 = req.body.ans2;
@@ -98,11 +156,13 @@ router.post("/mcq", (req, res) => {
   let ans4 = req.body.ans4;
   let correctAns = req.body.correctAns;
   let qnTypeId = 1;
+  let tutorialId = ssn.tutId;
 
   Question.create({
     question,
     correctAns,
     qnTypeId,
+    tutorialId,
   })
     .then((question) => {
       console.log(question.toJSON());
@@ -116,6 +176,7 @@ router.post("/mcq", (req, res) => {
       })
         .then((options) => {
           console.log(options.toJSON());
+          flashMessage(res, "success", "Multiple choice question created.");
           res.redirect("/tutor/qns");
         })
         .catch((err) => console.log(err));
@@ -124,17 +185,21 @@ router.post("/mcq", (req, res) => {
 });
 
 router.post("/oe", (req, res) => {
+  ssn = req.session;
   let question = req.body.qn;
   let correctAns = req.body.correctAns;
   let qnTypeId = 2;
+  let tutorialId = ssn.tutId;
 
   Question.create({
     question,
     correctAns,
     qnTypeId,
+    tutorialId,
   })
     .then((question) => {
       console.log(question.toJSON());
+      flashMessage(res, "success", "Open ended question created.");
       res.redirect("/tutor/qns");
     })
     .catch((err) => console.log(err));
@@ -168,6 +233,7 @@ router.post("/editMcq/:id", (req, res) => {
       )
         .then((options) => {
           console.log(options[0] + " question options updated.");
+          flashMessage(res, "success", "Multiple choice question updated.");
           res.redirect("/tutor/qns");
         })
         .catch((err) => console.log(err));
@@ -188,6 +254,7 @@ router.post("/editOe/:id", (req, res) => {
   )
     .then((question) => {
       console.log(question[0] + " question updated.");
+      flashMessage(res, "success", "Open ended question updated.");
       res.redirect("/tutor/qns");
     })
     .catch((err) => console.log(err));

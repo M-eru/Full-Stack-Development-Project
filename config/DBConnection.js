@@ -3,11 +3,11 @@ const Question = require("../models/Question");
 const QnOption = require("../models/QnOption");
 const QnType = require("../models/QnType");
 const Tutorial = require("../models/Tutorial");
-const ParentTutor = require('../models/ParentTutor');
-const Student = require('../models/Student');
-const User = require('../models/User');
-const Badge = require('../models/Badge');
-const Card = require('../models/Card');
+const ParentTutor = require("../models/ParentTutor");
+const Student = require("../models/Student");
+const User = require("../models/User");
+const Badge = require("../models/Badge");
+const Card = require("../models/Card");
 
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
@@ -20,7 +20,7 @@ const setUpDB = (drop) => {
       QnType.hasMany(Question);
       Question.belongsTo(QnType);
 
-      Tutorial.hasMany(Question);
+      Tutorial.hasMany(Question, { onDelete: "CASCADE" });
       Question.belongsTo(Tutorial);
 
       Question.hasOne(QnOption, { onDelete: "CASCADE" });
