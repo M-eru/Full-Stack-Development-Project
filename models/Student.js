@@ -8,6 +8,7 @@ const Student = db.define('student',
   admno: { type: Sequelize.STRING(7) },
   password: { type: Sequelize.STRING },
   role: { type: Sequelize.STRING },
+  year: { type: Sequelize.INTEGER(1)},
   status: { type: Sequelize.STRING },
 
   // Temporary columns for accessing parent details
