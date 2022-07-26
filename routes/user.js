@@ -161,7 +161,7 @@ router.post("/login/student", (req, res, next) => {
 router.post("/login/parent-tutor", (req, res, next) => {
   passport.authenticate("parent-tutor", {
     // Success redirect URL
-    successRedirect: "/",
+    successRedirect: "/children/addChildren",
     // Failure redirect URL
     failureRedirect: "/user/login/parent-tutor",
     // boolean to generate a flash message

@@ -100,6 +100,7 @@ const studentRoute = require("./routes/student");
 const userRoute = require("./routes/user");
 const badgeRoute = require("./routes/badge");
 const cardRoute = require("./routes/card");
+const childrenRoute = require('./routes/children');
 
 // Any URL with the pattern ‘/*’ is directed to routes/main.js
 app.use("/", mainRoute);
@@ -108,6 +109,7 @@ app.use("/student", studentRoute);
 app.use("/user", userRoute);
 app.use("/badge", badgeRoute);
 app.use("/card", cardRoute);
+app.use('/children', childrenRoute);
 
 // Creates a port for express server.
 const port = 5000;

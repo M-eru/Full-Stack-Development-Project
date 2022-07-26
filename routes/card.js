@@ -20,21 +20,28 @@ router.get('/listCard', (req, res) => {
 
 // get --> Add Card
 router.get('/addCard', (req, res) => {
-    // const counter = await Card.count()
-    // if (counter == 3) {
-    //     flashMessage(res, 'error', 'Maximum number of cards');
-    //     res.render('card/listCard');
-    //     return;
-    // }
-    Card.findAll({
-        raw: true
-    })
-        .then((cards) => {
-        if (cards.count == 3) {
-            console.log("3 payment cards | not allowed!");
+    async function hello() {                                        // check if COUNT(cards) >= 3
+        let isOk = true;
+        const myCount = await Card.count();
+        console.log("Number of cards: " + myCount);                   
+        if (myCount >= 3) {                                         // yes --> redirect to card/listCard
+            flashMessage(res, 'error', 'Maximum number of cards');
+            isOk = false;
         }
-    });
-    res.render('card/addCard');
+        if (!isOk) {
+            Card.findAll({
+                order: [['expiryDate', 'DESC']],
+                raw: true
+            })
+                .then((cards) => {
+                    res.render('card/listCard', { cards });
+                })
+                .catch(err => console.log(err));
+            return;
+        }                       
+        res.render('card/addCard');                                 // no --> render card/addCard
+    }
+    hello();
 });
 
 
