@@ -26,8 +26,8 @@ router.post("/signup/student", async function (req, res) {
   let { name, admno, password, cpassword } = req.body;
 
   let isValid = true;
-  if (!(admno.charAt(0) == "1" || admno.charAt(0) == "2")) {
-    flashMessage(res, "error", "Admin no. has to start with either 1 or 2");
+  if (!(admno.charAt(0) == "1")) {
+    flashMessage(res, "error", "Admin no. has to start with 1");
     isValid = false;
   }
 
@@ -54,10 +54,8 @@ router.post("/signup/student", async function (req, res) {
       flashMessage(res, "error", admno + " alreay registered");
       res.render("user/signup_std", { name, admno });
     } else {
-      let year = 0;
       // Set year according to admin no.
-      if (admno.charAt(0) == "1") { year = 1; }
-      else { year = 2; }
+      let year = 1;
 
       // Create new user record
       var salt = bcrypt.genSaltSync(10);
@@ -70,7 +68,6 @@ router.post("/signup/student", async function (req, res) {
         password: hash,
         year, 
         role: "student",
-
         status: "active",
       });
 

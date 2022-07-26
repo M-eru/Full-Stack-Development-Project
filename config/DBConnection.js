@@ -15,6 +15,8 @@ const setUpDB = (drop) => {
     .authenticate()
     .then(() => {
       console.log("Database connected.");
+      // Reminder if drop is set to true
+      if (drop) {console.log("Drop set to true.")};
 
       // Defines relationships
       QnType.hasMany(Question);
