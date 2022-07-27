@@ -68,7 +68,7 @@ app.use(
 // Bring in database connection
 const DBConnection = require("./config/DBConnection");
 // Connects to MySQL database
-DBConnection.setUpDB(false); // True to set up database with new tables
+DBConnection.setUpDB(true); // True to set up database with new tables
 
 // Messaging library
 const flash = require("connect-flash");

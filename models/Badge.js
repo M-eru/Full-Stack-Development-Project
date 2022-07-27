@@ -6,7 +6,8 @@ const Badge = db.define('badge',
     {
         badgename: { type: Sequelize.STRING },
         points: { type: Sequelize.INTEGER },
-        color: { type: Sequelize.STRING }
+        color: { type: Sequelize.STRING },
+        posterURL: { type: Sequelize.STRING }
         // icon: { type: Sequelize.STRING }
     });
 
