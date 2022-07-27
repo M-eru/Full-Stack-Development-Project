@@ -26,6 +26,11 @@ router.post("/signup/student", async function (req, res) {
   let { name, admno, password, cpassword } = req.body;
 
   let isValid = true;
+  if (!(admno.charAt(0) == "1")) {
+    flashMessage(res, "error", "Admin no. has to start with 1");
+    isValid = false;
+  }
+
   if (password.length < 6) {
     flashMessage(res, "error", "Password must be at least 6 characters");
     isValid = false;
@@ -49,6 +54,9 @@ router.post("/signup/student", async function (req, res) {
       flashMessage(res, "error", admno + " alreay registered");
       res.render("user/signup_std", { name, admno });
     } else {
+      // Set year according to admin no.
+      let year = 1;
+
       // Create new user record
       var salt = bcrypt.genSaltSync(10);
       var hash = bcrypt.hashSync(password, salt);
@@ -58,9 +66,11 @@ router.post("/signup/student", async function (req, res) {
         name,
         admno,
         password: hash,
+        year, 
         role: "student",
         status: "active",
       });
+
       console.log(
         "New student registered:",
         "\n---\nName: ",
@@ -151,7 +161,7 @@ router.post("/login/student", (req, res, next) => {
 router.post("/login/parent-tutor", (req, res, next) => {
   passport.authenticate("parent-tutor", {
     // Success redirect URL
-    successRedirect: "/",
+    successRedirect: "/children/addChildren",
     // Failure redirect URL
     failureRedirect: "/user/login/parent-tutor",
     // boolean to generate a flash message

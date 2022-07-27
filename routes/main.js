@@ -33,12 +33,12 @@ router.get("/", (req, res) => {
 });
 
 router.get('/studentProfile', (req, res) => {
-    res.render('parent/studentProfile')
+    res.render('parent/studentProfile');
 });
 
 
 router.get('/studentProgress', (req, res) => {
-    res.render('parent/studentProgress')
+    res.render('parent/studentProgress');
 });
 
 

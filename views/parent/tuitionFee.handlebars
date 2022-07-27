@@ -37,11 +37,12 @@
         <form action="" method="post">
             <div class="card card-body overflow-auto" style="height: 500px;">
                 {{#each cards}}
-                <input type="radio" name="tuition_card" id="{{id}}" onclick="changeColor({{id}})">
+                <input type="radio" name="tuition_card" id="{{id}}" style="display: none;" 
+                        onchange="ensureOneInput({{id}}, 'tuition_card')">
                 <label for="{{id}}">
-                    <div class="card mb-2 w-100 mx-auto" style="border: .3rem solid #C4C4C4;" id="sigh{{id}}">
+                    <div class="card mb-2 w-100 mx-auto" style="border: .3rem solid #C4C4C4;" id="border_line{{id}}">
                         <div class="card-header" style="background-color: #9BD6EB;">
-                            <span class="check_btn" id="hello{{id}}"><i class="fas fa-check"></i></span>
+                            <span class="check_btn" id="icon_bg{{id}}"><i class="fas fa-check"></i></span>
                             <h5 class="card-title">{{cardName}}</h5>
                         </div>
                         <div class="card-body">
@@ -79,12 +80,22 @@
 </div>
 
 <script>
-    function changeColor(myId) {
-        const btn = document.getElementById('hello'+myId);
-        const myBorder = document.getElementById('sigh'+myId);
-        if (document.getElementById(myId).checked) {
-            btn.style.backgroundColor = '#15ee15';
+    var flag = 0;
+    function ensureOneInput(myId, inputName) {
+        if (myId != flag) {
+            const myIcon = document.getElementById('icon_bg' + myId);
+            const myBorder = document.getElementById('border_line' + myId);
+            myIcon.style.backgroundColor = '#15ee15';
             myBorder.style.borderColor = '#15ee15';
+
+            if (flag != 0) {
+                const myIcon1 = document.getElementById('icon_bg' + flag);
+                const myBorder1 = document.getElementById('border_line' + flag);
+                myIcon1.style.backgroundColor = '#C4C4C4';
+                myBorder1.style.borderColor = '#C4C4C4';
+            }
+            
+            flag = myId;
         }
     }
 </script>
