@@ -31,7 +31,7 @@ const ensureTutor = (req, res, next) => {
   res.redirect('/');
 };
 
-const ensureProfile = (req, res, next) => {
+const ensureStudentTutor = (req, res, next) => {
   if (req.isAuthenticated()) {
     if (req.user.role == "student" || req.user.role == "tutor") {
       return next();
@@ -41,4 +41,4 @@ const ensureProfile = (req, res, next) => {
   res.redirect('/');
 };
 
-module.exports = { ensureStudent, ensureParent, ensureTutor, ensureProfile };
+module.exports = { ensureStudent, ensureParent, ensureTutor, ensureStudentTutor };

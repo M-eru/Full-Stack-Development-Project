@@ -7,7 +7,7 @@ const flashMessage = require('../helpers/messenger');
 const fs = require('fs');
 const upload = require('../helpers/imageUpload');
 
-router.get('/badges', ensureAuthenticated.ensureStudent, (req, res) => {
+router.get('/badges', ensureAuthenticated.ensureStudentTutor, (req, res) => {
     Badge.findAll({
         // where: { userId: req.user.id },
         order: [['points', 'DESC']],
