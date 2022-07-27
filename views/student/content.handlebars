@@ -1,0 +1,48 @@
+{{> _studentNavBar}}
+<div class="container">
+    <div class="container mt-5 p-4 rounded-lg" style="background-color: #96D4D4;">
+        <div class="container">
+            {{> _flashmsg}}
+        </div>
+        <div class="container">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h1 class="display-4">Tutorials</h1>
+            </div>
+        </div>
+        {{#if tutorials}}
+        {{#each tutorials}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>{{tutName}}</h4>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/student/tutorials/{{id}}" target="_blank">View</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>No tutorials available!</h4>
+            </div>
+        </div>
+        {{/if}}
+        <nav class="mt-5 d-flex justify-content-center align-items-center">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="content">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
