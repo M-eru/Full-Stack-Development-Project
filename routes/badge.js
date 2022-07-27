@@ -4,7 +4,7 @@ const moment = require('moment');
 const Badge = require('../models/Badge');
 const ensureAuthenticated = require('../helpers/auth');
 
-router.get('/badges', ensureAuthenticated, (req, res) => {
+router.get('/badges', ensureAuthenticated.ensureStudent, (req, res) => {
     Badge.findAll({
         where: { userId: req.user.id },
         order: [['points', 'DESC']],
@@ -16,11 +16,11 @@ router.get('/badges', ensureAuthenticated, (req, res) => {
         .catch(err => console.log(err));
 });
 
-router.get('/createbadge', ensureAuthenticated, (req, res) => {
+router.get('/createbadge', ensureAuthenticated.ensureTutor, (req, res) => {
     res.render('tutor_badges/createbadge');
 });
 
-router.post('/createbadge', ensureAuthenticated, (req, res) => {
+router.post('/createbadge', ensureAuthenticated.ensureTutor, (req, res) => {
     let badgename = req.body.badgename;
     let points = req.body.points;
     let color = req.body.color;
@@ -37,7 +37,7 @@ router.post('/createbadge', ensureAuthenticated, (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.get('/deleteBadge/:id', ensureAuthenticated, async function (req, res) {
+router.get('/deleteBadge/:id', ensureAuthenticated.ensureTutor, async function (req, res) {
     try {
         let badge = await Badge.findByPk(req.params.id);
         if (!badge) {
