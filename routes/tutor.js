@@ -4,6 +4,8 @@ const Question = require("../models/Question");
 const QnOption = require("../models/QnOption");
 const QnType = require("../models/QnType");
 const Tutorial = require("../models/Tutorial");
+const Student = require("../models/Student");
+const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
 const { success } = require("flash-messenger/Alert");
 
@@ -115,6 +117,17 @@ router.get("/deleteTut/:id", async function (req, res) {
   console.log(result + " tutorial deleted.");
   res.redirect("/tutor/content");
 });
+
+// Get parent details
+router.get("/parent_details", (req, res) => {
+  Student.findAll({
+    include: { model: ParentTutor },
+    order: [['admno', 'ASC']]
+  }).then((students) => {
+      console.log(students);
+      res.render("tutor/parent_details", { students });
+  })
+})
 
 // Posts
 router.post("/content", (req, res) => {

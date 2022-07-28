@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const flashMessage = require('../helpers/messenger');
 const Card = require("../models/Card");
+const Student = require('../models/Student');
+const ensureAuthenticated = require('../helpers/auth');
+const ParentTutor = require("../models/ParentTutor");
 
 router.get('/', (req, res) => {
 	const title = 'Video Jotter';
@@ -32,29 +35,50 @@ router.get("/", (req, res) => {
   res.render("index", { title });
 });
 
-router.get('/studentProfile', (req, res) => {
-    res.render('parent/studentProfile');
+router.get('/studentProfile', ensureAuthenticated.ensureParent, (req, res) => {
+    Student.findAll({
+        include: { model: ParentTutor },
+        where: { parentTutorId: req.user.id },
+        order: [['name', 'ASC']]
+    }).then((students) => {
+        console.log(students);
+        res.render("parent/studentProfile", { students });
+    })
 });
 
 
-router.get('/studentProgress', (req, res) => {
-    res.render('parent/studentProgress');
+router.get('/studentProgress', ensureAuthenticated.ensureParent, (req, res) => {
+    Student.findAll({
+        include: { model: ParentTutor },
+        where: { parentTutorId: req.user.id },
+        order: [['name', 'ASC']]
+    }).then((students) => {
+        console.log(students);
+        res.render('parent/studentProgress', { students });
+    })
 });
 
 
-router.get('/tuitionFee', (req, res) => {
+router.get('/tuitionFee', ensureAuthenticated.ensureParent, (req, res) => {
     Card.findAll({
         order: [['expiryDate', 'DESC']],
         raw: true
     })
     .then((cards) => {
-        res.render('parent/tuitionFee', { cards });
+        Student.findAll({
+            include: { model: ParentTutor },
+            where: { parentTutorId: req.user.id },
+            order: [['name', 'ASC']]
+        }).then((students) => {
+            console.log(students);
+            res.render('parent/tuitionFee', { cards, students });
+        })
     })
     .catch(err => console.log(err));
 });
 
 
-router.post('/tuitionFee', (req, res) => {
+router.post('/tuitionFee', ensureAuthenticated.ensureParent, (req, res) => {
     var card_id = req.body.tuition_card;
     let isValid = true;
     if (!card_id) {

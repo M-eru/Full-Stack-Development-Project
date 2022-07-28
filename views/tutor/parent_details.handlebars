@@ -1,0 +1,27 @@
+{{> _tutorNavBar}}
+<div class="container mt-5">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr class="text-center">
+                <th scope="col">Student Admin Number</th>
+                <th scope="col">Parent Name</th>
+                <th scope="col">Tutor Name</th>
+                <th scope="col">Number of signed-up days</th>
+                <th scope="col">Total tuition fee</th>
+                <th scope="col">Payed? (Y/N)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each students}}
+            <tr class="text-center">
+                <th scope="row">{{admno}}</th>
+                <td>{{parentTutor.name}}</td>
+                <td>Grace Lim</td>
+                <td>20</td>
+                <td>$2000</td>
+                <td>N</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

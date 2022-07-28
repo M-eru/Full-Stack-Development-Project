@@ -1,28 +1,11 @@
-<div class="col-3 overflow-auto" style="background-color:#282A35; color: white; height: 625px;">
+<div class="col-3 overflow-auto vh-100" style="background-color:#282A35; color: white;">
     {{!-- Search Bar --}}
     <input class="col mt-5" type="text w-100" id="mySearch" onkeyup="myFunction()" placeholder="Search.." title="Type in a category">
     {{!-- List of Children --}}
     <ul id="myMenu" >
-        {{#each student}}
-        <li><a href="#">{{childName}}</a></li>
+        {{#each students}}
+        <li><a href="#{{id}}" onclick="displayStudent({{id}})">{{name}}</a></li>
         {{/each}}
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Haiyah</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
-        <li><a href="#">Hello</a></li>
     </ul>
 </div>
 
