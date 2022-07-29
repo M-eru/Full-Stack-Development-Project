@@ -5,7 +5,6 @@ const QnOption = require("../models/QnOption");
 const QnType = require("../models/QnType");
 const Tutorial = require("../models/Tutorial");
 const flashMessage = require("../helpers/messenger");
-const { success } = require("flash-messenger/Alert");
 
 // Content Pages
 router.get("/content", (req, res) => {
@@ -14,58 +13,42 @@ router.get("/content", (req, res) => {
   });
 });
 
-router.get("/qns", (req, res) => {
-  ssn = req.session;
-  Promise.all([
-    Question.findAll({ include: { model: QnOption, required: true } }),
-    Question.findAll({ where: { qnTypeId: 2 } }),
-    QnType.findAll(),
-    Tutorial.findOne({ where: { tutName: ssn.tutorial } }),
-  ]).then((data) => {
-    // console.log(JSON.stringify(data, null, 2));
-    res.render("tutor/qns", {
-      mcqqn: data[0],
-      oeqn: data[1],
-      qnType: data[2],
-      tutorial: data[3],
-    });
-  });
-});
+// router.get("/qns/:id", (req, res) => {
+//   Promise.all([
+//     Question.findAll(
+//       { include: { model: QnOption, required: true } },
+//       { where: { tutorialId: req.params.id } }
+//     ),
+//     Question.findAll({ where: { tutorialId: req.params.id, qnTypeId: 2 } }),
+//     QnType.findAll(),
+//     Tutorial.findByPk(req.params.id),
+//   ]).then((data) => {
+//     // console.log(JSON.stringify(data, null, 2));
+//     res.render("tutor/qns", {
+//       mcqqn: data[0],
+//       oeqn: data[1],
+//       qnType: data[2],
+//       tutorial: data[3],
+//     });
+//   });
+// });
 
 router.get("/qns/:id", (req, res) => {
-  Promise.all([
-    Question.findAll(
-      { include: { model: QnOption, required: true } },
-      { where: { tutorialId: req.params.id } }
-    ),
-    Question.findAll({ where: { tutorialId: req.params.id, qnTypeId: 2 } }),
-    QnType.findAll(),
-    Tutorial.findByPk(req.params.id),
-  ]).then((data) => {
-    // console.log(JSON.stringify(data, null, 2));
-    res.render("tutor/qns", {
-      mcqqn: data[0],
-      oeqn: data[1],
-      qnType: data[2],
-      tutorial: data[3],
-    });
+  Tutorial.findByPk(req.params.id, {
+    include: { model: Question, include: { model: QnOption } },
+    order: [[Question, "qnOrder", "ASC"]],
+  }).then((data) => {
+    console.log(JSON.stringify(data, null, 2));
+    res.render("tutor/qns", { data: data });
   });
 });
 
 router.get("/tutorials/:id", (req, res) => {
-  Promise.all([
-    Question.findAll(
-      { include: { model: QnOption, required: true } },
-      { where: { tutorialId: req.params.id } }
-    ),
-    Question.findAll({ where: { tutorialId: req.params.id, qnTypeId: 2 } }),
-    Tutorial.findByPk(req.params.id),
-  ]).then((data) => {
-    res.render("tutor/preview", {
-      mcqqn: data[0],
-      oeqn: data[1],
-      tutorial: data[2],
-    });
+  Tutorial.findByPk(req.params.id, {
+    include: { model: Question, include: { model: QnOption } },
+  }).then((data) => {
+    console.log(JSON.stringify(data, null, 2));
+    res.render("tutor/qns", { data: data });
   });
 });
 
@@ -74,12 +57,12 @@ router.get("/preview", (req, res) => {
 });
 
 // Question Forms
-router.get("/mcq", (req, res) => {
-  res.render("tutor/mcq");
+router.get("/mcq/:id", (req, res) => {
+  res.render("tutor/mcq", { id: req.params.id });
 });
 
-router.get("/oe", (req, res) => {
-  res.render("tutor/oe");
+router.get("/oe/:id", (req, res) => {
+  res.render("tutor/oe", { id: req.params.id });
 });
 
 // Edit Forms
@@ -98,16 +81,16 @@ router.get("/editOe/:id", (req, res) => {
 });
 
 // Delete Questions
-router.get("/deleteMcq/:id", async function (req, res) {
+router.get("/deleteMcq/:id?", async function (req, res) {
   let result = await Question.destroy({ where: { id: req.params.id } });
   console.log(result + " question deleted.");
-  res.redirect("/tutor/qns");
+  res.redirect("/tutor/qns/" + req.query.tutId);
 });
 
-router.get("/deleteOe/:id", async function (req, res) {
+router.get("/deleteOe/:id?", async function (req, res) {
   let result = await Question.destroy({ where: { id: req.params.id } });
   console.log(result + " question deleted.");
-  res.redirect("/tutor/qns");
+  res.redirect("/tutor/qns/" + req.query.tutId);
 });
 
 router.get("/deleteTut/:id", async function (req, res) {
@@ -118,17 +101,13 @@ router.get("/deleteTut/:id", async function (req, res) {
 
 // Posts
 router.post("/content", (req, res) => {
-  let ssn = req.session;
   let tutName = req.body.tutorial;
-  ssn.tutorial = tutName;
-
   Tutorial.create({
     tutName,
   })
     .then((tut) => {
-      ssn.tutId = tut.id;
       console.log(tut.toJSON());
-      res.redirect("/tutor/qns");
+      res.redirect("/tutor/qns/" + tut.id);
     })
     .catch((err) => console.log(err));
 });
@@ -136,9 +115,9 @@ router.post("/content", (req, res) => {
 router.post("/qnSubmit", (req, res) => {
   let qnType = req.body.qnType;
   if (qnType == "Multiple Choice") {
-    res.redirect("/tutor/mcq");
+    res.redirect("/tutor/mcq/" + req.body.id);
   } else if (qnType == "Open Ended") {
-    res.redirect("/tutor/oe");
+    res.redirect("/tutor/oe/" + req.body.id);
   }
 });
 
@@ -148,7 +127,7 @@ router.post("/tutSubmit", (req, res) => {
 });
 
 router.post("/mcq", (req, res) => {
-  ssn = req.session;
+  let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let ans1 = req.body.ans1;
   let ans2 = req.body.ans2;
@@ -156,9 +135,10 @@ router.post("/mcq", (req, res) => {
   let ans4 = req.body.ans4;
   let correctAns = req.body.correctAns;
   let qnTypeId = 1;
-  let tutorialId = ssn.tutId;
+  let tutorialId = req.body.id;
 
   Question.create({
+    qnOrder,
     question,
     correctAns,
     qnTypeId,
@@ -177,7 +157,7 @@ router.post("/mcq", (req, res) => {
         .then((options) => {
           console.log(options.toJSON());
           flashMessage(res, "success", "Multiple choice question created.");
-          res.redirect("/tutor/qns");
+          res.redirect("/tutor/qns/" + tutorialId);
         })
         .catch((err) => console.log(err));
     })
@@ -185,13 +165,14 @@ router.post("/mcq", (req, res) => {
 });
 
 router.post("/oe", (req, res) => {
-  ssn = req.session;
+  let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let correctAns = req.body.correctAns;
   let qnTypeId = 2;
-  let tutorialId = ssn.tutId;
+  let tutorialId = req.body.id;
 
   Question.create({
+    qnOrder,
     question,
     correctAns,
     qnTypeId,
@@ -200,7 +181,7 @@ router.post("/oe", (req, res) => {
     .then((question) => {
       console.log(question.toJSON());
       flashMessage(res, "success", "Open ended question created.");
-      res.redirect("/tutor/qns");
+      res.redirect("/tutor/qns/" + tutorialId);
     })
     .catch((err) => console.log(err));
 });

@@ -2,7 +2,7 @@
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link text-decoration-none text-dark" href="/tutor/qns"><i
+                <a class="nav-link text-decoration-none text-dark" href="/tutor/qns/{{question.tutorialId}}"><i
                         class='fas fa-angle-left'></i></a>
             </li>
         </ul>
@@ -118,7 +118,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger"><a class="text-decoration-none text-light"
-                        href="/tutor/qns">Exit</a></button>
+                        href="/tutor/qns/{{id}}">Exit</a></button>
                 <button type="button" class="btn btn-success" data-dismiss="modal">Continue</button>
             </div>
         </div>

@@ -2,12 +2,13 @@
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link text-decoration-none text-dark" href="/tutor/content"><i class='fas fa-angle-left'></i></a>
+                <a class="nav-link text-decoration-none text-dark" href="/tutor/content"><i
+                        class='fas fa-angle-left'></i></a>
             </li>
         </ul>
     </div>
     <div class="mx-auto order-0">
-        {{#with tutorial}}
+        {{#with data}}
         <a class="navbar-brand mx-auto" href="#">{{tutName}}</a>
         {{/with}}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".creationNav">
@@ -24,18 +25,33 @@
 
 <div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
     <form action="">
-        {{#if mcqqn}}
-        {{#each mcqqn}}
+        {{#with data}}
+        {{#if qns}}
+        {{#each qns}}
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
             <div class="row">
                 <div class="col d-flex align-items-center mt-2">
-                    <h5>Question {{id}}</h5>
+                    <h5>Question {{qnOrder}}</h5>
                 </div>
+                <div class="col-6"></div>
+                {{#if qnOption}}
+                <div class="col d-flex justify-content-end">
+                    <a class="btn btn-info mr-2" href="/tutor/editMcq/{{id}}"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="btn btn-danger btn-sm" href="/tutor/deleteMcq/{{id}}?tutId={{tutorialId}}"><i
+                            class="material-icons">delete</i></a>
+                </div>
+                {{else}}
+                <div class="col d-flex justify-content-end">
+                    <a class="btn btn-info mr-2" href="/tutor/editOe/{{id}}"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="btn btn-danger btn-sm" href="/tutor/deleteOe/{{id}}?tutId={{tutorialId}}"><i
+                            class="material-icons">delete</i></a>
+                </div>
+                {{/if}}
             </div>
             <hr class="my-3 border border-dark" />
             <p class="lead">{{question}}</p>
-            <fieldset class="form-group-row">
-                {{#with qnOption}}
+            {{#with qnOption}}
+            <fieldset class="form-group row">
                 <div class="col-10">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="options" id="option1" value="1">
@@ -62,34 +78,29 @@
                         </label>
                     </div>
                 </div>
-                {{/with}}
             </fieldset>
-        </div>
-        {{/each}}
-        {{/if}}
-
-        {{#if oeqn}}
-        {{#each oeqn}}
-        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
-            <div class="row">
-                <div class="col d-flex align-items-center mt-2">
-                    <h5>Question {{id}}</h5>
-                </div>
-            </div>
-            <hr class="my-3 border border-dark" />
-            <p class="lead">{{question}}</p>
+            {{/with}}
+            {{#if qnOption}}
+            <h5>Correct Answer: Option {{correctAns}}</h5>
+            {{else}}
             <fieldset class="form-group row">
                 <div class="col-10">
-                    <label for="ans" class="col-form-label h4">Your Answer:</label>
-                    <textarea type="text" class="form-control" id="ans" name="ans"></textarea>
+                    <label for="ans" class="col-form-label h4">Correct Answer:</label>
+                    <textarea type="text" class="form-control" id="ans" name="ans">{{correctAns}}</textarea>
                 </div>
             </fieldset>
+            {{/if}}
         </div>
         {{/each}}
+        {{else}}
+        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+            <h5 class="mt-1">No questions added.</h5>
+        </div>
         {{/if}}
+        {{/with}}
 
         <div class="d-flex justify-content-end submit">
-            <a href="/tutor/content"><button type="button" class="btn btn-outline-light mb-2">Exit</button></a>
+            <button type="button" class="btn btn-outline-light"><a href="/tutor/content">Exit</a></button>
         </div>
     </form>
 </div>

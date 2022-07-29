@@ -2,7 +2,7 @@
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link text-decoration-none text-dark" href="/tutor/qns"><i
+                <a class="nav-link text-decoration-none text-dark" href="/tutor/qns/{{id}}"><i
                         class='fas fa-angle-left'></i></a>
             </li>
         </ul>
@@ -22,9 +22,19 @@
 </nav>
 
 <div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
-    <form action="" method="post" class="needs-validation" novalidate>
+    <form action="/tutor/mcq" method="post" class="needs-validation" novalidate>
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
             <div class="form-group">
+                <input type="hidden" name="id" value="{{id}}"> {{!-- Tutorial ID --}}
+                <label for="qnOrder" class="col-form-label h5">Question Number</label>
+                <input type="text" class="form-control" id="qnOrder" name="qnOrder"
+                    placeholder="Question number here..." required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter a valid number.
+                </div>
                 <label for="qn" class="col-form-label h5">Question</label>
                 <textarea class="form-control" id="qn" name="qn" placeholder="Question here..." required></textarea>
                 <div class="valid-feedback">
@@ -89,7 +99,7 @@
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
                     <option value="3">Option 3</option>
-                    <option value="">Option 4</option>
+                    <option value="4">Option 4</option>
                 </select>
                 <div class="invalid-feedback">
                     Please select a valid question type.
@@ -118,7 +128,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger"><a class="text-decoration-none text-light"
-                        href="/tutor/qns">Exit</a></button>
+                        href="/tutor/qns/{{id}}">Exit</a></button>
                 <button type="button" class="btn btn-success" data-dismiss="modal">Continue</button>
             </div>
         </div>

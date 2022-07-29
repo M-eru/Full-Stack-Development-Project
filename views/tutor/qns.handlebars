@@ -8,7 +8,7 @@
         </ul>
     </div>
     <div class="mx-auto order-0">
-        {{#with tutorial}}
+        {{#with data}}
         <a class="navbar-brand mx-auto" href="#">{{tutName}}</a>
         {{/with}}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".creationNav">
@@ -29,24 +29,33 @@
 <div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
     {{> _flashmsg}}
     <form action="/tutor/tutSubmit" method="post">
-        {{#if mcqqn}}
-        {{#each mcqqn}}
+        {{#with data}}
+        {{#if qns}}
+        {{#each qns}}
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
             <div class="row">
                 <div class="col d-flex align-items-center mt-2">
-                    <h5>Question {{id}}</h5>
+                    <h5>Question {{qnOrder}}</h5>
                 </div>
                 <div class="col-6"></div>
+                {{#if qnOption}}
                 <div class="col d-flex justify-content-end">
                     <a class="btn btn-info mr-2" href="/tutor/editMcq/{{id}}"><i class="fas fa-pencil-alt"></i></a>
-                    <a class="btn btn-danger btn-sm" href="/tutor/deleteMcq/{{id}}"><i
+                    <a class="btn btn-danger btn-sm" href="/tutor/deleteMcq/{{id}}?tutId={{tutorialId}}"><i
                             class="material-icons">delete</i></a>
                 </div>
+                {{else}}
+                <div class="col d-flex justify-content-end">
+                    <a class="btn btn-info mr-2" href="/tutor/editOe/{{id}}"><i class="fas fa-pencil-alt"></i></a>
+                    <a class="btn btn-danger btn-sm" href="/tutor/deleteOe/{{id}}?tutId={{tutorialId}}"><i
+                            class="material-icons">delete</i></a>
+                </div>
+                {{/if}}
             </div>
             <hr class="my-3 border border-dark" />
             <p class="lead">{{question}}</p>
+            {{#with qnOption}}
             <fieldset class="form-group row">
-                {{#with qnOption}}
                 <div class="col-10">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="options" id="option1" value="1">
@@ -73,46 +82,26 @@
                         </label>
                     </div>
                 </div>
-                {{/with}}
             </fieldset>
+            {{/with}}
+            {{#if qnOption}}
             <h5>Correct Answer: Option {{correctAns}}</h5>
-        </div>
-        {{/each}}
-        {{else}}
-        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
-            <h5 class="mt-1">No multiple choice questions added.</h5>
-        </div>
-        {{/if}}
-
-        {{#if oeqn}}
-        {{#each oeqn}}
-        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
-            <div class="row">
-                <div class="col d-flex align-items-center mt-2">
-                    <h5>Question {{id}}</h5>
-                </div>
-                <div class="col-6"></div>
-                <div class="col d-flex justify-content-end">
-                    <a class="btn btn-info mr-2" href="/tutor/editOe/{{id}}"><i class="fas fa-pencil-alt"></i></a>
-                    <a class="btn btn-danger btn-sm" href="/tutor/deleteMcq/{{id}}"><i
-                            class="material-icons">delete</i></a>
-                </div>
-            </div>
-            <hr class="my-3 border border-dark" />
-            <p class="lead">{{question}}</p>
+            {{else}}
             <fieldset class="form-group row">
                 <div class="col-10">
                     <label for="ans" class="col-form-label h4">Correct Answer:</label>
                     <textarea type="text" class="form-control" id="ans" name="ans">{{correctAns}}</textarea>
                 </div>
             </fieldset>
+            {{/if}}
         </div>
         {{/each}}
         {{else}}
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
-            <h5 class="mt-1">No open ended questions added.</h5>
+            <h5 class="mt-1">No questions added.</h5>
         </div>
         {{/if}}
+        {{/with}}
 
         <div class="d-flex justify-content-end submit">
             <button type="submit" class="btn btn-outline-light">Save</button>
@@ -133,9 +122,14 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="qnType" class="col-form-label">Question Type</label>
+                        {{#with data}}
+                        <input type="hidden" name="id" value="{{id}}">
+                        {{/with}}
                         <select id="qnType" name="qnType" class="custom-select" required>
                             <option selected disabled value="">Choose...</option>
-                            {{#if qnType}}
+                            <option value="Multiple Choice">Multiple Choice</option>
+                            <option value="Open Ended">Open Ended</option>
+                            {{#if data}}
                             {{#each qnType}}
                             <option value="{{qnType}}">{{qnType}}</option>
                             {{/each}}
