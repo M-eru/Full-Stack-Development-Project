@@ -1,20 +1,20 @@
 {{> _flashmsg }}
 <div class="container mt-5">
     <div class="card card-body">
-        <h2 class="text-center">Select child(ren) to view</h2>
+        <h2 class="text-center">Select student(s) to view</h2>
         <br>
         <form action="" method="post">
             <div class="form-group">
                 <div class="row">
                     <div class="col-10 col-sm-10 col-md-10 col-lg-5">
-                        <label class="font-italic">Child's Admin Number</label>
+                        <label class="font-italic">Student's Admin Number</label>
                     </div>
                     <div class="col-10 col-sm-10 col-md-10 col-lg-5">
-                        <label class="font-italic">Child's Password</label>
+                        <label class="font-italic">Student's Password</label>
                     </div>
                 </div>
             </div>
-            {{@index}}: <div class="input_fields_wrap">
+            {{@index}}<div class="input_fields_wrap">
                 <div class="form-group row mb-2">
                     <div class="col-10 col-sm-10 col-md-10 col-lg-5 mb-4">
                         <input type="text" class="form-control" id="admNo" name="admNo" maxlength="7"
@@ -51,7 +51,8 @@
 
         //user click on remove text
         $(wrapper).on("click", "#remove_field", function (e) { 
-            e.preventDefault(); $(this).parent('div').remove(); x--;
+            e.preventDefault(); 
+            $(this).parent('div').remove(); x--;
         })
     });
 </script>

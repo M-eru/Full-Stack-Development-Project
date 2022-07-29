@@ -1,19 +1,21 @@
+{{> _parentNavBar}}
 {{> _flashmsg }}
 <div class="container-fluid h-100">
 <div class="row h-100">
 {{> _leftNavbar}}
 {{!-- main content --}}
-<div class="col-8 mt-4 ml-3" style="text-align: justify;">
-  <h1>Dwight Castro</h1>
+<div class="col-8 mt-4 ml-3" style="text-align: justify;" id="studentDetails">
+  {{#each students}}
+  <h1>{{name}}</h1>
   <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
   <table class="table table-borderless">
     <tbody>
       <tr>
         <th rowspan="2" width="20%">Student Details</th>
-        <td>Dwight Castro</td>
+        <td>{{name}}</td>
       </tr>
       <tr>
-        <td>220000A</td>
+        <td>{{admno}}</td>
       </tr>
       <tr>
         <th>Subject</th>
@@ -21,13 +23,14 @@
       </tr>
       <tr>
         <th rowspan="2">Tutor Details</th>
-        <td>Grace Lim</td>
+        <td>{{parentTutor.name}}</td>
       </tr>
       <tr>
-        <td>grace_lim@email.com</td>
+        <td>{{parentTutor.email}}</td>
       </tr>
     </tbody>
   </table>
+  {{/each}}
 </div>
 </div>
 </div>

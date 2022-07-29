@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
+const ParentTutor = require('../models/ParentTutor');
 const flashMessage = require('../helpers/messenger');
 const bcrypt = require("bcryptjs");
+const ensureAuthenticated = require('../helpers/auth');
 
 
 // function = check if char is an alphabet
@@ -12,17 +14,18 @@ function isCharacterALetter(char) {
 
 
 // get --> Add Children
-router.get('/addChildren', (req, res) => {
+router.get('/addChildren', ensureAuthenticated.ensureParent, (req, res) => {
     res.render('children/addChildren');
 });
 
 
 // post --> Add Children
-router.post('/addChildren', async function (req, res) {
+router.post('/addChildren', ensureAuthenticated.ensureParent, async function (req, res) {
 
     // get info from submitted form
     var admNo = req.body.admNo;
     var childPsd = req.body.childPsd;
+    let parentId = req.user.id;
     let isValid = true;
 
     // check --> Admin Number [length = 7], [1st 6 characters are numbers], [last character is a letter]
@@ -73,28 +76,68 @@ router.post('/addChildren', async function (req, res) {
     try {
         if (Array.isArray(admNo) == true) {
             for (let i = 0; i < admNo.length; i++) {
-
-                // hash student password
-                var salt = bcrypt.genSaltSync(10);
-                var hash1 = bcrypt.hashSync(childPsd[i], salt);
-
                 // find student
-                let student = await Student.findOne({ where: { admno: admNo[i], password: hash1 } });
-                
-                // not found
+                let student = await Student.findOne({ where: { admno: admNo[i] } });
+
+                // Student not found
                 if (!student) {
-                    flashMessage(res, "error", admNo + " cannot be found.");
+                    flashMessage(res, "error", admNo[i] + " cannot be found.");
                     res.render("children/addChildren", { admNo });
                     return;
                 }
+                
+                // compare Password
+                var isMatch = bcrypt.compareSync(childPsd[i], student.password);
+
+                // Password not matching
+                if (!isMatch) {
+                    flashMessage(res, "error", admNo[i] + " cannot be found.");
+                    res.render("children/addChildren", { admNo });
+                    return;
+                }
+
+                if (student.parentTutorId == null || student.parentTutorId == parentId) {
+                    Student.update(
+                        { parentTutorId: parentId },
+                        { where: {admno: admNo[i]} }
+                    );
+                }
+                else {
+                    flashMessage(res, "error", admNo[i] + " has been assigned.");
+                    res.render("children/addChildren", { admNo });
+                    return;
+                }
+                
             }
         }
         else {
-            var salt = bcrypt.genSaltSync(10);
-            var hash = bcrypt.hashSync(childPsd, salt);
-            let student = await Student.findOne({ where: { admno: admNo, password: hash } });
+            // find student
+            let student = await Student.findOne({ where: { admno: admNo } });
+
+            // Student not found
             if (!student) {
                 flashMessage(res, "error", admNo + " cannot be found.");
+                res.render("children/addChildren", { admNo });
+                return;
+            }
+
+            // compare Password
+            var isMatch = bcrypt.compareSync(childPsd, student.password);
+
+            // Password not matching
+            if (!isMatch) {
+                flashMessage(res, "error", admNo + " cannot be found.");
+                res.render("children/addChildren", { admNo });
+                return;
+            }
+
+            if (student.parentTutorId == null || student.parentTutorId == parentId) {
+                Student.update(
+                    { parentTutorId: parentId },
+                    { where: { admno: admNo}}
+                );
+            } else {
+                flashMessage(res, "error", admNo + " has been assigned.");
                 res.render("children/addChildren", { admNo });
                 return;
             }
@@ -104,9 +147,8 @@ router.post('/addChildren', async function (req, res) {
         console.log(err);
     }
 
-    // isValid = true
     flashMessage(res, "success", admNo + " assigned to parent");
-    res.render("parent/studentProfile");
+    res.redirect("/studentProfile");
 });
 
 
