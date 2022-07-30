@@ -25,8 +25,19 @@
     <form action="" method="post" class="needs-validation" novalidate>
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
             <div class="form-group">
+                <input type="hidden" name="tutId" value="{{question.tutorialId}}"> {{!-- Tutorial ID --}}
+                <label for="qnOrder" class="col-form-label h5">Question Number</label>
+                <input type="number" class="form-control" id="qnOrder" name="qnOrder" value="{{question.qnOrder}}"
+                    placeholder="Question number here..." required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter a valid number.
+                </div>
                 <label for="qn" class="col-form-label h5">Question</label>
-                <textarea class="form-control" id="qn" name="qn" placeholder="Question here..." required>{{question.question}}</textarea>
+                <textarea class="form-control" id="qn" name="qn" placeholder="Question here..."
+                    required>{{question.question}}</textarea>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -38,8 +49,8 @@
             <div class="form-group">
                 <div class="ans1">
                     <label for="ans1" class="col-form-label h5">Option 1</label>
-                    <input type="text" class="form-control" id="ans1" name="ans1"
-                        value="{{question.qnOption.ans1}}" required>
+                    <input type="text" class="form-control" id="ans1" name="ans1" value="{{question.qnOption.ans1}}"
+                        required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -49,8 +60,8 @@
                 </div>
                 <div class="ans2">
                     <label for="ans2" class="col-form-label h5">Option 2</label>
-                    <input type="text" class="form-control" id="ans2" name="ans2"
-                        value="{{question.qnOption.ans2}}" required>
+                    <input type="text" class="form-control" id="ans2" name="ans2" value="{{question.qnOption.ans2}}"
+                        required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -60,8 +71,8 @@
                 </div>
                 <div class="ans3">
                     <label for="ans3" class="col-form-label h5">Option 3</label>
-                    <input type="text" class="form-control" id="ans3" name="ans3"
-                        value="{{question.qnOption.ans3}}" required>
+                    <input type="text" class="form-control" id="ans3" name="ans3" value="{{question.qnOption.ans3}}"
+                        required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -71,8 +82,8 @@
                 </div>
                 <div class="ans4">
                     <label for="ans4" class="col-form-label h5">Option 4</label>
-                    <input type="text" class="form-control" id="ans4" name="ans4"
-                        value="{{question.qnOption.ans4}}" required>
+                    <input type="text" class="form-control" id="ans4" name="ans4" value="{{question.qnOption.ans4}}"
+                        required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

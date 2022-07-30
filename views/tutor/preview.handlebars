@@ -33,20 +33,6 @@
                 <div class="col d-flex align-items-center mt-2">
                     <h5>Question {{qnOrder}}</h5>
                 </div>
-                <div class="col-6"></div>
-                {{#if qnOption}}
-                <div class="col d-flex justify-content-end">
-                    <a class="btn btn-info mr-2" href="/tutor/editMcq/{{id}}"><i class="fas fa-pencil-alt"></i></a>
-                    <a class="btn btn-danger btn-sm" href="/tutor/deleteMcq/{{id}}?tutId={{tutorialId}}"><i
-                            class="material-icons">delete</i></a>
-                </div>
-                {{else}}
-                <div class="col d-flex justify-content-end">
-                    <a class="btn btn-info mr-2" href="/tutor/editOe/{{id}}"><i class="fas fa-pencil-alt"></i></a>
-                    <a class="btn btn-danger btn-sm" href="/tutor/deleteOe/{{id}}?tutId={{tutorialId}}"><i
-                            class="material-icons">delete</i></a>
-                </div>
-                {{/if}}
             </div>
             <hr class="my-3 border border-dark" />
             <p class="lead">{{question}}</p>
@@ -99,8 +85,8 @@
         {{/if}}
         {{/with}}
 
-        <div class="d-flex justify-content-end submit">
-            <button type="button" class="btn btn-outline-light"><a href="/tutor/content">Exit</a></button>
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-outline-light mr-2" href="/tutor/content">Exit</a>
         </div>
     </form>
 </div>
