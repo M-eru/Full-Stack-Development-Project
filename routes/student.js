@@ -5,6 +5,9 @@ const QnOption = require("../models/QnOption");
 const Tutorial = require("../models/Tutorial");
 const Answer = require("../models/Answer");
 const Result = require("../models/Result");
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 router.get("/tutorials/:id", (req, res) => {
   Tutorial.findByPk(req.params.id, {
@@ -32,7 +35,7 @@ router.get("/result/:id", (req, res) => {
       { model: Result }, //, where: { id: 19 } }, WHERE studentId
     ],
   }).then((data) => {
-    // console.log(JSON.stringify(data, null, 2));
+    console.log(JSON.stringify(data, null, 2));
     res.render("student/result", { data: data });
   });
 });
@@ -44,12 +47,22 @@ router.post("/tutorials/:id", async function (req, res) {
   let tutorialId = req.body.tutId;
   let ids = req.body.id;
   let score = 0;
+  let status = "true";
+
+  Result.create({
+    //Tried adding await
+    status,
+    score,
+    tutorialId,
+  });
   // console.log("Tutorial: " + tutorialId);
   // console.log("Qn: " + ids);
 
   // Question Answers
   if (Array.isArray(req.body.id) == true) {
+    console.log("52");
     ids.forEach(async function (qnId) {
+      console.log("54");
       let input = req.body[qnId];
       // console.log("Answer: " + req.body[item]);
       await Question.findByPk(qnId).then((i) => {
@@ -59,6 +72,13 @@ router.post("/tutorials/:id", async function (req, res) {
         if (input == ans) {
           console.log("Answer: " + input + " Correct Answer: " + ans);
           score += 1;
+          Result.update(
+            {
+              //Tried adding await
+              score,
+            },
+            { where: { tutorialId: tutorialId } }
+          );
           Answer.create({
             ans,
             qnId,
@@ -72,6 +92,7 @@ router.post("/tutorials/:id", async function (req, res) {
           });
         }
       });
+      await sleep(2000);
     });
   } else {
     let qnId = ids;
@@ -81,6 +102,13 @@ router.post("/tutorials/:id", async function (req, res) {
       if (input == ans) {
         console.log("Answer: " + input + " Correct Answer: " + ans);
         score += 1;
+        Result.update(
+          {
+            //Tried adding await
+            score,
+          },
+          { where: { tutorialId: tutorialId } }
+        );
         Answer.create({
           ans,
           qnId,
@@ -97,13 +125,14 @@ router.post("/tutorials/:id", async function (req, res) {
   }
 
   // Adding student's results into database
-  let status = "true";
+  // let status = "true";
   console.log("Score: " + score);
-  Result.create({ //Tried adding await
-    status,
-    score,
-    tutorialId,
-  });
+  // Result.create({
+  //   Tried adding await
+  //   status,
+  //   score,
+  //   tutorialId,
+  // });
 
   // Redirect to result page
   res.redirect("/student/result/" + tutorialId);
