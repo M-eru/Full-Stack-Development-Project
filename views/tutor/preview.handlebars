@@ -36,6 +36,7 @@
             </div>
             <hr class="my-3 border border-dark" />
             <p class="lead">{{question}}</p>
+            {{#if qnOption}}
             {{#with qnOption}}
             <fieldset class="form-group row">
                 <div class="col-10">
@@ -66,13 +67,11 @@
                 </div>
             </fieldset>
             {{/with}}
-            {{#if qnOption}}
-            <h5>Correct Answer: Option {{correctAns}}</h5>
             {{else}}
             <fieldset class="form-group row">
                 <div class="col-10">
-                    <label for="ans" class="col-form-label h4">Correct Answer:</label>
-                    <textarea type="text" class="form-control" id="ans" name="ans">{{correctAns}}</textarea>
+                    <label for="ans" class="col-form-label h4">Your Answer:</label>
+                    <textarea type="text" class="form-control" id="ans" name="ans"></textarea>
                 </div>
             </fieldset>
             {{/if}}

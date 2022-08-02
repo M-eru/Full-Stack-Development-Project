@@ -2,13 +2,13 @@
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link text-decoration-none text-dark" data-toggle="modal"
-                    data-target="#warningModal"><i class='fas fa-angle-left'></i></a>
+                <a class="nav-link text-decoration-none text-dark" data-toggle="modal" data-target="#warningModal"><i
+                        class='fas fa-angle-left'></i></a>
             </li>
         </ul>
     </div>
     <div class="mx-auto order-0">
-        {{#with tutorial}}
+        {{#with data}}
         <a class="navbar-brand mx-auto" href="#">{{tutName}}</a>
         {{/with}}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".creationNav">
@@ -24,19 +24,23 @@
 </nav>
 
 <div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
-    <form action="" method="post">
-        {{#if mcqqn}}
-        {{#each mcqqn}}
+    <form action="" method="post" class="needs-validation" novalidate>
+        {{#with data}}
+        <input type="hidden" name="tutId" value="{{id}}"> {{!-- Tutorial ID --}}
+        {{#if qns}}
+        {{#each qns}}
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
             <div class="row">
                 <div class="col d-flex align-items-center mt-2">
-                    <h5>Question {{id}}</h5>
+                    <h5>Question {{qnOrder}}</h5>
                 </div>
             </div>
             <hr class="my-3 border border-dark" />
             <p class="lead">{{question}}</p>
-            <fieldset class="form-group-row">
-                {{#with qnOption}}
+            {{#if qnOption}}
+            {{#with qnOption}}
+            <fieldset class="form-group row" name="{{qnOrder}}">
+                <input type="hidden" name="id" value="{{id}}"> {{!-- Question ID --}}
                 <div class="col-10">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
@@ -57,37 +61,43 @@
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="{{id}}" id="option4" value="4">
+                        <input class="form-check-input" type="radio" name="{{id}}" id="option4" value="4" required>
                         <label class="form-check-label" for="option4">
                             {{ans4}}
                         </label>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please choose a valid answer!
+                        </div>
                     </div>
                 </div>
-                {{/with}}
             </fieldset>
-        </div>
-        {{/each}}
-        {{/if}}
-
-        {{#if oeqn}}
-        {{#each oeqn}}
-        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
-            <div class="row">
-                <div class="col d-flex align-items-center mt-2">
-                    <h5>Question {{id}}</h5>
-                </div>
-            </div>
-            <hr class="my-3 border border-dark" />
-            <p class="lead">{{question}}</p>
+            {{/with}}
+            {{else}}
             <fieldset class="form-group row">
+                <input type="hidden" name="id" value="{{id}}"> {{!-- Question ID --}}
                 <div class="col-10">
                     <label for="ans" class="col-form-label h4">Your Answer:</label>
-                    <textarea type="text" class="form-control" id="ans" name="{{id}}"></textarea>
+                    <textarea type="text" class="form-control" id="ans" name="{{id}}" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Please enter a valid answer!
+                    </div>
                 </div>
             </fieldset>
+            {{/if}}
         </div>
         {{/each}}
+        {{else}}
+        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+            <h5 class="mt-1">No questions added.</h5>
+        </div>
         {{/if}}
+        {{/with}}
 
         <div class="d-flex justify-content-end submit">
             <button type="submit" class="btn btn-outline-light mb-2">Submit</button>
@@ -115,3 +125,24 @@
         </div>
     </div>
 </div>
+
+{{!-- Bootstrap form validation --}}
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
