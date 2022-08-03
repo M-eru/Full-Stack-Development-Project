@@ -7,7 +7,7 @@ const ensureAuthenticated = require('../helpers/auth');
 const ParentTutor = require("../models/ParentTutor");
 
 router.get('/', (req, res) => {
-	const title = 'Video Jotter';
+	const title = 'Tuition Academy';
 	// renders views/index.handlebars, passing title as an object
 	res.render('index', { title: title })
 });
