@@ -27,13 +27,13 @@
     <form action="" method="post" class="needs-validation" novalidate>
         {{#with data}}
         {{#if results}}
-        {{#with results}}
+        {{#each results}}
         <div class="container p-3 mb-4 bg-light rounded-lg qn1">
             <div class="text-center mt-2">
                 <h5>Total Score: {{score}}</h5>
             </div>
         </div>
-        {{/with}}
+        {{/each}}
         {{/if}}
         {{#if qns}}
         {{#each qns}}

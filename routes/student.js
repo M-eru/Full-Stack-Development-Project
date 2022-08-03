@@ -35,7 +35,7 @@ router.get("/result/:id", (req, res) => {
       { model: Result }, //, where: { id: 19 } }, WHERE studentId
     ],
   }).then((data) => {
-    console.log(JSON.stringify(data, null, 2));
+    // console.log(JSON.stringify(data, null, 2));
     res.render("student/result", { data: data });
   });
 });
