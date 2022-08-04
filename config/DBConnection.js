@@ -51,8 +51,8 @@ const setUpDB = (drop) => {
       User.hasMany(Badge);
       Badge.belongsTo(User);
 
-      Student.hasMany(Card);
-      Card.belongsTo(Student);
+      ParentTutor.hasMany(Card);
+      Card.belongsTo(ParentTutor);
       // Student is just for my code to work. Will be changed to user accordingly.
       // Student = User
 

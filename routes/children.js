@@ -148,7 +148,7 @@ router.post('/addChildren', ensureAuthenticated.ensureParent, async function (re
     }
 
     flashMessage(res, "success", admNo + " assigned to parent");
-    res.redirect("/studentProfile");
+    res.redirect("/parent/studentProfile");
 });
 
 

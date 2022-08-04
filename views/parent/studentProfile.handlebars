@@ -5,17 +5,16 @@
 {{> _leftNavbar}}
 {{!-- main content --}}
 <div class="col-8 mt-4 ml-3" style="text-align: justify;" id="studentDetails">
-  {{#each students}}
-  <h1>{{name}}</h1>
+  <h1>{{student.name}}</h1>
   <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
   <table class="table table-borderless">
     <tbody>
       <tr>
         <th rowspan="2" width="20%">Student Details</th>
-        <td>{{name}}</td>
+        <td>{{student.name}}</td>
       </tr>
       <tr>
-        <td>{{admno}}</td>
+        <td>{{student.admno}}</td>
       </tr>
       <tr>
         <th>Subject</th>
@@ -30,7 +29,6 @@
       </tr>
     </tbody>
   </table>
-  {{/each}}
 </div>
 </div>
 </div>
