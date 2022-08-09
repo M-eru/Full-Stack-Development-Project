@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
-const ParentTutor = require('../models/ParentTutor');
 const flashMessage = require('../helpers/messenger');
 const bcrypt = require("bcryptjs");
 const ensureAuthenticated = require('../helpers/auth');
@@ -148,7 +147,7 @@ router.post('/addChildren', ensureAuthenticated.ensureParent, async function (re
     }
 
     flashMessage(res, "success", admNo + " assigned to parent");
-    res.redirect("/parent/studentProfile");
+    res.redirect("/parent/studentProfile_select");
 });
 
 

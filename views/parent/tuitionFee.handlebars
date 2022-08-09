@@ -1,83 +1,88 @@
 {{> _parentNavBar}}
 {{> _flashmsg }}
 <div class="container-fluid h-100">
-<div class="row h-100">
-{{> _leftNavbar}}
-{{!-- right content --}}
-<div class="col-8 mt-4 ml-3" style="text-align: justify;">
-    {{!-- Student Name --}}
-    <h1>{{student.name}}</h1>
-    <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
-    {{!-- Tuition Fee Information (right navbar) --}}
-    <div class="col-3 float-right pt-4" style="height: 500px; background-color: #C4C4C4;">
-        <h5><u>Tuition Fee Information</u></h5>
-        <table class="table table-borderless">
-            <tbody>
-                <tr>
-                    <th>Subject</th>
-                    <td>Mathematics</td>
-                </tr>
-                <tr>
-                    <th>Signed-up days</th>
-                    <td>365</td>
-                </tr>
-                <tr>
-                    <th>Total</th>
-                    <td>S$ 3650</td>
-                </tr>
-            </tbody>
-        </table>
-        <br>
-        <h5><u>Payment Procedure</u></h5>
-        <p>1. Select <b>one card</b> to pay for student's tuition fee.</p>
-        <p>2. Click "Confirm" button to complete payment.</p>
-    </div>
-    {{!-- Cards available (left content) --}}
-    <div class="container">
-        {{#if cards}}
-        <form action="" method="post">
-            <div class="card card-body overflow-auto" style="height: 500px;">
-                {{#each cards}}
-                <input type="radio" name="tuition_card" id="{{id}}" style="display: none;" 
-                        onchange="ensureOneInput({{id}}, 'tuition_card')">
-                <label for="{{id}}">
-                    <div class="card mb-2 w-100 mx-auto" style="border: .3rem solid #C4C4C4;" id="border_line{{id}}">
-                        <div class="card-header" style="background-color: #9BD6EB;">
-                            <span class="check_btn" id="icon_bg{{id}}"><i class="fas fa-check"></i></span>
-                            <h5 class="card-title">{{cardName}}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-4">
-                                    <p class="font-italic">Card Number</p>
-                                    <p class="text-info">{{cardNo}}</p>
+    <div class="row h-100">
+        {{> _leftNavbarFee}}
+        {{!-- right content --}}
+        <div class="col-8 mt-4 ml-3" style="text-align: justify;">
+            {{#if student.payed}}
+            {{> _noPayment }}
+            {{else}}
+            {{!-- Student Name --}}
+            <h1>{{student.name}}</h1>
+            <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
+            {{!-- Tuition Fee Information (right navbar) --}}
+            <div class="col-3 float-right pt-4" style="height: 500px; background-color: #C4C4C4;">
+                <h5><u>Tuition Fee Information</u></h5>
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th>Subject</th>
+                            <td>Mathematics</td>
+                        </tr>
+                        <tr>
+                            <th>Signed-up days</th>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <td>S$ 3650</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <h5><u>Payment Procedure</u></h5>
+                <p>1. Select <b>one card</b> to pay for student's tuition fee.</p>
+                <p>2. Click "Confirm" button to complete payment.</p>
+            </div>
+            {{!-- Cards available (left content) --}}
+            <div class="container">
+                {{#if cards}}
+                <form action="" method="post">
+                    <div class="card card-body overflow-auto" style="height: 500px;">
+                        {{#each cards}}
+                        <input type="radio" name="tuition_card" id="{{id}}" style="display: none;"
+                            onchange="ensureOneInput({{id}}, 'tuition_card')">
+                        <label for="{{id}}">
+                            <div class="card mb-2 w-100 mx-auto" style="border: .3rem solid #C4C4C4;"
+                                id="border_line{{id}}">
+                                <div class="card-header" style="background-color: #9BD6EB;">
+                                    <span class="check_btn" id="icon_bg{{id}}"><i class="fas fa-check"></i></span>
+                                    <h5 class="card-title">{{cardName}}</h5>
                                 </div>
-                                <div class="col-2">
-                                    <p class="font-italic">Card</p>
-                                    <p class="text-info">{{debitCredit}}</p>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <p class="font-italic">Card Number</p>
+                                            <p class="text-info">{{cardNo}}</p>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="font-italic">Card</p>
+                                            <p class="text-info">{{debitCredit}}</p>
 
-                                </div>
-                                <div class="col-3">
-                                    <p class="font-italic">Expiry Date</p>
-                                    <p class="text-info">{{formatDate expiryDate 'MMM YYYY'}}</p>
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="font-italic">Expiry Date</p>
+                                            <p class="text-info">{{formatDate expiryDate 'MMM YYYY'}}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </label>
+                        {{/each}}
+                        <button id="tuition_submit" type="submit" class="btn btn-primary">Confirm</button>
                     </div>
-                </label>
-                {{/each}}
-                <button id="tuition_submit" type="submit" class="btn btn-primary">Confirm</button>
+                </form>
+                {{else}}
+                <div class="text-center">
+                    <h3>No payment card saved</h3>
+                    <a class="nav-link bg-info text-white rounded" href="/card/addCard">Add payment card</a>
+                </div>
+                {{/if}}
+                {{/if}}
             </div>
-        </form>
-        {{else}}
-        <div class="text-center">
-            <h3>No payment card saved</h3>
-            <a class="nav-link bg-info text-white rounded" href="/card/addCard">Add payment card</a>
         </div>
-        {{/if}}
     </div>
-</div>
-</div>
 </div>
 
 <script>
@@ -95,9 +100,11 @@
                 myIcon1.style.backgroundColor = '#C4C4C4';
                 myBorder1.style.borderColor = '#C4C4C4';
             }
-            
+
             flag = myId;
         }
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
