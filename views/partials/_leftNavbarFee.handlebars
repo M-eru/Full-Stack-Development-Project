@@ -4,19 +4,10 @@
     {{!-- List of Children --}}
     <ul id="myMenu">
         {{#each students}}
-        <li><a href="/parent/studentProfile/{{id}}">{{name}}</a></li>
+        <li><a href="/parent/tuitionFee/{{id}}">{{name}}</a></li>
         {{/each}}
     </ul>
 </div>
-
-{{!-- var currentURL = window.location.href;
-    var toBeChanged = document.getElementsByTagName("li");
-    if (currentURL == "http://localhost:5000/tuitionFee") {
-        toBeChanged.href = "/tuitionFee/{{id}}";
-    }
-    else if (currentURL == "http://localhost:5000/studentProfile") {
-        toBeChanged.href = "/studentProfile/{{id}}";
-    } --}}
 
 <script>
     function myFunction() {

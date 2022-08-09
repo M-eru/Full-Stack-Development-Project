@@ -69,6 +69,7 @@ router.post("/signup/student", async function (req, res) {
         year, 
         role: "student",
         status: "active",
+        payed: false
       });
 
       console.log(

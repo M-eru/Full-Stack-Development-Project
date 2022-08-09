@@ -3,22 +3,24 @@ const router = express.Router();
 const flashMessage = require('../helpers/messenger');
 const Card = require("../models/Card");
 const Student = require('../models/Student');
+const ParentTutor = require('../models/ParentTutor');
 const ensureAuthenticated = require('../helpers/auth');
-const ParentTutor = require("../models/ParentTutor");
 
 
-router.get('/studentProfile', ensureAuthenticated.ensureParent, (req, res) => {
+// get --> studentProfile (not selected)
+router.get('/studentProfile_select', ensureAuthenticated.ensureParent, (req, res) => {
     Student.findAll({
         include: { model: ParentTutor },
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
         console.log(students);
-        res.render("parent/studentProfile", { students });
+        res.render("parent/studentProfile_select", { students });
     })
 });
 
 
+// get --> studentProfile (selected)
 router.get('/studentProfile/:id', ensureAuthenticated.ensureParent, (req, res) => {
     Student.findAll({
         include: { model: ParentTutor },
@@ -38,65 +40,84 @@ router.get('/studentProfile/:id', ensureAuthenticated.ensureParent, (req, res) =
 });
 
 
-router.get('/studentProgress', ensureAuthenticated.ensureParent, (req, res) => {
+// get --> studentProgress (not selected)
+router.get('/studentProgress_select', ensureAuthenticated.ensureParent, (req, res) => {
     Student.findAll({
         include: { model: ParentTutor },
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
         console.log(students);
-        res.render('parent/studentProgress', { students });
+        res.render('parent/studentProgress_select', { students });
     })
 });
 
 
-router.get('/tuitionFee', ensureAuthenticated.ensureParent, (req, res) => {
-    Card.findAll({
+// get --> studentProgress (selected)
+router.get('/studentProgress/:id', ensureAuthenticated.ensureParent, (req, res) => {
+    Student.findAll({
+        include: { model: ParentTutor },
         where: { parentTutorId: req.user.id },
-        order: [['expiryDate', 'DESC']],
-        raw: true
-    })
-    .then((cards) => {
-        Student.findAll({
-            include: { model: ParentTutor },
-            where: { parentTutorId: req.user.id },
-            order: [['name', 'ASC']]
-        }).then((students) => {
-            console.log(students);
-            res.render('parent/tuitionFee', { cards, students });
+        order: [['name', 'ASC']]
+    }).then((students) => {
+        Student.findByPk(req.params.id).then((student) => {
+            if (!student) {
+                flashMessage(res, 'error', 'Student not found');
+                res.redirect('/studentProgress');
+                return;
+            }
+            res.render("parent/studentProgress", { student, students });
         })
     })
-    .catch(err => console.log(err));
+        .catch(err => console.log(err));
 });
 
 
+// get --> tuitionFee (not selected)
+router.get('/tuitionFee_select', ensureAuthenticated.ensureParent, (req, res) => {
+    Student.findAll({
+        include: { model: ParentTutor },
+        where: { parentTutorId: req.user.id },
+        order: [['name', 'ASC']]
+    }).then((students) => {
+        console.log(students);
+        res.render('parent/tuitionFee_select', { students });
+    }).catch(err => console.log(err));
+});
+
+
+// get --> tuitionFee (selected)
 router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
+    // get all cards
     Card.findAll({
         where: { parentTutorId: req.user.id },
         order: [['expiryDate', 'DESC']],
         raw: true
     })
-    .then((cards) => {
-        Student.findAll({
-            include: { model: ParentTutor },
-            where: { parentTutorId: req.user.id },
-            order: [['name', 'ASC']]
-        }).then((students) => {
-            Student.findByPk(req.params.id).then((student) => {
-                if (!student) {
-                    flashMessage(res, 'error', 'Student not found');
-                    res.redirect('/tuitionFee');
-                    return;
-                }
-                res.render("parent/tuitionFee", { cards, student, students });
+        .then((cards) => {
+            // get all students (leftNavbar)
+            Student.findAll({
+                include: { model: ParentTutor },
+                where: { parentTutorId: req.user.id },
+                order: [['name', 'ASC']]
+            }).then((students) => {
+                // get selected student
+                Student.findByPk(req.params.id).then((student) => {
+                    if (!student) {
+                        flashMessage(res, 'error', 'Student not found');
+                        res.redirect('/tuitionFee_select');
+                        return;
+                    }
+                    res.render("parent/tuitionFee", { cards, student, students });
+                })
             })
         })
-    })
-    .catch(err => console.log(err));
+        .catch(err => console.log(err));
 });
 
 
-router.post('/tuitionFee', ensureAuthenticated.ensureParent, (req, res) => {
+// post --> tuitionFee (selected)
+router.post('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
     var card_id = req.body.tuition_card;
     let isValid = true;
     if (!card_id) {
@@ -108,14 +129,23 @@ router.post('/tuitionFee', ensureAuthenticated.ensureParent, (req, res) => {
             order: [['expiryDate', 'DESC']],
             raw: true
         })
-        .then((cards) => {
-            res.render('parent/tuitionFee', { cards });
-        })
-        .catch(err => console.log(err));
+            .then((cards) => {
+                res.render('parent/tuitionFee', { cards });
+            })
+            .catch(err => console.log(err));
         return;
     }
-    flashMessage(res, 'success', 'Payment complete!');
-    res.render('parent/tuitionFee');
+    Student.update(
+        {
+            payed: true
+        },
+        { where: { id: req.params.id } }
+    )
+        .then((result) => {
+            flashMessage(res, 'success', 'Payment complete!');
+            res.redirect('/parent/tuitionFee_select');
+        })
+        .catch(err => console.log(err));
 });
 
 module.exports = router;
