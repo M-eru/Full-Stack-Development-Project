@@ -25,16 +25,12 @@
 
 <div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
     <form action="" method="post" class="needs-validation" novalidate>
-        {{#with data}}
-        {{#if results}}
-        {{#each results}}
         <div class="container p-3 mb-4 bg-light rounded-lg qn1">
             <div class="text-center mt-2">
-                <h5>Total Score: {{score}}</h5>
+                <h5>Total Score: {{data.score}}</h5>
             </div>
         </div>
-        {{/each}}
-        {{/if}}
+        {{#with data.tut}}
         {{#if qns}}
         {{#each qns}}
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
