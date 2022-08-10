@@ -35,8 +35,18 @@ router.get("/tutorial", ensureAuthenticated.ensureStudent, (req, res) => {
 });
 
 router.get("/content", ensureAuthenticated.ensureStudent, (req, res) => {
-  Tutorial.findAll().then((tutorials) => {
-    res.render("student/content", { tutorials: tutorials });
+  Tutorial.findAll().then(async function (tutorials) {
+    let status = null;
+    await Answer.findOne({
+      where: { studentId: req.user.id },
+    }).then((result) => {
+      if (result) {
+        status = "completed";
+      }
+      res.render("student/content", {
+        data: { tutorials: tutorials, status: status },
+      });
+    });
   });
 });
 
@@ -55,11 +65,9 @@ router.get(
       await Answer.findOne({
         where: { studentId: req.user.id },
       }).then((result) => {
-        if (result.length != 0) {
+        if (result) {
           status = "completed";
         }
-        // console.log(score, status);
-        console.log(JSON.stringify(data, null, 2));
       });
       res.render("student/result", {
         data: { tut: data, score: score, status: status },
@@ -82,9 +90,7 @@ router.post(
 
     // Question Answers
     if (Array.isArray(req.body.id) == true) {
-      console.log("52");
       ids.forEach(async function (qnId) {
-        console.log("54");
         let input = req.body[qnId];
         // console.log("Answer: " + req.body[item]);
         await Question.findByPk(qnId).then((i) => {
@@ -92,7 +98,7 @@ router.post(
           // console.log("Correct Answer: " + i.correctAns);
           let ans = i.correctAns;
           if (input == ans) {
-            console.log("Answer: " + input + " Correct Answer: " + ans);
+            // console.log("Answer: " + input + " Correct Answer: " + ans);
             // Answer.create({
             //   ans,
             //   qnId,
@@ -103,7 +109,7 @@ router.post(
               req.user.id
             );
           } else if (input !== ans) {
-            console.log("Failed Answer: " + input + " Correct Answer: " + ans);
+            // console.log("Failed Answer: " + input + " Correct Answer: " + ans);
             // Answer.create({
             //   ans,
             //   input,
@@ -123,7 +129,7 @@ router.post(
       await Question.findByPk(ids).then((i) => {
         let ans = i.correctAns;
         if (input == ans) {
-          console.log("Answer: " + input + " Correct Answer: " + ans);
+          // console.log("Answer: " + input + " Correct Answer: " + ans);
           // Answer.create({
           //   ans,
           //   qnId,
@@ -134,7 +140,7 @@ router.post(
             req.user.id
           );
         } else if (input !== ans) {
-          console.log("Failed Answer: " + input + " Correct Answer: " + ans);
+          // console.log("Failed Answer: " + input + " Correct Answer: " + ans);
           // Answer.create({
           //   ans,
           //   input,

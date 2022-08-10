@@ -9,12 +9,15 @@
                 <h1 class="display-4">Tutorials</h1>
             </div>
         </div>
-        {{#if tutorials}}
-        {{#each tutorials}}
+        {{#if data.tutorials}}
+        {{#each data.tutorials}}
         <div class="container mt-4">
             <div class="p-4 bg-light text-dark rounded-lg text-center">
                 <h4>{{tutName}}</h4>
                 <div class="btn-group" role="group">
+                    {{#if ../data.status}}
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/student/result/{{id}}">Results</a>
+                    {{/if}}
                     <a class="btn btn-outline-dark mt-3 mb-2" href="/student/tutorials/{{id}}">View</a>
                 </div>
             </div>

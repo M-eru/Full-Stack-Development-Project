@@ -8,6 +8,17 @@ const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
 
+// Function
+function upsert(values, qnId) {
+  return QnOption.findOne({ where: { qnId: qnId } }).then(function (obj) {
+    if (obj) {
+      return obj.update(values);
+    } else {
+      return QnOption.create(values);
+    }
+  });
+}
+
 // Content Pages
 router.get("/content", (req, res) => {
   Tutorial.findAll().then((tutorials) => {
@@ -120,7 +131,7 @@ router.post("/tutSubmit", (req, res) => {
   res.redirect("/tutor/content");
 });
 
-router.post("/mcq", (req, res) => {
+router.post("/mcq", async function (req, res) {
   let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let ans1 = req.body.ans1;
@@ -130,58 +141,104 @@ router.post("/mcq", (req, res) => {
   let correctAns = req.body.correctAns;
   let qnTypeId = 1;
   let tutorialId = req.body.id;
-
-  Question.create({
-    qnOrder,
-    question,
-    correctAns,
-    qnTypeId,
-    tutorialId,
-  })
-    .then((question) => {
-      console.log(question.toJSON());
-      qnId = question.id;
-      QnOption.create({
-        ans1,
-        ans2,
-        ans3,
-        ans4,
-        qnId,
+  const qnCheck = await Question.findOne({
+    where: { qnOrder: req.body.qnOrder },
+  });
+  if (qnCheck) {
+    await Question.update(
+      {
+        question,
+        correctAns,
+        qnTypeId,
+      },
+      { where: { qnOrder: req.body.qnOrder } }
+    )
+      .then((question) => {
+        console.log(question[0] + " question updated.");
+        upsert(
+          { ans1: ans1, ans2: ans2, ans3: ans3, ans4: ans4, qnId: qnCheck.id },
+          qnCheck.id
+        )
+          .then((options) => {
+            flashMessage(res, "success", "Multiple choice question updated.");
+            res.redirect("/tutor/qns/" + tutorialId);
+          })
+          .catch((err) => console.log(err));
       })
-        .then((options) => {
-          console.log(options.toJSON());
-          flashMessage(res, "success", "Multiple choice question created.");
-          res.redirect("/tutor/qns/" + tutorialId);
-        })
-        .catch((err) => console.log(err));
+      .catch((err) => console.log(err));
+  } else {
+    await Question.create({
+      qnOrder,
+      question,
+      correctAns,
+      qnTypeId,
+      tutorialId,
     })
-    .catch((err) => console.log(err));
+      .then(async function (question) {
+        console.log(question.toJSON());
+        qnId = question.id;
+        await QnOption.create({
+          ans1,
+          ans2,
+          ans3,
+          ans4,
+          qnId,
+        })
+          .then((options) => {
+            console.log(options.toJSON());
+            flashMessage(res, "success", "Multiple choice question created.");
+            res.redirect("/tutor/qns/" + tutorialId);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }
 });
 
-router.post("/oe", (req, res) => {
+router.post("/oe", async function (req, res) {
   let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let correctAns = req.body.correctAns;
   let qnTypeId = 2;
   let tutorialId = req.body.id;
 
-  Question.create({
-    qnOrder,
-    question,
-    correctAns,
-    qnTypeId,
-    tutorialId,
-  })
-    .then((question) => {
-      console.log(question.toJSON());
-      flashMessage(res, "success", "Open ended question created.");
-      res.redirect("/tutor/qns/" + tutorialId);
+  const qnCheck = await Question.findOne({
+    where: { qnOrder: req.body.qnOrder },
+  });
+
+  if (qnCheck) {
+    await Question.update(
+      {
+        question,
+        correctAns,
+        qnTypeId,
+      },
+      { where: { qnOrder: req.body.qnOrder } }
+    )
+      .then(async function (question) {
+        await QnOption.destroy({ where: { qnId: qnCheck.id } });
+        flashMessage(res, "success", "Open ended question updated.");
+        res.redirect("/tutor/qns/" + tutorialId);
+      })
+      .catch((err) => console.log(err));
+  } else {
+    await Question.create({
+      qnOrder,
+      question,
+      correctAns,
+      qnTypeId,
+      tutorialId,
     })
-    .catch((err) => console.log(err));
+      .then(async function (question) {
+        console.log(question.toJSON());
+        flashMessage(res, "success", "Open ended question created.");
+        res.redirect("/tutor/qns/" + tutorialId);
+      })
+      .catch((err) => console.log(err));
+  }
 });
 
 router.post("/editMcq/:id", (req, res) => {
-  let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let ans1 = req.body.ans1;
   let ans2 = req.body.ans2;
@@ -192,7 +249,6 @@ router.post("/editMcq/:id", (req, res) => {
 
   Question.update(
     {
-      qnOrder,
       question,
       correctAns,
     },
@@ -220,14 +276,12 @@ router.post("/editMcq/:id", (req, res) => {
 });
 
 router.post("/editOe/:id", (req, res) => {
-  let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let correctAns = req.body.correctAns;
   let tutorialId = req.body.tutId;
 
   Question.update(
     {
-      qnOrder,
       question,
       correctAns,
     },

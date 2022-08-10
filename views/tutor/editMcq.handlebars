@@ -26,15 +26,6 @@
         <div class="container p-4 mb-4 bg-light rounded-lg qn1">
             <div class="form-group">
                 <input type="hidden" name="tutId" value="{{question.tutorialId}}"> {{!-- Tutorial ID --}}
-                <label for="qnOrder" class="col-form-label h5">Question Number</label>
-                <input type="number" class="form-control" id="qnOrder" name="qnOrder" value="{{question.qnOrder}}"
-                    placeholder="Question number here..." required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    Please enter a valid number.
-                </div>
                 <label for="qn" class="col-form-label h5">Question</label>
                 <textarea class="form-control" id="qn" name="qn" placeholder="Question here..."
                     required>{{question.question}}</textarea>
