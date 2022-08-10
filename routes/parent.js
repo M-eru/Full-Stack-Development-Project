@@ -33,7 +33,9 @@ router.get('/studentProfile/:id', ensureAuthenticated.ensureParent, (req, res) =
                 res.redirect('/studentProfile');
                 return;
             }
-            res.render("parent/studentProfile", { student, students });
+            ParentTutor.findByPk(1).then((tutor) => {
+                res.render("parent/studentProfile", { student, students, tutor });
+            })
         })
     })
         .catch(err => console.log(err));
