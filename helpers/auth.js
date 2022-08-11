@@ -41,4 +41,31 @@ const ensureStudentTutor = (req, res, next) => {
   res.redirect('/');
 };
 
-module.exports = { ensureStudent, ensureParent, ensureTutor, ensureStudentTutor };
+// Check if there is no user logged in (used for sign up/login pages)
+const ensureNotAuthenticated = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return next();
+  }
+  flashMessage(res, "error", "User already logged in.");
+  res.redirect('/');
+};
+
+// Redirects user to different homepages depending on their role
+const getHomepage = (role) => {
+  if (role) {
+    switch (role) {
+      case "student":
+        return '/student/content';
+      
+      case "parent":
+        return '/parent/studentProfile_select';
+      
+      case "tutor":
+        return '/tutor/content';
+    }
+  }
+  else { return '/'; }
+}
+
+module.exports = { ensureStudent, ensureParent, ensureTutor, ensureStudentTutor, 
+  ensureNotAuthenticated, getHomepage };

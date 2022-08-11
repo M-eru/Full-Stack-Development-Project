@@ -27,7 +27,6 @@ function localStrategy(passport) {
           return done(null, false, { message: "Incorrect username or password" });
         }
         // Authenticated
-        // flashMessage(res, "success", admno + " logged in successfully");
         return done(null, user);
       });
     })
@@ -55,7 +54,6 @@ function localStrategy(passport) {
           return done(null, false, { message: "Incorrect username or password" });
         }
         // Authenticated
-        // flashMessage(res, "success", email + " logged in successfully");
         return done(null, user);
       });
     })
@@ -70,7 +68,6 @@ function localStrategy(passport) {
   // put into req.user
   passport.deserializeUser((user, done) => {
     if (user.role == 'student') {
-      console.log('Passport-session: Confirmed user role as student')
       Student.findByPk(user.id)
       .then((user) => {
         done(null, user);
@@ -83,7 +80,6 @@ function localStrategy(passport) {
     }
 
     else if (user.role == 'parent' || user.role == 'tutor') {
-      console.log('Passport-session: Confirmed user role as', user.role)
       ParentTutor.findByPk(user.id)
       .then((user) => {
         done(null, user);
