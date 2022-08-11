@@ -10,7 +10,7 @@ const upload = require('../helpers/imageUpload');
 router.get('/badges', ensureAuthenticated.ensureStudentTutor, (req, res) => {
     Badge.findAll({
         // where: { userId: req.user.id },
-        order: [['points', 'DESC']],
+        order: [['points', 'ASC']],
         raw: true
     })
         .then((badges) => {
@@ -23,22 +23,81 @@ router.get('/createbadge', ensureAuthenticated.ensureTutor, (req, res) => {
     res.render('tutor_badges/createbadge');
 });
 
-router.post('/createbadge', ensureAuthenticated.ensureTutor, (req, res) => {
+// router.post('/createbadge', ensureAuthenticated.ensureTutor, (req, res) => {
+// let badgename = req.body.badgename;
+// let points = req.body.points;
+// let color = req.body.color;
+// let posterURL = req.body.posterURL;
+// let icon = req.body.icon;
+// let userId = req.user.id;
+// 
+// Badge.create(
+// { badgename, points, color, posterURL }
+// )
+// .then((badge) => {
+// console.log(badge.toJSON());
+// res.redirect('/badge/badges');
+// })
+// .catch(err => console.log(err))
+// });
+
+router.post('/createbadge', ensureAuthenticated.ensureTutor, async function (req, res) {
     let badgename = req.body.badgename;
     let points = req.body.points;
     let color = req.body.color;
     let posterURL = req.body.posterURL;
-    // let icon = req.body.icon;
     // let userId = req.user.id;
+    try {
+        let badge = await Badge.findOne({ where: { badgename: badgename } });
+        if (badge) {
+            // If user is found, that means email has already been registered
+            flashMessage(res, 'error', badgename + ' already exists');
+            res.render('tutor_badges/createbadge');
+        }
+        else {
+            Badge.create(
+                { badgename, points, color, posterURL }
+            )
+                .then((badge) => {
+                    console.log(badge.toJSON());
+                    res.redirect('/badge/badges');
+                })
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
 
-    Badge.create(
-        { badgename, points, color, posterURL }
-    )
+router.get('/editBadge/:id', ensureAuthenticated.ensureTutor, (req, res) => {
+    Badge.findByPk(req.params.id)
         .then((badge) => {
-            console.log(badge.toJSON());
+            if (!badge) {
+                flashMessage(res, 'error', 'Badge not found');
+                res.redirect('/badge/badges');
+                return;
+            }
+            res.render('tutor_badges/editbadge', { badge });
+        })
+        .catch(err => console.log(err));
+});
+
+router.post('/editbadge/:id', ensureAuthenticated.ensureTutor, (req, res) => {
+    let badgename = req.body.badgename;
+    let points = req.body.points;
+    let color = req.body.color;
+    let posterURL = req.body.posterURL;
+    Badge.update(
+        {
+            badgename, points, color, posterURL
+        },
+        { where: { id: req.params.id } }
+    )
+        .then((result) => {
+            console.log(result[0] + ' Badge updated');
             res.redirect('/badge/badges');
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 });
 
 router.get('/deleteBadge/:id', ensureAuthenticated.ensureTutor, async function (req, res) {
@@ -66,8 +125,8 @@ router.get('/deleteBadge/:id', ensureAuthenticated.ensureTutor, async function (
 
 router.post('/upload', (req, res) => {
     // Creates user id directory for upload if not exist
-    if (!fs.existsSync('./public/uploads/')) {
-        fs.mkdirSync('./public/uploads/', {
+    if (!fs.existsSync('./public/uploads/' + req.user.id)) {
+        fs.mkdirSync('./public/uploads/' + req.user.id, {
             recursive:
                 true
         });
@@ -79,10 +138,24 @@ router.post('/upload', (req, res) => {
         }
         else {
             res.json({
-                file: `/uploads/${req.file.filename}`
+                file: `/uploads/${req.user.id}/${req.file.filename}`
             });
         }
     });
+});
+
+// StudentSide
+
+router.get('/badge/:id', ensureAuthenticated.ensureStudent, (req, res) => {
+    Badge.findAll({
+        where: { studentId: req.user.id },
+        order: [['points', 'ASC']],
+        raw: true
+    })
+        .then((badges) => {
+            res.render('student/badge', { badges });
+        })
+        .catch(err => console.log(err));
 });
 
 module.exports = router;
