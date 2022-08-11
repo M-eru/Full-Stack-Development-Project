@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const flashMessage = require('../helpers/messenger');
+const { route } = require("./tutor");
 
 
 router.get('/', (req, res) => {
@@ -8,6 +9,10 @@ router.get('/', (req, res) => {
 	// renders views/index.handlebars, passing title as an object
 	res.render('index', { title: title })
 });
+
+router.get("/404", (req, res) => {
+	res.render("404");
+})
 
 
 router.post('/flash', (req, res) => {
