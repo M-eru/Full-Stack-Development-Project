@@ -37,6 +37,9 @@ const setUpDB = (drop) => {
       Question.hasOne(Answer);
       Answer.belongsTo(Question);
 
+      Tutorial.hasMany(Answer);
+      Answer.belongsTo(Tutorial);
+
       // Parent and tutor accounts are grouped in the same table.
       ParentTutor.hasMany(Student);
       Student.belongsTo(ParentTutor);

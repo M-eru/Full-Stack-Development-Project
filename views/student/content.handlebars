@@ -16,7 +16,11 @@
                 <h4>{{tutName}}</h4>
                 <div class="btn-group" role="group">
                     {{#if ../data.status}}
+                    {{#each ../data.status}}
+                    {{#when id 'eq' ../id}}
                     <a class="btn btn-outline-dark mt-3 mb-2" href="/student/result/{{id}}">Results</a>
+                    {{/when}}
+                    {{/each}}
                     {{/if}}
                     <a class="btn btn-outline-dark mt-3 mb-2" href="/student/tutorials/{{id}}">View</a>
                 </div>

@@ -9,16 +9,16 @@ const sequelize = require("sequelize");
 
 // Functions
 
-function upsert(values, qnId, studentId) {
-  return Answer.findOne({ where: { qnId: qnId, studentId: studentId } }).then(
-    function (obj) {
-      if (obj) {
-        return obj.update(values);
-      } else {
-        return Answer.create(values);
-      }
+function upsert(values, qnId, studentId, tutorialId) {
+  return Answer.findOne({
+    where: { qnId: qnId, studentId: studentId, tutorialId: tutorialId },
+  }).then(function (obj) {
+    if (obj) {
+      return obj.update(values);
+    } else {
+      return Answer.create(values);
     }
-  );
+  });
 }
 
 router.get("/tutorials/:id", ensureAuthenticated.ensureStudent, (req, res) => {
@@ -36,16 +36,18 @@ router.get("/tutorial", ensureAuthenticated.ensureStudent, (req, res) => {
 
 router.get("/content", ensureAuthenticated.ensureStudent, (req, res) => {
   Tutorial.findAll().then(async function (tutorials) {
-    let status = null;
-    await Answer.findOne({
-      where: { studentId: req.user.id },
-    }).then((result) => {
-      if (result) {
-        status = "completed";
-      }
-      res.render("student/content", {
-        data: { tutorials: tutorials, status: status },
+    let status = []
+    await tutorials.forEach(async function (data) {
+      await Answer.findOne({
+        where: { studentId: req.user.id, tutorialId: data.id },
+      }).then((result) => {
+        if (result) {
+          status.push({"id": data.id});
+        }
       });
+    });
+    res.render("student/content", {
+      data: { tutorials: tutorials, status: status },
     });
   });
 });
@@ -60,10 +62,14 @@ router.get(
       // console.log(JSON.stringify(data, null, 2));
       let status = "uncompleted";
       const score = await Answer.count({
-        where: { studentId: req.user.id, input: null },
+        where: {
+          studentId: req.user.id,
+          input: null,
+          tutorialId: req.params.id,
+        },
       });
       await Answer.findOne({
-        where: { studentId: req.user.id },
+        where: { studentId: req.user.id, tutorialId: req.params.id },
       }).then((result) => {
         if (result) {
           status = "completed";
@@ -92,7 +98,8 @@ router.post(
     if (Array.isArray(req.body.id) == true) {
       ids.forEach(async function (qnId) {
         let input = req.body[qnId];
-        // console.log("Answer: " + req.body[item]);
+        // console.log("QnId: " + qnId);
+        // console.log("Answer: " + req.body[qnId]);
         await Question.findByPk(qnId).then((i) => {
           // console.log(JSON.stringify(i, null, 2));
           // console.log("Correct Answer: " + i.correctAns);
@@ -104,9 +111,16 @@ router.post(
             //   qnId,
             // });
             upsert(
-              { ans: ans, input: null, qnId: qnId, studentId: req.user.id },
+              {
+                ans: ans,
+                input: null,
+                qnId: qnId,
+                studentId: req.user.id,
+                tutorialId: tutorialId,
+              },
               qnId,
-              req.user.id
+              req.user.id,
+              tutorialId
             );
           } else if (input !== ans) {
             // console.log("Failed Answer: " + input + " Correct Answer: " + ans);
@@ -116,9 +130,16 @@ router.post(
             //   qnId,
             // });
             upsert(
-              { ans: ans, input: input, qnId: qnId, studentId: req.user.id },
+              {
+                ans: ans,
+                input: input,
+                qnId: qnId,
+                studentId: req.user.id,
+                tutorialId: tutorialId,
+              },
               qnId,
-              req.user.id
+              req.user.id,
+              tutorialId
             );
           }
         });
@@ -135,9 +156,16 @@ router.post(
           //   qnId,
           // });
           upsert(
-            { ans: ans, input: null, qnId: qnId, studentId: req.user.id },
+            {
+              ans: ans,
+              input: null,
+              qnId: qnId,
+              studentId: req.user.id,
+              tutorialId: tutorialId,
+            },
             qnId,
-            req.user.id
+            req.user.id,
+            tutorialId
           );
         } else if (input !== ans) {
           // console.log("Failed Answer: " + input + " Correct Answer: " + ans);
@@ -147,9 +175,16 @@ router.post(
           //   qnId,
           // });
           upsert(
-            { ans: ans, input: input, qnId: qnId, studentId: req.user.id },
+            {
+              ans: ans,
+              input: input,
+              qnId: qnId,
+              studentId: req.user.id,
+              tutorialId: tutorialId,
+            },
             qnId,
-            req.user.id
+            req.user.id,
+            tutorialId
           );
         }
       });

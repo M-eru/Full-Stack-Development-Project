@@ -142,7 +142,7 @@ router.post("/mcq", async function (req, res) {
   let qnTypeId = 1;
   let tutorialId = req.body.id;
   const qnCheck = await Question.findOne({
-    where: { qnOrder: req.body.qnOrder },
+    where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId },
   });
   if (qnCheck) {
     await Question.update(
@@ -151,7 +151,7 @@ router.post("/mcq", async function (req, res) {
         correctAns,
         qnTypeId,
       },
-      { where: { qnOrder: req.body.qnOrder } }
+      { where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId } }
     )
       .then((question) => {
         console.log(question[0] + " question updated.");
@@ -203,7 +203,7 @@ router.post("/oe", async function (req, res) {
   let tutorialId = req.body.id;
 
   const qnCheck = await Question.findOne({
-    where: { qnOrder: req.body.qnOrder },
+    where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId },
   });
 
   if (qnCheck) {
@@ -213,7 +213,7 @@ router.post("/oe", async function (req, res) {
         correctAns,
         qnTypeId,
       },
-      { where: { qnOrder: req.body.qnOrder } }
+      { where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId } }
     )
       .then(async function (question) {
         await QnOption.destroy({ where: { qnId: qnCheck.id } });
