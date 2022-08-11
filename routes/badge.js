@@ -6,10 +6,12 @@ const ensureAuthenticated = require('../helpers/auth');
 const flashMessage = require('../helpers/messenger');
 const fs = require('fs');
 const upload = require('../helpers/imageUpload');
+const ParentTutor = require('../models/ParentTutor');
+const Answer = require('../models/Answer');
 
 router.get('/badges', ensureAuthenticated.ensureTutor, (req, res) => {
     Badge.findAll({
-        // where: { userId: req.user.id },
+        where: { parentTutorId: req.user.id },
         order: [['points', 'ASC']],
         raw: true
     })
@@ -56,7 +58,7 @@ router.post('/createbadge', ensureAuthenticated.ensureTutor, async function (req
         }
         else {
             Badge.create(
-                { badgename, points, color, posterURL }
+                { badgename, points, color, posterURL, parentTutorId:1 }
             )
                 .then((badge) => {
                     console.log(badge.toJSON());
@@ -146,7 +148,14 @@ router.post('/upload', (req, res) => {
 
 // StudentSide
 
-router.get('/badge/:id', ensureAuthenticated.ensureStudent, (req, res) => {
+router.get('/badge', ensureAuthenticated.ensureStudent, async function(req, res) {
+    const score = await Answer.count({
+        where: {
+          studentId: req.user.id,
+          input: null,
+        },
+      });
+        console.log(score);
     Badge.findAll({
         where: { studentId: req.user.id },
         order: [['points', 'ASC']],
