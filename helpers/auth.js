@@ -31,16 +31,6 @@ const ensureTutor = (req, res, next) => {
   res.redirect('/user/redirect');
 };
 
-const ensureStudentTutor = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    if (req.user.role == "student" || req.user.role == "tutor") {
-      return next();
-    }
-  }
-  flashMessage(res, "error", "Authentication failed. Redirected to homepage.");
-  res.redirect('/user/redirect');
-};
-
 // Check if there is no user logged in (used for sign up/login pages)
 const ensureNotAuthenticated = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -67,5 +57,5 @@ const getHomepage = (role) => {
   else { return '/'; }
 }
 
-module.exports = { ensureStudent, ensureParent, ensureTutor, ensureStudentTutor, 
+module.exports = { ensureStudent, ensureParent, ensureTutor, 
   ensureNotAuthenticated, getHomepage };
