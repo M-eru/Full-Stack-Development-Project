@@ -18,14 +18,14 @@
                         <div class="card">
                             <div class="card-body text-left">
                                 <label class="" for="color">Color</label>
-                                <input class="form-control" id="color" type="color" name="color" required/>
+                                <input class="form-control" id="color" type="color" name="color" onchange="changeColor()" required/>
                             </div>
                         </div>
                     </div>
                     <input id="posterURL" type="hidden" name="posterURL" value="{{badge.posterURL}}">
                     <div class="custom-file mb-2">
                         <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload"
-                            accept="image/png,image/jpeg,image/jpg,image/gif" required>
+                            accept="image/png,image/jpeg,image/jpg,image/gif" onchange="loadFile(event)" required>
                         <label class="custom-file-label" for="customFile">Choose File</label>
                     </div>
                     <div class="text-danger small mb-2" id="posterErr" style="display:none"></div>
@@ -42,6 +42,16 @@
                 </div>
 
                 <div class="col card" style="position: relative;">
+                    <div class="col mt-4" style="left: 33%;">
+                        <div id="badgeColor" class="container"
+                            style="display:inline-block; height: 190px; width: 130px; border-radius: 10px; position: relative; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+                            <div class="image"
+                                style="margin:0; position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%);">
+                                <img id="badgeImage" alt="No image" class="img img-fluid mb-2">
+                            </div>
+                            </a>
+                        </div>
+                    </div>
                     <div style="position: absolute; bottom: 0; left: 40%">
                         <button class="btn btn-primary px-4" type="submit"
                             style="background-color: #282A35; border-color: #282A35">
@@ -53,3 +63,24 @@
     </form>
 </div>
 </div>
+
+<script>
+    // change color
+    function changeColor() {
+        var badgeColor = document.getElementById('color').value;
+        document.getElementById('badgeColor').style.backgroundColor = badgeColor;
+    }
+    var loadFile = function(event) {
+        // add image
+        var output = document.getElementById('badgeImage');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+        URL.revokeObjectURL(output.src)
+        }
+
+        // change label
+        var input = event.srcElement;
+        var fileName = input.files[0].name;
+        document.getElementById('fileLabel').innerHTML = fileName;
+    };
+</script>
