@@ -23,8 +23,11 @@ router.get("/login/parent-tutor", ensureAuthenticated.ensureNotAuthenticated, (r
   res.render("user/login_pt");
 });
 
-router.get("/redirect/parent-tutor", (req, res) => {
-  res.redirect(ensureAuthenticated.getHomepage(req.user.role));
+router.get("/redirect", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect(ensureAuthenticated.getHomepage(req.user.role));
+  }
+  else { res.redirect('/'); }
 });
 
 router.get("/profile", (req, res) => {
@@ -165,7 +168,7 @@ router.post("/signup/parent-tutor", async function (req, res) {
 router.post("/login/student", (req, res, next) => {
   passport.authenticate("student", {
     // Success redirect URL
-    successRedirect: "/student/content",
+    successRedirect: "/user/redirect",
     // Failure redirect URL
     failureRedirect: "/user/login/student",
     // boolean to generate a flash message
@@ -176,7 +179,7 @@ router.post("/login/student", (req, res, next) => {
 router.post("/login/parent-tutor", (req, res, next) => {
   passport.authenticate("parent-tutor", {
     // Success redirect URL
-    successRedirect: "/user/redirect/parent-tutor",
+    successRedirect: "/user/redirect",
     // Failure redirect URL
     failureRedirect: "/user/login/parent-tutor",
     // boolean to generate a flash message
