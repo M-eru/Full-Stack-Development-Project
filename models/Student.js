@@ -11,6 +11,7 @@ const Student = db.define('student',
   year: { type: Sequelize.INTEGER(1)},
   status: { type: Sequelize.STRING },
   payed: { type: Sequelize.BOOLEAN, defaultValue: false },
+  totalScore: { type: Sequelize.INTEGER, defaultValue: 0 },
   // Temporary columns for accessing parent details
   // When completed parent details should be accessed using FK instead
   tutorName: { type: Sequelize.STRING },

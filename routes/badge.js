@@ -8,6 +8,7 @@ const fs = require('fs');
 const upload = require('../helpers/imageUpload');
 const ParentTutor = require('../models/ParentTutor');
 const Answer = require('../models/Answer');
+const Student = require('../models/Student');
 
 router.get('/badges', ensureAuthenticated.ensureTutor, (req, res) => {
     Badge.findAll({
@@ -35,7 +36,7 @@ router.get('/createbadge', ensureAuthenticated.ensureTutor, (req, res) => {
 // 
 // Badge.create(
 // { badgename, points, color, posterURL }
-// )
+// )    
 // .then((badge) => {
 // console.log(badge.toJSON());
 // res.redirect('/badge/badges');
@@ -58,7 +59,7 @@ router.post('/createbadge', ensureAuthenticated.ensureTutor, async function (req
         }
         else {
             Badge.create(
-                { badgename, points, color, posterURL, parentTutorId:1 }
+                { badgename, points, color, posterURL, parentTutorId: 1 }
             )
                 .then((badge) => {
                     console.log(badge.toJSON());
@@ -148,14 +149,28 @@ router.post('/upload', (req, res) => {
 
 // StudentSide
 
-router.get('/badge', ensureAuthenticated.ensureStudent, async function(req, res) {
+router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res) {
+    // get total score
     const score = await Answer.count({
         where: {
-          studentId: req.user.id,
-          input: null,
+            studentId: req.user.id,
+            input: null,
         },
-      });
-        console.log(score);
+    });
+    console.log(score);
+    
+    // update student score
+    Student.findOne({
+        where: { id: req.user.id }
+    }).then((student) => {
+        if (student.totalScore <= score) {
+            Student.update(
+                { totalScore: score },
+                { where: { id: req.user.id } }
+            )
+        }
+    });
+
     Badge.findAll({
         where: { studentId: req.user.id },
         order: [['points', 'ASC']],
