@@ -1,5 +1,6 @@
 {{> _tutorNavBar}}
-<div class="container">
+<div class="container py-4">
+    {{> _flashmsg}}
     <div class="container mt-5 p-4 rounded-lg" style="background-color: #96D4D4;">
         <div class="container">
             {{> _flashmsg}}
@@ -32,23 +33,9 @@
             </div>
         </div>
         {{/if}}
-        <nav class="mt-5 d-flex justify-content-center align-items-center">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#">
-                        <span>&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="content">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">
-                        <span>&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <div class="mt-5 mb-4 d-flex justify-content-center align-items-center">
+            <a href="#content" class="btn btn-outline-dark bg-light"><i class='fas fa-angle-up'></i></a>
+        </div>
     </div>
 </div>
 

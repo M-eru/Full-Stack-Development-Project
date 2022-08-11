@@ -40,28 +40,28 @@
             {{#if qnOption}}
             {{#with qnOption}}
             <fieldset class="form-group row" name="{{qnOrder}}">
-                <input type="hidden" name="id" value="{{id}}"> {{!-- Question ID --}}
+                <input type="hidden" name="id" value="{{qnId}}"> {{!-- Question ID --}}
                 <div class="col-10">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
+                        <input class="form-check-input" type="radio" name="{{qnId}}" id="option1" value="1">
                         <label class="form-check-label" for="option1">
                             {{ans1}}
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="{{id}}" id="option2" value="2">
+                        <input class="form-check-input" type="radio" name="{{qnId}}" id="option2" value="2">
                         <label class="form-check-label" for="option2">
                             {{ans2}}
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="{{id}}" id="option3" value="3">
+                        <input class="form-check-input" type="radio" name="{{qnId}}" id="option3" value="3">
                         <label class="form-check-label" for="option3">
                             {{ans3}}
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="{{id}}" id="option4" value="4" required>
+                        <input class="form-check-input" type="radio" name="{{qnId}}" id="option4" value="4" required>
                         <label class="form-check-label" for="option4">
                             {{ans4}}
                         </label>

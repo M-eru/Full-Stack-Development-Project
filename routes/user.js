@@ -5,21 +5,38 @@ const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const ensureAuthenticated = require('../helpers/auth');
 
-router.get("/signup/student", (req, res) => {
+router.get("/signup/student", ensureAuthenticated.ensureNotAuthenticated, (req, res) => {
   res.render("user/signup_std");
 });
 
-router.get("/signup/parent-tutor", (req, res) => {
+router.get("/signup/parent-tutor", ensureAuthenticated.ensureNotAuthenticated, (req, res) => {
   res.render("user/signup_pt");
 });
 
-router.get("/login/student", (req, res) => {
+router.get("/login/student", ensureAuthenticated.ensureNotAuthenticated, (req, res) => {
   res.render("user/login_std");
 });
 
-router.get("/login/parent-tutor", (req, res) => {
+router.get("/login/parent-tutor", ensureAuthenticated.ensureNotAuthenticated, (req, res) => {
   res.render("user/login_pt");
+});
+
+router.get("/redirect", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect(ensureAuthenticated.getHomepage(req.user.role));
+  }
+  else { res.redirect('/'); }
+});
+
+router.get("/profile", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render("user/profile")
+  }
+  else {
+    res.redirect("/")
+  }
 });
 
 router.post("/signup/student", async function (req, res) {
@@ -151,7 +168,7 @@ router.post("/signup/parent-tutor", async function (req, res) {
 router.post("/login/student", (req, res, next) => {
   passport.authenticate("student", {
     // Success redirect URL
-    successRedirect: "/badge/badges",
+    successRedirect: "/user/redirect",
     // Failure redirect URL
     failureRedirect: "/user/login/student",
     // boolean to generate a flash message
@@ -162,7 +179,7 @@ router.post("/login/student", (req, res, next) => {
 router.post("/login/parent-tutor", (req, res, next) => {
   passport.authenticate("parent-tutor", {
     // Success redirect URL
-    successRedirect: "/children/addChildren",
+    successRedirect: "/user/redirect",
     // Failure redirect URL
     failureRedirect: "/user/login/parent-tutor",
     // boolean to generate a flash message
@@ -170,13 +187,60 @@ router.post("/login/parent-tutor", (req, res, next) => {
   })(req, res, next);
 });
 
+router.post("/profile", async function (req, res) {
+  let { name, detail, password, cpassword } = req.body;
+
+  let isValid = true;
+  if (password.length < 6) {
+    flashMessage(res, "error", "New password must be at least 6 characters");
+    isValid = false;
+  }
+
+  if (password != cpassword) {
+    flashMessage(res, "error", "Passwords do not match");
+    isValid = false;
+  }
+
+  if (!isValid) {
+    res.render("user/profile");
+    return;
+  }
+
+  if (req.user.role == "student") {
+    Student.update(
+      { password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
+      { where: { id: req.user.id } })
+      .then((result) => {
+          console.log('Student Id: ' + result[0] + ' has been updated');
+          flashMessage(res, 'success', detail + ' has been updated successfully');
+      })
+      .catch(err => console.log(err));
+  }
+  else {
+    ParentTutor.update(
+      { name, email: detail, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
+      { where: { id: req.user.id } })
+      .then((result) => {
+        console.log('Parent-Tutor Id: ' + result[0] + ' has been updated');
+        flashMessage(res, 'success', detail + ' has been updated successfully');
+      })
+  }
+  res.redirect(ensureAuthenticated.getHomepage(req.user.role))
+});
+
 router.get("/logout", (req, res) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
+  if (req.isAuthenticated()) {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      flashMessage(res, "success", "Logged out successfully");
+      res.redirect("/");
+    });
+  }
+  else {
+    res.redirect("/")
+  }
 });
 
 module.exports = router;

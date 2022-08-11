@@ -7,6 +7,7 @@ const Tutorial = require("../models/Tutorial");
 const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
+const ensureAuthenticated = require("../helpers/auth");
 
 // Function
 function upsert(values, qnId) {
@@ -20,81 +21,130 @@ function upsert(values, qnId) {
 }
 
 // Content Pages
-router.get("/content", (req, res) => {
+
+router.get("/content", ensureAuthenticated.ensureTutor, (req, res) => {
   Tutorial.findAll().then((tutorials) => {
     res.render("tutor/content", { tutorials: tutorials });
   });
 });
 
-router.get("/qns/:id", (req, res) => {
-  Tutorial.findByPk(req.params.id, {
-    include: { model: Question, include: { model: QnOption } },
-    order: [[Question, "qnOrder", "ASC"]],
-  }).then((data) => {
-    // console.log(JSON.stringify(data, null, 2));
-    res.render("tutor/qns", { data: data });
-  });
-});
+router.get(
+  "/qns/:id",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    const check = await Tutorial.findByPk(req.params.id);
+    if (check) {
+      await Tutorial.findByPk(req.params.id, {
+        include: { model: Question, include: { model: QnOption } },
+        order: [[Question, "qnOrder", "ASC"]],
+      }).then((data) => {
+        // console.log(JSON.stringify(data, null, 2));
+        res.render("tutor/qns", { data: data });
+      });
+    } else {
+      res.render("404");
+    }
+  }
+);
 
-router.get("/tutorials/:id", (req, res) => {
-  Tutorial.findByPk(req.params.id, {
-    include: { model: Question, include: { model: QnOption } },
-    order: [[Question, "qnOrder", "ASC"]],
-  }).then((data) => {
-    // console.log(JSON.stringify(data, null, 2));
-    res.render("tutor/preview", { data: data });
-  });
-});
+router.get(
+  "/tutorials/:id",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    const check = await Tutorial.findByPk(req.params.id);
+    if (check) {
+      await Tutorial.findByPk(req.params.id, {
+        include: { model: Question, include: { model: QnOption } },
+        order: [[Question, "qnOrder", "ASC"]],
+      }).then((data) => {
+        // console.log(JSON.stringify(data, null, 2));
+        res.render("tutor/preview", { data: data });
+      });
+    } else {
+      res.render("404");
+    }
+  }
+);
 
-router.get("/preview", (req, res) => {
+router.get("/preview", ensureAuthenticated.ensureTutor, (req, res) => {
   res.render("tutor/preview");
 });
 
 // Question Forms
-router.get("/mcq/:id", (req, res) => {
+router.get("/mcq/:id", ensureAuthenticated.ensureTutor, (req, res) => {
   res.render("tutor/mcq", { id: req.params.id });
 });
 
-router.get("/oe/:id", (req, res) => {
+router.get("/oe/:id", ensureAuthenticated.ensureTutor, (req, res) => {
   res.render("tutor/oe", { id: req.params.id });
 });
 
 // Edit Forms
-router.get("/editMcq/:id", (req, res) => {
-  Question.findByPk(req.params.id, {
-    include: { model: QnOption, required: true },
-  }).then((question) => {
-    res.render("tutor/editMcq", { question });
-  });
-});
+router.get(
+  "/editMcq/:id",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    const check = await Question.findByPk(req.params.id);
+    if (check) {
+      await Question.findByPk(req.params.id, {
+        include: { model: QnOption, required: true },
+      }).then((question) => {
+        res.render("tutor/editMcq", { question });
+      });
+    } else {
+      res.render("404");
+    }
+  }
+);
 
-router.get("/editOe/:id", (req, res) => {
-  Question.findByPk(req.params.id).then((question) => {
-    res.render("tutor/editOe", { question });
-  });
-});
+router.get(
+  "/editOe/:id",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    const check = await Question.findByPk(req.params.id);
+    if (check) {
+      await Question.findByPk(req.params.id).then((question) => {
+        res.render("tutor/editOe", { question });
+      });
+    } else {
+      res.render("404");
+    }
+  }
+);
 
 // Delete Questions
-router.get("/deleteMcq/:id?", async function (req, res) {
-  let result = await Question.destroy({ where: { id: req.params.id } });
-  console.log(result + " question deleted.");
-  res.redirect("/tutor/qns/" + req.query.tutId);
-});
+router.get(
+  "/deleteMcq/:id?",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    let result = await Question.destroy({ where: { id: req.params.id } });
+    console.log(result + " question deleted.");
+    res.redirect("/tutor/qns/" + req.query.tutId);
+  }
+);
 
-router.get("/deleteOe/:id?", async function (req, res) {
-  let result = await Question.destroy({ where: { id: req.params.id } });
-  console.log(result + " question deleted.");
-  res.redirect("/tutor/qns/" + req.query.tutId);
-});
+router.get(
+  "/deleteOe/:id?",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    let result = await Question.destroy({ where: { id: req.params.id } });
+    console.log(result + " question deleted.");
+    res.redirect("/tutor/qns/" + req.query.tutId);
+  }
+);
 
-router.get("/deleteTut/:id", async function (req, res) {
-  let result = await Tutorial.destroy({ where: { id: req.params.id } });
-  console.log(result + " tutorial deleted.");
-  res.redirect("/tutor/content");
-});
+router.get(
+  "/deleteTut/:id",
+  ensureAuthenticated.ensureTutor,
+  async function (req, res) {
+    let result = await Tutorial.destroy({ where: { id: req.params.id } });
+    console.log(result + " tutorial deleted.");
+    res.redirect("/tutor/content");
+  }
+);
 
 // Get parent details
-router.get("/parent_details", (req, res) => {
+router.get("/parent_details", ensureAuthenticated.ensureTutor, (req, res) => {
   Student.findAll({
     include: { model: ParentTutor },
     order: [["admno", "ASC"]],
@@ -105,7 +155,7 @@ router.get("/parent_details", (req, res) => {
 });
 
 // Posts
-router.post("/content", (req, res) => {
+router.post("/content", ensureAuthenticated.ensureTutor, (req, res) => {
   let tutName = req.body.tutorial;
   Tutorial.create({
     tutName,
@@ -117,7 +167,7 @@ router.post("/content", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.post("/qnSubmit", (req, res) => {
+router.post("/qnSubmit", ensureAuthenticated.ensureTutor, (req, res) => {
   let qnType = req.body.qnType;
   if (qnType == "Multiple Choice") {
     res.redirect("/tutor/mcq/" + req.body.id);
@@ -126,12 +176,12 @@ router.post("/qnSubmit", (req, res) => {
   }
 });
 
-router.post("/tutSubmit", (req, res) => {
+router.post("/tutSubmit", ensureAuthenticated.ensureTutor, (req, res) => {
   flashMessage(res, "success", "Tutorial has been updated");
   res.redirect("/tutor/content");
 });
 
-router.post("/mcq", async function (req, res) {
+router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
   let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let ans1 = req.body.ans1;
@@ -142,7 +192,7 @@ router.post("/mcq", async function (req, res) {
   let qnTypeId = 1;
   let tutorialId = req.body.id;
   const qnCheck = await Question.findOne({
-    where: { qnOrder: req.body.qnOrder },
+    where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId },
   });
   if (qnCheck) {
     await Question.update(
@@ -151,7 +201,7 @@ router.post("/mcq", async function (req, res) {
         correctAns,
         qnTypeId,
       },
-      { where: { qnOrder: req.body.qnOrder } }
+      { where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId } }
     )
       .then((question) => {
         console.log(question[0] + " question updated.");
@@ -195,7 +245,7 @@ router.post("/mcq", async function (req, res) {
   }
 });
 
-router.post("/oe", async function (req, res) {
+router.post("/oe", ensureAuthenticated.ensureTutor, async function (req, res) {
   let qnOrder = req.body.qnOrder;
   let question = req.body.qn;
   let correctAns = req.body.correctAns;
@@ -203,7 +253,7 @@ router.post("/oe", async function (req, res) {
   let tutorialId = req.body.id;
 
   const qnCheck = await Question.findOne({
-    where: { qnOrder: req.body.qnOrder },
+    where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId },
   });
 
   if (qnCheck) {
@@ -213,7 +263,7 @@ router.post("/oe", async function (req, res) {
         correctAns,
         qnTypeId,
       },
-      { where: { qnOrder: req.body.qnOrder } }
+      { where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId } }
     )
       .then(async function (question) {
         await QnOption.destroy({ where: { qnId: qnCheck.id } });
@@ -238,7 +288,7 @@ router.post("/oe", async function (req, res) {
   }
 });
 
-router.post("/editMcq/:id", (req, res) => {
+router.post("/editMcq/:id", ensureAuthenticated.ensureTutor, (req, res) => {
   let question = req.body.qn;
   let ans1 = req.body.ans1;
   let ans2 = req.body.ans2;
@@ -275,7 +325,7 @@ router.post("/editMcq/:id", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.post("/editOe/:id", (req, res) => {
+router.post("/editOe/:id", ensureAuthenticated.ensureTutor, (req, res) => {
   let question = req.body.qn;
   let correctAns = req.body.correctAns;
   let tutorialId = req.body.tutId;

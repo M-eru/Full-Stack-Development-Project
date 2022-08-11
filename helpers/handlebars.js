@@ -12,6 +12,10 @@ const radioCheck = function (value, radioValue) {
   return value == radioValue ? "checked" : "";
 };
 
+const capString = function (string) {
+  return string[0].toUpperCase() + string.substring(1)
+};
+
 const when = function (operand_1, operator, operand_2, options) {
   var operators = {
       eq: function (l, r) {
@@ -39,4 +43,4 @@ const when = function (operand_1, operator, operand_2, options) {
   else return options.inverse(this);
 };
 
-module.exports = { formatDate, replaceCommas, radioCheck, when };
+module.exports = { formatDate, replaceCommas, radioCheck, when, capString };

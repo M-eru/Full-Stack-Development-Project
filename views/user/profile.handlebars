@@ -1,0 +1,52 @@
+<div class="container mt-5 pt-5">
+  {{> _flashmsg }}
+  <div class="row">
+    {{!-- Left Section --}}
+    <div class="col-sm-3 rounded-left" style="background-color: #282A35; color: white;">
+      {{!-- Back Arrow Icon --}}
+      <a class="" href="/user/redirect"><i class="fa-solid fa-arrow-left fa-2xl mt-4" style="color: white;"></i></a>
+      {{!-- Left Section Header --}}
+      <a href="/user/redirect"><img src="/img/logo.png" class="mx-auto d-block mt-5" style="width:40%; height: auto;" alt=""></a>
+      <p class="text-center">Tuition Academy</p>
+      <p class="text-center">Simplify your Learning</p>
+    </div>
+    {{!-- Right Section --}}
+    <div class="col-sm-9 rounded-right" style="background-color: #96D4D4;">
+      {{!-- Form Header --}}
+      <div class="row ml-5 mt-5">
+        <p class="lead display-4 ">Change Password</p>
+      </div>
+
+      {{!-- Form --}}
+      <div class="row ml-5">
+        <form class="mb-5" method="post" action="">
+          <div>
+            <input type="text" name="name" value="{{user.name}}" class="{{#when user.role "eq" "student" }}
+              form-control-plaintext{{else}}form-control{{/when}} my-4" style="width: 300px;" 
+              placeholder="Account Name" {{#when user.role "eq" "student"}}readonly{{/when}} required>
+          </div>
+          <div>
+          {{#when user.role "eq" "student"}}
+            <input type="text" name="detail" value="{{user.admno}}" class="form-control-plaintext my-4"
+              style="width: 300px;" placeholder="Admin Number" required readonly>
+          {{else}}
+            <input type="email" name="detail" value="{{user.email}}" class="form-control my-4" style="width: 300px;"
+              placeholder="Email Address" required>
+          {{/when}}
+          </div>
+          <div>
+            <input type="password" name="password" class="form-control my-4" style="width: 300px;"
+              placeholder="New Password" required>
+          </div>
+          <div>
+            <input type="password" name="cpassword" class="form-control my-4" style="width: 300px;"
+              placeholder="Confirm Password" required>
+          </div>
+          <div class="row mb-5" style="margin-left: 0;">
+            <button type="submit" class="btn btn-light mb-5">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -47,19 +47,19 @@
                 <div class="col-10">
                     <div class="col-10">
                         {{!-- Answer 1 --}}
-                        {{#when ans1 'eq' ../answer.input}}
+                        {{#when "1" 'eq' ../answer.input}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
                             <label class="form-check-label text-danger" for="option1">
-                                {{../answer.input}}
+                                {{ans1}}
                             </label>
                         </div>
                         {{else}}
-                        {{#when ans1 'eq' ../answer.ans}}
+                        {{#when "1" 'eq' ../answer.ans}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
                             <label class="form-check-label text-success" for="option1">
-                                {{../answer.ans}}
+                                {{ans1}}
                             </label>
                         </div>
                         {{else}}
@@ -72,19 +72,19 @@
                         {{/when}}
                         {{/when}}
                         {{!-- Answer 2 --}}
-                        {{#when ans2 'eq' ../answer.input}}
+                        {{#when "2" 'eq' ../answer.input}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
                             <label class="form-check-label text-danger" for="option1">
-                                {{../answer.input}}
+                                {{ans2}}
                             </label>
                         </div>
                         {{else}}
-                        {{#when ans2 'eq' ../answer.ans}}
+                        {{#when "2" 'eq' ../answer.ans}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
                             <label class="form-check-label text-success" for="option1">
-                                {{../answer.ans}}
+                                {{ans2}}
                             </label>
                         </div>
                         {{else}}
@@ -97,19 +97,19 @@
                         {{/when}}
                         {{/when}}
                         {{!-- Answer 3 --}}
-                        {{#when ans3 'eq' ../answer.input}}
+                        {{#when "3" 'eq' ../answer.input}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
                             <label class="form-check-label text-danger" for="option1">
-                                {{../answer.input}}
+                                {{ans3}}
                             </label>
                         </div>
                         {{else}}
-                        {{#when ans3 'eq' ../answer.ans}}
+                        {{#when "3" 'eq' ../answer.ans}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
                             <label class="form-check-label text-success" for="option1">
-                                {{../answer.ans}}
+                                {{ans3}}
                             </label>
                         </div>
                         {{else}}
@@ -122,19 +122,19 @@
                         {{/when}}
                         {{/when}}
                         {{!-- Answer 4 --}}
-                        {{#when ans4 'eq' ../answer.input}}
+                        {{#when "4" 'eq' ../answer.input}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
                             <label class="form-check-label text-danger" for="option1">
-                                {{../answer.input}}
+                                {{ans4}}
                             </label>
                         </div>
                         {{else}}
-                        {{#when ans4 'eq' ../answer.ans}}
+                        {{#when "4" 'eq' ../answer.ans}}
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1">
+                            <input class="form-check-input" type="radio" name="{{id}}" id="option1" value="1" checked>
                             <label class="form-check-label text-success" for="option1">
-                                {{../answer.ans}}
+                                {{ans4}}
                             </label>
                         </div>
                         {{else}}
