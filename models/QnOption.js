@@ -6,6 +6,9 @@ const QnOption = db.define("qnOption", {
   ans2: { type: Sequelize.STRING },
   ans3: { type: Sequelize.STRING },
   ans4: { type: Sequelize.STRING },
+},
+{
+  timestamps: false
 });
 
 module.exports = QnOption;

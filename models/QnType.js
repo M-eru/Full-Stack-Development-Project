@@ -3,6 +3,9 @@ const db = require("../config/DBConfig");
 
 const QnType = db.define("qnType", {
   qnType: { type: Sequelize.STRING },
+},
+{
+  timestamps: false
 });
 
 // Creates question types if entries doesn't exist.

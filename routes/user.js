@@ -235,6 +235,7 @@ router.get("/logout", (req, res) => {
         return next(err);
       }
       flashMessage(res, "success", "Logged out successfully");
+      console.log("User logged out.")
       res.redirect("/");
     });
   }

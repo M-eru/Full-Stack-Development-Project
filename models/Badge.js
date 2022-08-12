@@ -9,6 +9,9 @@ const Badge = db.define('badge',
         color: { type: Sequelize.STRING },
         posterURL: { type: Sequelize.STRING }
         // icon: { type: Sequelize.STRING }
+    },
+    {
+      timestamps: false
     });
 
 module.exports = Badge;

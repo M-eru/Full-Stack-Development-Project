@@ -11,6 +11,9 @@ const ParentTutor = db.define('parentTutor',
   role: { type: Sequelize.STRING },
   year: { type: Sequelize.INTEGER(1), allowNull: true},
   status: { type: Sequelize.STRING }
+},
+{
+  timestamps: false
 });
 
 ParentTutor.sync();

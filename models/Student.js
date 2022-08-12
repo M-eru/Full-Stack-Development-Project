@@ -16,6 +16,9 @@ const Student = db.define('student',
   // When completed parent details should be accessed using FK instead
   tutorName: { type: Sequelize.STRING },
   tutorEmail: { type: Sequelize.STRING }
+},
+{
+  timestamps: false
 });
 
 module.exports = Student;
