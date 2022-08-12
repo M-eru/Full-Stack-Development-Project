@@ -8,6 +8,7 @@ const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
 const ensureAuthenticated = require("../helpers/auth");
+const Answer = require("../models/Answer");
 
 // Function
 function upsert(values, qnId) {
@@ -203,12 +204,13 @@ router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
       },
       { where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId } }
     )
-      .then((question) => {
+      .then(async function (question) {
         console.log(question[0] + " question updated.");
         upsert(
           { ans1: ans1, ans2: ans2, ans3: ans3, ans4: ans4, qnId: qnCheck.id },
           qnCheck.id
-        )
+        );
+        await Answer.destroy({ where: { tutorialId: tutorialId } })
           .then((options) => {
             flashMessage(res, "success", "Multiple choice question updated.");
             res.redirect("/tutor/qns/" + tutorialId);
@@ -233,7 +235,8 @@ router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
           ans3,
           ans4,
           qnId,
-        })
+        });
+        await Answer.destroy({ where: { tutorialId: tutorialId } })
           .then((options) => {
             console.log(options.toJSON());
             flashMessage(res, "success", "Multiple choice question created.");
@@ -267,6 +270,7 @@ router.post("/oe", ensureAuthenticated.ensureTutor, async function (req, res) {
     )
       .then(async function (question) {
         await QnOption.destroy({ where: { qnId: qnCheck.id } });
+        await Answer.destroy({ where: { tutorialId: tutorialId } });
         flashMessage(res, "success", "Open ended question updated.");
         res.redirect("/tutor/qns/" + tutorialId);
       })
@@ -281,6 +285,7 @@ router.post("/oe", ensureAuthenticated.ensureTutor, async function (req, res) {
     })
       .then(async function (question) {
         console.log(question.toJSON());
+        await Answer.destroy({ where: { tutorialId: tutorialId } });
         flashMessage(res, "success", "Open ended question created.");
         res.redirect("/tutor/qns/" + tutorialId);
       })
