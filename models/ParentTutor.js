@@ -19,7 +19,7 @@ ParentTutor.sync();
 ParentTutor.findOrCreate({
   where: { id: 1 },
   defaults: {
-    name: 'Tutor-1',
+    name: 'Jack',
     email: 'myacademy1@email.com',
     password: bcrypt.hashSync('qwerty', bcrypt.genSaltSync(10)),
     role: 'tutor',
