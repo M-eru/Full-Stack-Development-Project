@@ -9,7 +9,10 @@ const User = require("../models/User");
 const Badge = require("../models/Badge");
 const Card = require("../models/Card");
 const Answer = require("../models/Answer");
-
+// const sequelize = require("sequelize");
+// const { Sequelize } = require("sequelize");
+const student_badge = require('../models/student_badge');
+// 
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
   mySQLDB
@@ -44,8 +47,8 @@ const setUpDB = (drop) => {
       ParentTutor.hasMany(Student);
       Student.belongsTo(ParentTutor);
 
-      Student.hasMany(Badge);
-      Badge.belongsTo(Student);
+      Student.belongsToMany(Badge,{through: student_badge});
+      Badge.belongsToMany(Student, {through: student_badge});
 
       ParentTutor.hasMany(Badge);
       Badge.belongsTo(ParentTutor);

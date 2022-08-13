@@ -9,6 +9,9 @@ const upload = require('../helpers/imageUpload');
 const ParentTutor = require('../models/ParentTutor');
 const Answer = require('../models/Answer');
 const Student = require('../models/Student');
+const { runInNewContext } = require('vm');
+const student_badge = require('../models/student_badge');
+// const { Model } = require('sequelize/types');
 
 router.get('/badges', ensureAuthenticated.ensureTutor, (req, res) => {
     Badge.findAll({
@@ -157,8 +160,8 @@ router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res
             input: null,
         },
     });
-    console.log(score);
-    
+    // console.log(score);
+
     // update student score
     Student.findOne({
         where: { id: req.user.id }
@@ -168,17 +171,35 @@ router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res
                 { totalScore: score },
                 { where: { id: req.user.id } }
             )
+            // console.log(student.totalScore)
         }
+        Badge.findAll({
+            order: [['points', 'ASC']],
+            raw: true
+        }).then(async function (badges) {
+            await badges.forEach(badge => {
+                // console.log(badge.id)
+                if (badge.points <= student.totalScore) {
+                    Badge.findOne({
+                        where: { id: badge.id }
+                    })
+                        // console.log(badge.id);
+                        // console.log(badge.badgename);
+                        // console.log(badgeRow);
+                        .then(async function (badgeRow) {
+                            await student.addBadge(badgeRow, { through: 'student_badge' })
+                        })
+                }
+            })
+        })
     });
 
+
     Badge.findAll({
-        where: { studentId: req.user.id },
-        order: [['points', 'ASC']],
-        raw: true
+        include: [{ model: Student, through: student_badge, where: { id: req.user.id } }]
+    }).then((badges) => {
+        res.render('student/badge', { badges });
     })
-        .then((badges) => {
-            res.render('student/badge', { badges });
-        })
         .catch(err => console.log(err));
 });
 
