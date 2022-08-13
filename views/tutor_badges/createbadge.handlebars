@@ -28,26 +28,18 @@
                     <input id="posterURL" type="hidden" name="posterURL" value="{{badge.posterURL}}">
                     <div class="custom-file mb-2">
                         <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload"
-                            accept="image/png,image/jpeg,image/jpg,image/gif" onchange="loadFile(event)" required>
-                        <label id="fileLabel" class="custom-file-label" for="customFile">Choose File</label>
+                            accept="image/png,image/jpeg,image/jpg,image/gif" onchange="loadFile(event)">
+                        <label class="custom-file-label" for="customFile">Choose File</label>
                     </div>
                     <div class="text-danger small mb-2" id="posterErr" style="display:none"></div>
-
-
-                    {{!-- <div class="form-group"> --}}
-                        {{!-- <div class="card"> --}}
-                            {{!-- <div class="card-body text-left"> --}}
-                                {{!-- <label class="" for="icon">Icon</label> --}}
-                                {{!-- <input class="form-control" id="icon" type="file" name="icon" /> --}}
-                                {{!-- </div> --}}
-                            {{!-- </div> --}}
-                        {{!-- </div> --}}
+                    {{!-- <img id="poster" src="{{posterURL}}" alt="Poster" class="border img-thumbnail img-fluid"> --}}
+                    {{!—- Hidden field to submit URL of poster to the server --}}
+    
                 </div>
 
                 <div class="col card" style="position: relative;">
                     <div class="col mt-4" style="left: 33%;">
-                        <div id="badgeColor" class="container"
-                            style="display:inline-block; height: 190px; width: 130px; border-radius: 10px; position: relative; 
+                        <div id="badgeColor" class="container" style="display:inline-block; height: 190px; width: 130px; border-radius: 10px; position: relative; 
                             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
                             <div class="image"
                                 style="margin:0; position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%);">
