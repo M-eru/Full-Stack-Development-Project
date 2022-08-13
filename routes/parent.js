@@ -4,7 +4,12 @@ const flashMessage = require('../helpers/messenger');
 const Card = require("../models/Card");
 const Student = require('../models/Student');
 const ParentTutor = require('../models/ParentTutor');
+const Tutorial = require("../models/Tutorial");
+const Answer = require("../models/Answer");
+const Payment_Duration = require("../models/Payment_Duration");
 const ensureAuthenticated = require('../helpers/auth');
+const sequelize = require("sequelize");
+const moment = require('moment');
 
 
 // get --> studentProfile (not selected)
@@ -49,7 +54,6 @@ router.get('/studentProgress_select', ensureAuthenticated.ensureParent, (req, re
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
-        console.log(students);
         res.render('parent/studentProgress_select', { students });
     })
 });
@@ -62,13 +66,28 @@ router.get('/studentProgress/:id', ensureAuthenticated.ensureParent, (req, res) 
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
-        Student.findByPk(req.params.id).then((student) => {
-            if (!student) {
-                flashMessage(res, 'error', 'Student not found');
-                res.redirect('/studentProgress');
-                return;
-            }
-            res.render("parent/studentProgress", { student, students });
+        Tutorial.findAll().then((tutorials) => {
+            Student.findByPk(req.params.id).then(async function (student) {
+                if (!student) {
+                    flashMessage(res, 'error', 'Student not found');
+                    res.redirect('/studentProgress');
+                    return;
+                }
+                let scoreList = {};
+                tutorials.forEach(async function (tutorial) {
+                    await Answer.count({
+                        where: {
+                            studentId: req.params.id,
+                            input: null,
+                            tutorialId: tutorial.id,
+                        }
+                    }).then((score) => {
+                        var tmp = {"tutName": tutorial.tutName, "score": score};
+                        scoreList[tutorial.tutName] = tmp;
+                    })
+                })
+                res.render('parent/studentProgress', { students, tutorials, student, scoreList });
+            })
         })
     })
         .catch(err => console.log(err));
@@ -90,27 +109,48 @@ router.get('/tuitionFee_select', ensureAuthenticated.ensureParent, (req, res) =>
 
 // get --> tuitionFee (selected)
 router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
-    // get all cards
+    let currentTime = moment(new Date()).format('YYYY-MM-DD');
+    // get1 --> all cards
     Card.findAll({
         where: { parentTutorId: req.user.id },
         order: [['expiryDate', 'DESC']],
         raw: true
     })
         .then((cards) => {
-            // get all students (leftNavbar)
+            // get1 --> all students (leftNavbar)
             Student.findAll({
                 include: { model: ParentTutor },
                 where: { parentTutorId: req.user.id },
                 order: [['name', 'ASC']]
             }).then((students) => {
-                // get selected student
+                // get1 --> selected student
                 Student.findByPk(req.params.id).then((student) => {
                     if (!student) {
                         flashMessage(res, 'error', 'Student not found');
                         res.redirect('/tuitionFee_select');
                         return;
                     }
-                    res.render("parent/tuitionFee", { cards, student, students });
+                    // get1 --> duration of payment
+                    Payment_Duration.findOne({
+                        where: {studentId: student.id}
+                    }).then((duration) => {
+                        let myEndDate = moment(duration.endDate).format('YYYY-MM-DD');
+                        // if exceed time limit, change info
+                        if (currentTime == myEndDate) {
+                            let startDate1 = duration.endDate;
+                            let endDate1 = moment(startDate1).add(1, 'Y');
+                            Payment_Duration.update({
+                                startDate:startDate1, endDate:endDate1, payed: false
+                            },
+                            { where: {studentId: student.id} }).then((duration) => {
+                                res.render("parent/tuitionFee", { cards, student, students, duration });
+                            })
+                        }
+                        // else, render page normally
+                        else {
+                            res.render("parent/tuitionFee", { cards, student, students, duration });
+                        }
+                    });
                 })
             })
         })
@@ -137,15 +177,15 @@ router.post('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
             .catch(err => console.log(err));
         return;
     }
-    Student.update(
+    Payment_Duration.update(
         {
             payed: true
         },
-        { where: { id: req.params.id } }
+        { where: { studentId: req.params.id } }
     )
         .then((result) => {
             flashMessage(res, 'success', 'Payment complete!');
-            res.redirect('/parent/tuitionFee_select');
+            res.redirect('/parent/tuitionFee/' + req.params.id);
         })
         .catch(err => console.log(err));
 });

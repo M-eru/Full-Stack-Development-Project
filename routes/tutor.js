@@ -9,6 +9,7 @@ const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
 const ensureAuthenticated = require("../helpers/auth");
 const Answer = require("../models/Answer");
+const Payment_Duration = require("../models/Payment_Duration");
 
 // Function
 function upsert(values, qnId) {
@@ -144,14 +145,27 @@ router.get(
   }
 );
 
-// Get parent details
+// Get parent details (Yee Jin)
 router.get("/parent_details", ensureAuthenticated.ensureTutor, (req, res) => {
   Student.findAll({
     include: { model: ParentTutor },
     order: [["admno", "ASC"]],
-  }).then((students) => {
-    console.log(students);
-    res.render("tutor/parent_details", { students });
+  }).then(async function (students) {
+    let studentList = {};
+    students.forEach((student) => {
+      Payment_Duration.findOne({
+        where: {studentId: student.id}
+      }).then((duration) => {
+        var tmp = {
+          "admno":student.admno, 
+          "parent":student.parentTutorId ? student.parentTutor.name : "-", 
+          "startDate": duration.startDate, "endDate": duration.endDate, 
+          "payed": duration.payed 
+        }
+        studentList[student.name] = tmp;
+      })
+    })
+    res.render("tutor/parent_details", { studentList });
   });
 });
 
