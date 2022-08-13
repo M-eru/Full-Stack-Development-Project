@@ -335,8 +335,9 @@ router.post("/editMcq/:id", ensureAuthenticated.ensureTutor, (req, res) => {
         },
         { where: { qnId: req.params.id } }
       )
-        .then((options) => {
+        .then(async function (options) {
           console.log(options[0] + " question options updated.");
+          await Answer.destroy({ where: { tutorialId: tutorialId } });
           flashMessage(res, "success", "Multiple choice question updated.");
           res.redirect("/tutor/qns/" + tutorialId);
         })
@@ -357,8 +358,9 @@ router.post("/editOe/:id", ensureAuthenticated.ensureTutor, (req, res) => {
     },
     { where: { id: req.params.id } }
   )
-    .then((question) => {
+    .then(async function (question) {
       console.log(question[0] + " question updated.");
+      await Answer.destroy({ where: { tutorialId: tutorialId } });
       flashMessage(res, "success", "Open ended question updated.");
       res.redirect("/tutor/qns/" + tutorialId);
     })

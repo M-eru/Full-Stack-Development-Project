@@ -69,7 +69,18 @@ router.get(
     });
     if (check) {
       await Tutorial.findByPk(req.params.id, {
-        include: [{ model: Question, include: [QnOption, Answer] }],
+        include: [
+          {
+            model: Question,
+            include: [
+              {
+                model: QnOption,
+                model: Answer,
+                where: { studentId: req.user.id },
+              },
+            ],
+          },
+        ],
       }).then(async function (data) {
         // console.log(JSON.stringify(data, null, 2));
         let status = "uncompleted";
