@@ -5,14 +5,14 @@
         {{> _leftNavbarFee}}
         {{!-- right content --}}
         <div class="col-8 mt-4 ml-3" style="text-align: justify;">
-            {{#if student.payed}}
+            {{#if duration.payed}}
             {{> _noPayment }}
             {{else}}
             {{!-- Student Name --}}
             <h1>{{student.name}}</h1>
             <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
             {{!-- Tuition Fee Information (right navbar) --}}
-            <div class="col-3 float-right pt-4" style="height: 500px; background-color: #C4C4C4;">
+            <div class="col-3 float-right pt-4" style="height: 600px; background-color: #C4C4C4;">
                 <h5><u>Tuition Fee Information</u></h5>
                 <table class="table table-borderless">
                     <tbody>
@@ -21,8 +21,8 @@
                             <td>Mathematics</td>
                         </tr>
                         <tr>
-                            <th>Signed-up days</th>
-                            <td>365</td>
+                            <th>Signed-up Period</th>
+                            <td>{{formatDate duration.startDate 'DD MMM YYYY'}} - {{formatDate duration.endDate 'DD MMM YYYY'}}</td>
                         </tr>
                         <tr>
                             <th>Total</th>
@@ -76,7 +76,7 @@
                 {{else}}
                 <div class="text-center">
                     <h3>No payment card saved</h3>
-                    <a class="nav-link bg-info text-white rounded" href="/card/addCard">Add payment card</a>
+                    <a class="btn btn-info text-white rounded mt-2" href="/card/addCard">Add payment card</a>
                 </div>
                 {{/if}}
                 {{/if}}

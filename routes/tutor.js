@@ -8,6 +8,8 @@ const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
 const ensureAuthenticated = require("../helpers/auth");
+const Answer = require("../models/Answer");
+const Payment_Duration = require("../models/Payment_Duration");
 
 // Function
 function upsert(values, qnId) {
@@ -143,14 +145,27 @@ router.get(
   }
 );
 
-// Get parent details
+// Get parent details (Yee Jin)
 router.get("/parent_details", ensureAuthenticated.ensureTutor, (req, res) => {
   Student.findAll({
     include: { model: ParentTutor },
     order: [["admno", "ASC"]],
-  }).then((students) => {
-    console.log(students);
-    res.render("tutor/parent_details", { students });
+  }).then(async function (students) {
+    let studentList = {};
+    students.forEach((student) => {
+      Payment_Duration.findOne({
+        where: {studentId: student.id}
+      }).then((duration) => {
+        var tmp = {
+          "admno":student.admno, 
+          "parent":student.parentTutorId ? student.parentTutor.name : "-", 
+          "startDate": duration.startDate, "endDate": duration.endDate, 
+          "payed": duration.payed 
+        }
+        studentList[student.name] = tmp;
+      })
+    })
+    res.render("tutor/parent_details", { studentList });
   });
 });
 
@@ -203,12 +218,13 @@ router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
       },
       { where: { qnOrder: req.body.qnOrder, tutorialId: tutorialId } }
     )
-      .then((question) => {
+      .then(async function (question) {
         console.log(question[0] + " question updated.");
         upsert(
           { ans1: ans1, ans2: ans2, ans3: ans3, ans4: ans4, qnId: qnCheck.id },
           qnCheck.id
-        )
+        );
+        await Answer.destroy({ where: { tutorialId: tutorialId } })
           .then((options) => {
             flashMessage(res, "success", "Multiple choice question updated.");
             res.redirect("/tutor/qns/" + tutorialId);
@@ -233,7 +249,8 @@ router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
           ans3,
           ans4,
           qnId,
-        })
+        });
+        await Answer.destroy({ where: { tutorialId: tutorialId } })
           .then((options) => {
             console.log(options.toJSON());
             flashMessage(res, "success", "Multiple choice question created.");
@@ -267,6 +284,7 @@ router.post("/oe", ensureAuthenticated.ensureTutor, async function (req, res) {
     )
       .then(async function (question) {
         await QnOption.destroy({ where: { qnId: qnCheck.id } });
+        await Answer.destroy({ where: { tutorialId: tutorialId } });
         flashMessage(res, "success", "Open ended question updated.");
         res.redirect("/tutor/qns/" + tutorialId);
       })
@@ -281,6 +299,7 @@ router.post("/oe", ensureAuthenticated.ensureTutor, async function (req, res) {
     })
       .then(async function (question) {
         console.log(question.toJSON());
+        await Answer.destroy({ where: { tutorialId: tutorialId } });
         flashMessage(res, "success", "Open ended question created.");
         res.redirect("/tutor/qns/" + tutorialId);
       })
@@ -343,6 +362,56 @@ router.post("/editOe/:id", ensureAuthenticated.ensureTutor, (req, res) => {
       res.redirect("/tutor/qns/" + tutorialId);
     })
     .catch((err) => console.log(err));
+});
+
+// Zi Kang's corner
+router.get("/search-student", ensureAuthenticated.ensureTutor, (req, res) => {
+  res.render("tutor/searchStudent");
+});
+
+router.get("/update-student", ensureAuthenticated.ensureTutor, (req, res) => {
+  res.redirect("tutor/search-student");
+});
+
+// router.post("/search-student", async function (req, res) {
+  
+// });
+
+router.post("/update-student", async function (req, res) {
+  let { stdId, name, admno, password, cpassword } = req.body;
+
+  let isValid = true;
+
+  if (!(admno.charAt(0) == "1")) {
+    flashMessage(res, "error", "Admin no. has to start with 1");
+    isValid = false;
+  }
+  
+  if (password.length < 6) {
+    flashMessage(res, "error", "New password must be at least 6 characters");
+    isValid = false;
+  }
+
+  if (password != cpassword) {
+    flashMessage(res, "error", "Passwords do not match");
+    isValid = false;
+  }
+
+  if (!isValid) {
+    res.render("user/profile");
+    return;
+  }
+
+  Student.update(
+    { name: name, admno: admno, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
+    { where: { id: stdId } })
+    .then((result) => {
+        console.log('Student Id: ' + result[0] + ' has been updated');
+        flashMessage(res, 'success', 'The details of student ' + admno + ' has been updated successfully');
+    })
+    .catch(err => console.log(err));
+
+  res.redirect('tutor/search-student')
 });
 
 module.exports = router;

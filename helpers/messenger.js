@@ -24,5 +24,8 @@ const flashMessage = (res, messageType, message, icon, dismissable) => {
   if (dismissable) {
     alert.canBeDismissed = dismissable;
   }
+  
+  // Sets dismissable (the 'x' thing) to true by default
+  alert.canBeDismissed = true;
 };
 module.exports = flashMessage; // returns a function

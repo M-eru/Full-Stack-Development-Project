@@ -9,6 +9,9 @@ const Card = db.define('card',
         expiryDate: { type: Sequelize.DATE },
         ccv: { type: Sequelize.STRING(4) },
         debitCredit: { type: Sequelize.STRING }
+    },
+    {
+      timestamps: false
     });
 
 module.exports = Card;

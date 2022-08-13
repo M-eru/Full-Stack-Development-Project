@@ -5,7 +5,6 @@ const QnType = require("../models/QnType");
 const Tutorial = require("../models/Tutorial");
 const ParentTutor = require("../models/ParentTutor");
 const Student = require("../models/Student");
-const User = require("../models/User");
 const Badge = require("../models/Badge");
 const Card = require("../models/Card");
 const Answer = require("../models/Answer");

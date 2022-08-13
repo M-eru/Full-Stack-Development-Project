@@ -11,21 +11,24 @@ const ParentTutor = db.define('parentTutor',
   role: { type: Sequelize.STRING },
   year: { type: Sequelize.INTEGER(1), allowNull: true},
   status: { type: Sequelize.STRING }
+},
+{
+  timestamps: false
 });
 
 ParentTutor.sync();
 
 // Creates tutor accounts if they don't exist
-ParentTutor.findOrCreate({
-  where: { id: 1 },
-  defaults: {
-    name: 'Tutor-1',
-    email: 'myacademy1@email.com',
-    password: bcrypt.hashSync('qwerty', bcrypt.genSaltSync(10)),
-    role: 'tutor',
-    year: 1,
-    status: 'active',
-  },
-});
+// ParentTutor.findOrCreate({
+//   where: { id: 1 },
+//   defaults: {
+//     name: 'Jack',
+//     email: 'myacademy1@email.com',
+//     password: bcrypt.hashSync('qwerty', bcrypt.genSaltSync(10)),
+//     role: 'tutor',
+//     year: 1,
+//     status: 'active',
+//   },
+// });
 
 module.exports = ParentTutor;

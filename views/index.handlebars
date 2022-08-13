@@ -1,12 +1,8 @@
-{{> _tutorNavBar}}
+{{> _guestNavBar}}
 {{> _flashmsg}}
-<div class="jumbotron text-center">
-	<div class="container">
-		<h1 class="display-4">{{title}}</h1>
-		<p class="lead">Tuition Academy</p>
-		<form action="/flash" method="post">
-			<button type="submit" class="btn btn-primary">Send Flash</button>
-		</form>
-	</div>
-	<br>
+<div class="jumbotron bg-dark text-light text-center">
+	<h2 class="display-4">Tuition Academy</h2>
+	<p class="lead">Simplify your learning</p>
+	<hr class="my-4 bg-light">
+	<a class="btn btn-info" href="/user/signup/student" role="button">Get started ➝</a>
 </div>
