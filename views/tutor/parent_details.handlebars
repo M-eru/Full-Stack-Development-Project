@@ -5,18 +5,16 @@
             <tr class="text-center">
                 <th scope="col">Student Admin Number</th>
                 <th scope="col">Parent Name</th>
-                <th scope="col">Signed-up days</th>
-                <th scope="col">Total tuition fee</th>
+                <th scope="col">Signed-up Period</th>
                 <th scope="col">Payed? (Y/N)</th>
             </tr>
         </thead>
         <tbody>
-            {{#each students}}
+            {{#each studentList}}
             <tr class="text-center">
                 <th scope="row">{{admno}}</th>
-                <td>{{parentTutor.name}}</td>
-                <td>365</td>
-                <td>$3650</td>
+                <td>{{parent}}</td>
+                <td>{{formatDate startDate 'DD MMM YYYY'}} - {{formatDate endDate 'DD MMM YYYY'}}</td>
                 {{#if payed}}
                 <td>Y</td>
                 {{else}}

@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const flashMessage = require("../helpers/messenger");
+const moment = require('moment');
 const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
+const Payment_Duration = require("../models/Payment_Duration");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const ensureAuthenticated = require('../helpers/auth');
+const sequelize = require("sequelize");
 
 router.get("/signup/student", ensureAuthenticated.ensureNotAuthenticated, (req, res) => {
   res.render("user/signup_std");
@@ -88,6 +91,21 @@ router.post("/signup/student", async function (req, res) {
         status: "active",
         payed: false
       });
+
+      // Adding payment_duration details to Payment_Duration model (Yee Jin)
+      let myStudentId = student.id;
+      Payment_Duration.create({
+        studentId: myStudentId
+      });
+      // let startDate = moment(sequelize.fn('date', sequelize.col('createdAt'), '%Y-%m-%d'));
+      let startDate1 = moment(new Date()).format('YYYY-MM-DD');
+      let endDate = moment(startDate1).add(1, 'Y');
+      let endDate1 = moment(endDate).format('YYYY-MM-DD');
+      Payment_Duration.update({
+        startDate: startDate1,
+        endDate: endDate1
+      },
+      { where: {studentId: myStudentId} });
 
       console.log(
         "New student registered:",
