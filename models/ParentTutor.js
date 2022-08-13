@@ -19,16 +19,16 @@ const ParentTutor = db.define('parentTutor',
 ParentTutor.sync();
 
 // Creates tutor accounts if they don't exist
-ParentTutor.findOrCreate({
-  where: { id: 1 },
-  defaults: {
-    name: 'Jack',
-    email: 'myacademy1@email.com',
-    password: bcrypt.hashSync('qwerty', bcrypt.genSaltSync(10)),
-    role: 'tutor',
-    year: 1,
-    status: 'active',
-  },
-});
+// ParentTutor.findOrCreate({
+//   where: { id: 1 },
+//   defaults: {
+//     name: 'Jack',
+//     email: 'myacademy1@email.com',
+//     password: bcrypt.hashSync('qwerty', bcrypt.genSaltSync(10)),
+//     role: 'tutor',
+//     year: 1,
+//     status: 'active',
+//   },
+// });
 
 module.exports = ParentTutor;

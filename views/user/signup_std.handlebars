@@ -37,9 +37,9 @@
             </div>
             <div class="col">
               <input type="text" name="admno" value="{{admno}}" class="form-control mt-4" style="width: 300px;"
-                placeholder="Admin Number (provided)" required>
+                pattern="[0-9]{6}[a-zA-Z]" placeholder="Admin Number (provided)" required>
               <div class="invalid-feedback">
-                Please enter an admin number.
+                Please enter a valid admin number consisting <br>of 6 numbers followed by 1 letter.
               </div>
             </div>
           </div>

@@ -350,4 +350,54 @@ router.post("/editOe/:id", ensureAuthenticated.ensureTutor, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Zi Kang's corner
+router.get("/search-student", ensureAuthenticated.ensureTutor, (req, res) => {
+  res.render("tutor/searchStudent");
+});
+
+router.get("/update-student", ensureAuthenticated.ensureTutor, (req, res) => {
+  res.redirect("tutor/search-student");
+});
+
+// router.post("/search-student", async function (req, res) {
+  
+// });
+
+router.post("/update-student", async function (req, res) {
+  let { stdId, name, admno, password, cpassword } = req.body;
+
+  let isValid = true;
+
+  if (!(admno.charAt(0) == "1")) {
+    flashMessage(res, "error", "Admin no. has to start with 1");
+    isValid = false;
+  }
+  
+  if (password.length < 6) {
+    flashMessage(res, "error", "New password must be at least 6 characters");
+    isValid = false;
+  }
+
+  if (password != cpassword) {
+    flashMessage(res, "error", "Passwords do not match");
+    isValid = false;
+  }
+
+  if (!isValid) {
+    res.render("user/profile");
+    return;
+  }
+
+  Student.update(
+    { name: name, admno: admno, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
+    { where: { id: stdId } })
+    .then((result) => {
+        console.log('Student Id: ' + result[0] + ' has been updated');
+        flashMessage(res, 'success', 'The details of student ' + admno + ' has been updated successfully');
+    })
+    .catch(err => console.log(err));
+
+  res.redirect('tutor/search-student')
+});
+
 module.exports = router;

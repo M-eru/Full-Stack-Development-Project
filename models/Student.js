@@ -10,7 +10,6 @@ const Student = db.define('student',
   role: { type: Sequelize.STRING },
   year: { type: Sequelize.INTEGER(1)},
   status: { type: Sequelize.STRING },
-  payed: { type: Sequelize.BOOLEAN, defaultValue: false },
   totalScore: { type: Sequelize.INTEGER, defaultValue: 0 },
 },
 {
