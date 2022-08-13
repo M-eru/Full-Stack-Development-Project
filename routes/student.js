@@ -64,12 +64,24 @@ router.get(
   "/result/:id",
   ensureAuthenticated.ensureStudent,
   async function (req, res) {
+    console.log("User ID: " + req.user.id);
     const check = await Answer.findOne({
       where: { studentId: req.user.id, tutorialId: req.params.id },
     });
     if (check) {
       await Tutorial.findByPk(req.params.id, {
-        include: [{ model: Question, include: [QnOption, Answer] }],
+        include: [
+          {
+            model: Question,
+            include: [
+              {
+                model: QnOption,
+                model: Answer,
+                where: { studentId: req.user.id },
+              },
+            ],
+          },
+        ],
       }).then(async function (data) {
         // console.log(JSON.stringify(data, null, 2));
         let status = "uncompleted";
