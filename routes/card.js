@@ -8,12 +8,22 @@ const ensureAuthenticated = require('../helpers/auth');
 
 // get --> List of Cards
 router.get('/listCard', ensureAuthenticated.ensureParent, (req, res) => {
+    let currentMonth = moment(new Date()).format('YYYY-MM');
     Card.findAll({
         where: { parentTutorId: req.user.id },
-        order: [['expiryDate', 'DESC']],
+        order: [['cardName', 'DESC']],
         raw: true
     })
         .then((cards) => {
+            if (cards.length > 0) {
+                cards.forEach(async function (card) {
+                    let cardExpiry = moment(card.expiryDate).format('YYYY-MM');
+                    if (currentMonth > cardExpiry) {        // check if card has expired
+                        flashMessage(res, 'error', card.cardName + ' payment card has expired.' );
+                        await Card.destroy({ where: { id: card.id } })
+                    }
+                })
+            }
             res.render('card/listCard', { cards });
         })
         .catch(err => console.log(err));

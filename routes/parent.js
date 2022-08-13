@@ -38,7 +38,9 @@ router.get('/studentProfile/:id', ensureAuthenticated.ensureParent, (req, res) =
                 res.redirect('/studentProfile');
                 return;
             }
-            ParentTutor.findByPk(1).then((tutor) => {
+            ParentTutor.findOne({
+                where: {year: student.year}
+            }).then((tutor) => {
                 res.render("parent/studentProfile", { student, students, tutor });
             })
         })
@@ -136,7 +138,7 @@ router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
                     }).then((duration) => {
                         let myEndDate = moment(duration.endDate).format('YYYY-MM-DD');
                         // if exceed time limit, change info
-                        if (currentTime == myEndDate) {
+                        if (currentTime > myEndDate) {
                             let startDate1 = duration.endDate;
                             let endDate1 = moment(startDate1).add(1, 'Y');
                             Payment_Duration.update({
