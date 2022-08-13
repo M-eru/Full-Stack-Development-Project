@@ -1,18 +1,78 @@
 {{> _tutorNavBar}}
 <div class="container py-4">
+  <div class="text-center my-4">
+    <p class="lead display-4">Search for Student</p>
+  </div>
   {{> _flashmsg}}
-  <div class="container mt-5 p-4 rounded-lg" style="background-color: #96D4D4;">
+  <div class="container mt-4 p-4 rounded-lg" style="background-color: #96D4D4;">
     <div class="container">
-      <form action="/tutor/search-student">
-
+      <form class="form-inline justify-content-center needs-validation mb-4" method="post" action="" novalidate>
+        <input class="form-control mr-sm-2" type="search" name="admno" pattern="[0-9]{6}[a-zA-Z]"
+          placeholder="Search Student Id" aria-label="Search" required>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </div>
     <div class="container">
       <div class="p-4 bg-light text-dark rounded-lg text-center">
-        <form action="/tutor/update-student">
+          {{#if student}}
+          <form class="needs-validation" method="post" action="/tutor/update-student" novalidate>
+            <div class="col-md-8 offset-md-3">
+              <input type="hidden" name="stdId" value="{{student.id}}">
 
-        </form>
+              <div class="form-group row">
+                <label for="name" class="col-sm-3 col-form-label text-left">Name: </label>
+                <div class="col-sm-9">
+                  <input type="text" name="name" id="name" value="{{student.name}}" class="form-control" style="width: 300px;"
+                    placeholder="Student Full Name" required>
+                  <div class="invalid-feedback">
+                    Please enter a name.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="admno" class="col-sm-3 col-form-label text-left">Admin Number: </label>
+                <div class="col-sm-9">
+                  <input type="text" name="admno" id="admno" value="{{student.admno}}" class="form-control" style="width: 300px;"
+                    pattern="[0-9]{6}[a-zA-Z]" placeholder="Admin Number (provided)" required>
+                  <div class="invalid-feedback">
+                    Please enter a valid admin number consisting <br>of 6 numbers followed by 1 letter.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="password" class="col-sm-3 col-form-label text-left">New Password: </label>
+                <div class="col-sm-9">
+                  <input type="password" name="password" id="password" class="form-control" style="width: 300px;"
+                    placeholder="Password" required>
+                  <div class="invalid-feedback">
+                    Please enter a password.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="cpassword" class="col-sm-3 col-form-label text-left">Confirm Password: </label>
+                <div class="col-sm-9">
+                  <input type="password" name="cpassword" id="cpassword" class="form-control" style="width: 300px;"
+                    placeholder="Confirm Password" required>
+                  <div class="invalid-feedback">
+                    Please enter the password again.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-light mb-5" style="border-color: black;">Update Student Details</button>
+          </form>
+          {{else}}
+          <p class="lead m-0">Enter a student&apos;s admin number to change their account details.</p>
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+{{!-- Bootstrap Form Validation --}}
+{{> _formValidate}}
