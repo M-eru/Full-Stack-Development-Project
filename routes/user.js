@@ -33,6 +33,13 @@ router.get("/redirect", (req, res) => {
   else { res.redirect('/'); }
 });
 
+router.get("/getStarted", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect("/user/redirect")
+  }
+  else { res.redirect("/user/signup/student") }
+})
+
 router.get("/profile", (req, res) => {
   if (req.isAuthenticated()) {
     res.render("user/profile")

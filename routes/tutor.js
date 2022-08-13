@@ -7,6 +7,7 @@ const Tutorial = require("../models/Tutorial");
 const Student = require("../models/Student");
 const ParentTutor = require("../models/ParentTutor");
 const flashMessage = require("../helpers/messenger");
+const bcrypt = require("bcryptjs");
 const ensureAuthenticated = require("../helpers/auth");
 const Answer = require("../models/Answer");
 const Payment_Duration = require("../models/Payment_Duration");
@@ -372,12 +373,16 @@ router.get("/search-student", ensureAuthenticated.ensureTutor, (req, res) => {
 });
 
 router.get("/update-student", ensureAuthenticated.ensureTutor, (req, res) => {
-  res.redirect("tutor/search-student");
+  res.redirect("/tutor/search-student");
 });
 
-// router.post("/search-student", async function (req, res) {
-  
-// });
+router.post("/search-student", async function (req, res) {
+  let student = await Student.findOne({ where: { admno: req.body.admno } })
+  if (!student) {
+    flashMessage(res, "error", "No student with matching admin number found")
+  }
+  res.render("tutor/searchStudent", { student });
+});
 
 router.post("/update-student", async function (req, res) {
   let { stdId, name, admno, password, cpassword } = req.body;
@@ -400,7 +405,7 @@ router.post("/update-student", async function (req, res) {
   }
 
   if (!isValid) {
-    res.render("user/profile");
+    res.redirect("/tutor/search-student");
     return;
   }
 
@@ -409,11 +414,11 @@ router.post("/update-student", async function (req, res) {
     { where: { id: stdId } })
     .then((result) => {
         console.log('Student Id: ' + result[0] + ' has been updated');
-        flashMessage(res, 'success', 'The details of student ' + admno + ' has been updated successfully');
     })
     .catch(err => console.log(err));
 
-  res.redirect('tutor/search-student')
+  flashMessage(res, 'success', 'The details of student ' + admno + ' has been updated successfully');
+  res.redirect('/tutor/search-student')
 });
 
 module.exports = router;
