@@ -64,7 +64,6 @@ router.get(
   "/result/:id",
   ensureAuthenticated.ensureStudent,
   async function (req, res) {
-    console.log("User ID: " + req.user.id);
     const check = await Answer.findOne({
       where: { studentId: req.user.id, tutorialId: req.params.id },
     });
