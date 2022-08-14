@@ -30,7 +30,10 @@
                                     </a>
                                 </div>
                                 <p class="text-info my-2" style="color:black;">
+                                    <a href="#" data-toggle="popover" title="Popover Header"
+                                        data-content="Some content inside the popover">
                                     {{badgename}}
+                                    </a>
                                 </p>
                             </div>
                             {{!--
@@ -67,6 +70,9 @@
 
     $('[data-toggle=confirmation]').confirmation({
         rootSelector: '[data-toggle=confirmation]',
+    });
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
     });
 
 </script>
