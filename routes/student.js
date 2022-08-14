@@ -84,7 +84,7 @@ router.get(
           },
         ],
       }).then(async function (data) {
-        console.log(JSON.stringify(data, null, 2));
+        // console.log(JSON.stringify(data, null, 2));
         let status = "uncompleted";
         const score = await Answer.count({
           where: {
@@ -128,7 +128,7 @@ router.post(
         let input = req.body[qnId];
         // console.log("QnId: " + qnId);
         // console.log("Answer: " + req.body[qnId]);
-        await Question.findByPk(qnId).then((i) => {
+        await Question.findByPk(qnId).then(async function (i) {
           // console.log(JSON.stringify(i, null, 2));
           // console.log("Correct Answer: " + i.correctAns);
           let ans = i.correctAns;
@@ -138,7 +138,7 @@ router.post(
             //   ans,
             //   qnId,
             // });
-            upsert(
+            await upsert(
               {
                 ans: ans,
                 input: null,
@@ -157,7 +157,7 @@ router.post(
             //   input,
             //   qnId,
             // });
-            upsert(
+            await upsert(
               {
                 ans: ans,
                 input: input,
@@ -175,7 +175,7 @@ router.post(
     } else {
       let qnId = ids;
       let input = req.body[qnId];
-      await Question.findByPk(ids).then((i) => {
+      await Question.findByPk(ids).then(async function (i) {
         let ans = i.correctAns;
         if (input == ans) {
           // console.log("Answer: " + input + " Correct Answer: " + ans);
@@ -183,7 +183,7 @@ router.post(
           //   ans,
           //   qnId,
           // });
-          upsert(
+          await upsert(
             {
               ans: ans,
               input: null,
@@ -202,7 +202,7 @@ router.post(
           //   input,
           //   qnId,
           // });
-          upsert(
+          await upsert(
             {
               ans: ans,
               input: input,
