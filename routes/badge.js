@@ -214,7 +214,25 @@ router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res
 
 //Student Scoreboard
 
-router.get('/scoreboard', ensureAuthenticated.ensureStudent, (req, res) => {
+router.get('/scoreboard', ensureAuthenticated.ensureStudent, async function (req, res) {
+    // get total score
+    const score = await Answer.count({
+        where: {
+            studentId: req.user.id,
+            input: null,
+        },
+    });
+    // update student score
+    await Student.findOne({
+        where: { id: req.user.id }
+    }).then(async function (student) {
+        if (student.totalScore <= score) {
+            await Student.update(
+                { totalScore: score },
+                { where: { id: req.user.id } }
+            )
+        }
+    })
     let rankings = {};
     let rank = 0;
     Student.findAll({
@@ -224,10 +242,12 @@ router.get('/scoreboard', ensureAuthenticated.ensureStudent, (req, res) => {
         console.log(students[0].name)
         // let rank = 0;
         students.forEach(student => {
-            rank += 1;
-            console.log(rank);
-            var tmp = { "Rank": rank, "Studname": student.name, "Points": student.totalScore };
-            rankings[rank] = tmp;
+            if (!student.totalScore == 0) {
+                rank += 1;
+                console.log(rank);
+                var tmp = { "Rank": rank, "Studname": student.name, "Points": student.totalScore };
+                rankings[rank] = tmp;
+            }
         })
         res.render('student/scoreboard', { students, rankings });
         console.log(rank);
@@ -237,7 +257,25 @@ router.get('/scoreboard', ensureAuthenticated.ensureStudent, (req, res) => {
 
 //Tutor Scoreboard
 
-router.get('/tutor_scoreboard', ensureAuthenticated.ensureTutor, (req, res) => {
+router.get('/tutor_scoreboard', ensureAuthenticated.ensureTutor, async function(req, res) {
+    // get total score
+    const score = await Answer.count({
+        where: {
+            studentId: req.user.id,
+            input: null,
+        },
+    });
+    // update student score
+    await Student.findOne({
+        where: { id: req.user.id }
+    }).then(async function (student) {
+        if (student.totalScore <= score) {
+            await Student.update(
+                { totalScore: score },
+                { where: { id: req.user.id } }
+            )
+        }
+    })
     let rankings = {};
     let rank = 0;
     Student.findAll({
@@ -246,13 +284,13 @@ router.get('/tutor_scoreboard', ensureAuthenticated.ensureTutor, (req, res) => {
     }).then((students) => {
         // let rank = 0;
         students.forEach(student => {
-            rank += 1;
-            console.log(rank);
-            var tmp = { "Rank": rank, "Studname": student.name, "Points": student.totalScore };
-            rankings[rank] = tmp;
+            if (!student.totalScore == 0) {
+                rank += 1;
+                var tmp = { "Rank": rank, "Studname": student.name, "Points": student.totalScore };
+                rankings[rank] = tmp;
+            }
         })
         res.render('tutor_badges/tutor_scoreboard', { students, rankings });
-        console.log(rank);
     })
         .catch(err => console.log(err));
 });
