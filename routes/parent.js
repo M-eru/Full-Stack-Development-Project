@@ -73,9 +73,8 @@ router.get('/studentProgress_select', ensureAuthenticated.ensureParent, (req, re
 
 // get --> studentProgress (selected)
 router.get('/studentProgress/:id', ensureAuthenticated.ensureParent, (req, res) => {
-    let rankings = {};
     let rank = 0;
-    var studentPos;
+    let studentPos = {};
 
     Student.findAll({
         include: { model: ParentTutor },
@@ -107,13 +106,16 @@ router.get('/studentProgress/:id', ensureAuthenticated.ensureParent, (req, res) 
                     scoreList[tutorial.tutName] = tmp;
                 })
                 // get student's scoreboard position
-                students.forEach(student1 => {
-                    rank += 1;
-                    var tmp = { "Rank": rank, "Studname": student1.name, "Points": student1.totalScore };
-                    if (student1.name == student.name) {
-                        studentPos = rank;
-                    }
-                    rankings[rank] = tmp;
+                Student.findAll({
+                    order: [['totalScore', 'DESC']],
+                }).then((students) => {
+                    students.forEach(student1 => {
+                        rank += 1;
+                        if (student1.name == student.name) {
+                            var myTmp = {"name": student1.name, "rank": rank};
+                            studentPos[0] = myTmp;
+                        }
+                    })
                 })
                 res.render('parent/studentProgress', { students, tutorials, student, scoreList, studentPos });
             })

@@ -28,10 +28,12 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {{#each studentPos}}
                             <tr>
-                                <td>{{studentPos}}</td>
-                                <td>{{student.name}}</td>
+                                <td>{{rank}}</td>
+                                <td>{{name}}</td>
                             </tr>
+                            {{/each}}
                         </tbody>
                     </table>
                 </div>
