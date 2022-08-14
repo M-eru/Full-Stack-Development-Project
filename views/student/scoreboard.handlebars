@@ -1,3 +1,65 @@
+<style>
+    /* table styling */
+    .container>header {
+        margin: 0 auto;
+        padding: 1em;
+        text-align: center;
+    }
+
+    .container>header h1 {
+        font-weight: 600;
+        font-size: 3em;
+        margin: 0;
+    }
+
+    .wrapper {
+        line-height: 1.5em;
+        margin: 0 auto;
+        padding: 2em 0 3em;
+        width: 90%;
+        max-width: 2000px;
+        overflow: hidden;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        background: #fff;
+    }
+
+    th {
+        background-color: #326295;
+        font-weight: bold;
+        color: #fff;
+        white-space: nowrap;
+    }
+
+    td,
+    th {
+        padding: 1em 1.5em;
+        text-align: left;
+    }
+
+    tbody th {
+        background-color: #2ea879;
+    }
+
+    tbody tr:nth-child(2n-1) {
+        background-color: #f5f5f5;
+        transition: all .125s ease-in-out;
+    }
+
+    tbody tr:hover {
+        background-color: rgba(50, 98, 149, .3);
+    }
+
+    td.rank {
+        text-transform: capitalize;
+    }
+
+    /* table styling */
+</style>
+
 {{> _studentNavBar }}
 <div class="container">
     <div class="container row justify-content-center"
@@ -10,15 +72,15 @@
             <div style="margin:30px 75px 0 70px">
                 <div class="container one podium">
                     <div class="podium__item">
-                        <p id="Name2" class="podium__city"></p>
+                        <p id="Name2" class="podium__city">2</p>
                         <div class="podium__rank second">2</div>
                     </div>
                     <div class="podium__item">
-                        <p id="Name1" class="podium__city">Thomas Oh</p>
+                        <p id="Name1" class="podium__city">1</p>
                         <div class="podium__rank first">1</div>
                     </div>
                     <div class="podium__item">
-                        <p id="Name3" class="podium__city">Nick Nelson</p>
+                        <p id="Name3" class="podium__city">3</p>
                         <div class="podium__rank third">3</div>
                     </div>
                 </div>
@@ -26,7 +88,7 @@
 
             <div class="container overflow-auto">
                 <div class="wrapper">
-                    <table id ="ranking">
+                    <table id="ranking">
                         <thead>
                             <tr>
                                 <th>Rank</th>
