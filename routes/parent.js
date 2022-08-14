@@ -202,14 +202,7 @@ router.post('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
         isValid = false;
     }
     if (!isValid) {
-        Card.findAll({
-            order: [['expiryDate', 'DESC']],
-            raw: true
-        })
-            .then((cards) => {
-                res.render('parent/tuitionFee', { cards });
-            })
-            .catch(err => console.log(err));
+        res.redirect('/parent/tuitionFee/' + req.params.id);
         return;
     }
     Payment_Duration.update(
