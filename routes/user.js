@@ -232,7 +232,7 @@ router.post("/profile", async function (req, res) {
   }
 
   if (req.user.role == "student") {
-    Student.update(
+    await Student.update(
       { password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
       { where: { id: req.user.id } })
       .then((result) => {
@@ -242,7 +242,7 @@ router.post("/profile", async function (req, res) {
       .catch(err => console.log(err));
   }
   else {
-    ParentTutor.update(
+    await ParentTutor.update(
       { name, email: detail, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
       { where: { id: req.user.id } })
       .then((result) => {

@@ -26,6 +26,13 @@ function localStrategy(passport) {
           console.log('Password incorrect, failed authentication')
           return done(null, false, { message: "Incorrect username or password" });
         }
+
+        // Check for deactivated
+        if (user.status == "inactive") {
+          console.log('Account deactivated, failed authentication')
+          return done(null, false, { message: "This account has been deactivated. Please contact your tutor." });
+        }
+
         // Authenticated
         return done(null, user);
       });

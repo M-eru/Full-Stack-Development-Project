@@ -368,8 +368,9 @@ router.post("/editOe/:id", ensureAuthenticated.ensureTutor, (req, res) => {
 });
 
 // Zi Kang's corner
-router.get("/search-student", ensureAuthenticated.ensureTutor, (req, res) => {
-  res.render("tutor/searchStudent");
+router.get("/search-student", ensureAuthenticated.ensureTutor, async (req, res) => {
+  let student = await Student.findByPk(req.query.id);
+  res.render("tutor/searchStudent", { student });
 });
 
 router.get("/update-student", ensureAuthenticated.ensureTutor, (req, res) => {
@@ -385,7 +386,7 @@ router.post("/search-student", async function (req, res) {
 });
 
 router.post("/update-student", async function (req, res) {
-  let { stdId, name, admno, password, cpassword } = req.body;
+  let { stdId, name, admno, password, cpassword, status } = req.body;
 
   let isValid = true;
 
@@ -394,30 +395,44 @@ router.post("/update-student", async function (req, res) {
     isValid = false;
   }
   
-  if (password.length < 6) {
-    flashMessage(res, "error", "New password must be at least 6 characters");
-    isValid = false;
-  }
+  if (password || cpassword) {
+    if (password.length < 6) {
+      flashMessage(res, "error", "New password must be at least 6 characters");
+      isValid = false;
+    }
 
-  if (password != cpassword) {
-    flashMessage(res, "error", "Passwords do not match");
-    isValid = false;
+    if (password != cpassword) {
+      flashMessage(res, "error", "Passwords do not match");
+      isValid = false;
+    }
   }
 
   if (!isValid) {
-    res.redirect("/tutor/search-student");
+    res.redirect("/tutor/search-student" + '?id=' + stdId);
     return;
   }
 
-  Student.update(
-    { name: name, admno: admno, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)) },
-    { where: { id: stdId } })
-    .then((result) => {
-        console.log('Student Id: ' + result[0] + ' has been updated');
-    })
-    .catch(err => console.log(err));
+  if (password || cpassword) {
+    Student.update(
+      { name: name, admno: admno, password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)), status: status },
+      { where: { id: stdId } })
+      .then((result) => {
+          console.log('Student Id: ' + result[0] + ' has been updated (password changed)');
+      })
+      .catch(err => console.log(err));
+  }
+  else {
+    Student.update(
+      { name: name, admno: admno, status: status },
+      { where: { id: stdId } })
+      .then((result) => {
+          console.log('Student Id: ' + result[0] + ' has been updated');
+      })
+      .catch(err => console.log(err));
+  }
 
   flashMessage(res, 'success', 'The details of student ' + admno + ' has been updated successfully');
+  console.log('Redirecting to /tutor/search-student')
   res.redirect('/tutor/search-student')
 });
 
