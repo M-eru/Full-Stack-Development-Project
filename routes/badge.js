@@ -66,6 +66,7 @@ router.post('/createbadge', ensureAuthenticated.ensureTutor, async function (req
             )
                 .then((badge) => {
                     console.log(badge.toJSON());
+                    flashMessage(res, "success", "Badge " + badgename + " Created");
                     res.redirect('/badge/badges');
                 })
         }
@@ -101,6 +102,7 @@ router.post('/editbadge/:id', ensureAuthenticated.ensureTutor, (req, res) => {
     )
         .then((result) => {
             console.log(result[0] + ' Badge updated');
+            flashMessage(res, "success", "Badge " + badgename + " Updated");
             res.redirect('/badge/badges');
         })
         .catch(err => console.log(err));
@@ -122,6 +124,7 @@ router.get('/deleteBadge/:id', ensureAuthenticated.ensureTutor, async function (
 
         let result = await Badge.destroy({ where: { id: badge.id } });
         console.log(result + ' Badge deleted');
+        flashMessage(res, "success", "Badge " + badge.badgename + " Deleted");
         res.redirect('/badge/badges');
     }
     catch (err) {
@@ -158,45 +161,76 @@ router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res
             input: null,
         },
     });
-    // console.log(score);
 
     // update student score
-    Student.findOne({
+    await Student.findOne({
         where: { id: req.user.id }
-    }).then((student) => {
+    }).then(async function (student) {
         if (student.totalScore <= score) {
-            Student.update(
+            await Student.update(
                 { totalScore: score },
                 { where: { id: req.user.id } }
             )
-            // console.log(student.totalScore)
         }
-        Badge.findAll({
+        await Badge.findAll({
             order: [['points', 'ASC']],
             raw: true
         }).then(async function (badges) {
             await badges.forEach(badge => {
-                // console.log(badge.id)
                 if (badge.points <= student.totalScore) {
                     Badge.findOne({
                         where: { id: badge.id }
                     })
-                        // console.log(badge.id);
-                        // console.log(badge.badgename);
-                        // console.log(badgeRow);
                         .then(async function (badgeRow) {
                             await student.addBadge(badgeRow, { through: 'student_badge' })
                         })
                 }
+                // let diff = badge.points - student.totalScore;
+                // console.log(diff);
+                // if (diff == 1){
+                // flashMessage(res, "info", diff + " more point to earn Badge " + badge.badgename);
+                // }
+                // if (diff == 2){
+                // flashMessage(res, "info", diff + " more points to earn Badge " + badge.badgename);
+                // }
             })
+            await Badge.findAll({
+                include: [{ model: Student, through: student_badge, where: { id: req.user.id } }],
+                order: [['points', 'ASC']]
+            }).then((badges) => {
+                res.render('student/badge', { badges, student });
+            }).catch(err => console.log(err));
         })
     });
 
+    // Badge.findAll({
+    // include: [{ model: Student, through: student_badge, where: { id: req.user.id } }],
+    // order:[['points', 'ASC']]
+    // }).then((badges) => {
+    // res.render('student/badge', { badges });
+    // }).catch(err => console.log(err));
 
-    Badge.findAll({
-        include: [{ model: Student, through: student_badge, where: { id: req.user.id } }]
-    }).then((badges) => {
-        res.render('student/badge', { badges });
+});
+
+//Scoreboard
+
+router.get('/scoreboard', ensureAuthenticated.ensureStudent, (req, res) => {
+    let rankings = {};
+    let rank = 0;
+    Student.findAll({
+        order: [['totalScore', 'DESC']],
+        raw: true,
+    }).then((students) => {
+        console.log(students[0].name)
+        // let rank = 0;
+        students.forEach(student => {
+            rank += 1;
+            console.log(rank);
+            var tmp = { "Rank": rank, "Studname": student.name, "Points": student.totalScore };
+            rankings[rank] = tmp;
+        })
+        res.render('student/scoreboard', { students, rankings });
+        console.log(rank);
     })
         .catch(err => console.log(err));
 });

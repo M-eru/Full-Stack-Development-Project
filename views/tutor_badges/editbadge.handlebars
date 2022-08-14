@@ -32,7 +32,7 @@
                         <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload"
                             accept="image/png,image/jpeg,image/jpg,image/gif" onchange="loadFile(event)"
                             value="{{badge.posterURL}}">
-                        <label class="custom-file-label" for="customFile">{{badge.filename}}</label>
+                        <label class="custom-file-label" for="customFile">{{badge.posterURL}}</label>
                     </div>
                     <div class="text-danger small mb-2" id="posterErr" style="display:none"></div>
                 </div>
@@ -43,7 +43,7 @@
                         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); background-color:{{badge.color}};">
                             <div class="image"
                                 style="margin:0; position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%);">
-                                <img id="badgeImage" alt="No image" class="img img-fluid mb-2">
+                                <img id="badgeImage" alt="No image" class="img img-fluid mb-2" src="{{badge.posterURL}}">
                             </div>
                             </a>
                         </div>
