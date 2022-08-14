@@ -33,7 +33,9 @@ router.get('/listCard', ensureAuthenticated.ensureParent, (req, res) => {
 // get --> Add Card
 router.get('/addCard', ensureAuthenticated.ensureParent, async function (req, res) {                                      
     let isOk = true;
-    const myCount = await Card.count();                         // check if COUNT(cards) >= 3
+    const myCount = await Card.count({
+        where: { parentTutorId: req.user.id }
+    });                         // check if COUNT(cards) >= 3
     console.log("Number of cards: " + myCount);                   
     if (myCount >= 3) {                                         // yes --> redirect to card/listCard
         flashMessage(res, 'error', 'Maximum number of cards');
