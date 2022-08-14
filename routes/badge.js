@@ -212,7 +212,7 @@ router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res
 
 });
 
-//Scoreboard
+//Student Scoreboard
 
 router.get('/scoreboard', ensureAuthenticated.ensureStudent, (req, res) => {
     let rankings = {};
@@ -230,6 +230,28 @@ router.get('/scoreboard', ensureAuthenticated.ensureStudent, (req, res) => {
             rankings[rank] = tmp;
         })
         res.render('student/scoreboard', { students, rankings });
+        console.log(rank);
+    })
+        .catch(err => console.log(err));
+});
+
+//Tutor Scoreboard
+
+router.get('/tutor_scoreboard', ensureAuthenticated.ensureTutor, (req, res) => {
+    let rankings = {};
+    let rank = 0;
+    Student.findAll({
+        order: [['totalScore', 'DESC']],
+        raw: true,
+    }).then((students) => {
+        // let rank = 0;
+        students.forEach(student => {
+            rank += 1;
+            console.log(rank);
+            var tmp = { "Rank": rank, "Studname": student.name, "Points": student.totalScore };
+            rankings[rank] = tmp;
+        })
+        res.render('tutor_badges/tutor_scoreboard', { students, rankings });
         console.log(rank);
     })
         .catch(err => console.log(err));
