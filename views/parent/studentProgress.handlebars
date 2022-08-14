@@ -8,13 +8,32 @@
             <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
             <div class="row">
                 <!-- Recently Completed -->
-                <div class="col-6 mr-2 ml-4 h-100" style="background-color: #282A35; color: white;">
+                <div class="col-6 mr-2 ml-4 overflow-auto"
+                    style="height: 600px; background-color: #96D4D4;">
                     <h3 class="mt-2 mb-4"><u>Tutorial Scores</u></h3>
                     {{#each scoreList}}
                     <div class="container bg-white mt-3 mb-3 pt-2 pb-1 rounded">
-                        <h6 style="color: black;">{{tutName}}<span class="float-right">{{score}}</span></h6>
+                        <h5 style="color: black;">{{tutName}}<span class="float-right">{{score}}/{{total}}</span></h5>
                     </div>
                     {{/each}}
+                </div>
+                <div class="col-4 ml-5 pt-2 pb-2" style="background-color: #282A35; height: 250px; color: white;">
+                    <!-- Current Scoreboard Position -->
+                    <h3 class="mt-2 mb-4 text-center"><u>Current Scoreboard Position</u></h3>
+                    <table class="table bg-white rounded">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Rank</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{studentPos}}</td>
+                                <td>{{student.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

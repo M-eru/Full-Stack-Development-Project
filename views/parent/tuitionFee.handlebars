@@ -21,8 +21,8 @@
                             <td>Mathematics</td>
                         </tr>
                         <tr>
-                            <th>Signed-up Period</th>
-                            <td>{{formatDate duration.startDate 'DD MMM YYYY'}} - {{formatDate duration.endDate 'DD MMM YYYY'}}</td>
+                            <th>Payment Period</th>
+                            <td class="text-left">{{formatDate duration.startDate 'DD MMM YYYY'}} -{{formatDate duration.endDate 'DD MMM YYYY'}}</td>
                         </tr>
                         <tr>
                             <th>Total</th>
@@ -39,7 +39,7 @@
             <div class="container">
                 {{#if cards}}
                 <form action="" method="post">
-                    <div class="card card-body overflow-auto" style="height: 500px;">
+                    <div class="card card-body overflow-auto" style="height: 600px;">
                         {{#each cards}}
                         <input type="radio" name="tuition_card" id="{{id}}" style="display: none;"
                             onchange="ensureOneInput({{id}}, 'tuition_card')">

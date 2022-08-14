@@ -18,7 +18,7 @@ router.get('/listCard', ensureAuthenticated.ensureParent, (req, res) => {
             if (cards.length > 0) {
                 cards.forEach(async function (card) {
                     let cardExpiry = moment(card.expiryDate).format('YYYY-MM');
-                    if (currentMonth > cardExpiry) {        // check if card has expired
+                    if (currentMonth > cardExpiry) {            // check if card has expired
                         flashMessage(res, 'error', card.cardName + ' payment card has expired.' );
                         await Card.destroy({ where: { id: card.id } })
                     }
@@ -55,7 +55,7 @@ router.get('/addCard', ensureAuthenticated.ensureParent, async function (req, re
 
 
 // post --> Add Card
-router.post('/addCard', ensureAuthenticated.ensureParent,  (req, res) => {
+router.post('/addCard', ensureAuthenticated.ensureParent, async function (req, res) {
     let cardName = req.body.cardName;
     let cardNo = req.body.cardNo.slice(0, 19);
     let expiryDate = moment(req.body.expiryDate, 'MM/YYYY');
@@ -63,6 +63,11 @@ router.post('/addCard', ensureAuthenticated.ensureParent,  (req, res) => {
     let debitCredit = req.body.debitCredit;
     let parentTutorId = req.user.id;
     let isValid = true;
+    let dbCard = await Card.findOne({ where: { cardNo: cardNo } });
+    if (dbCard) {
+        flashMessage(res, 'error', 'Card Number already used.');
+        isValid = false;
+    }
     if (cardNo.length < 13) {
         flashMessage(res, 'error', 'Card Number must contain 13 to 19 numbers (inclusive).');
         isValid = false;
