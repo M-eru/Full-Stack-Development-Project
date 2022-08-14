@@ -3,6 +3,34 @@
   margin: auto;
 }
 
+body {
+  height: 20rem;
+  /* Manual height for make scrollbar appear */
+  /* font-family: 'Product Sans', sans-serif !important; */
+  overflow-y: overlay !important;
+  /* For scrollbar overlay on content */
+  overflow-x: hidden !important;
+}
+
+::selection {
+  background: #5f97f6;
+  color: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: .30rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(27, 27, 27, .4);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 /* Search Bar (_leftNavbar)*/
 #mySearch {
   width: 100%;
@@ -104,60 +132,60 @@
 
 /* table styling */
 /* .container>header { */
-  /* margin: 0 auto; */
-  /* padding: 1em; */
-  /* text-align: center; */
+/* margin: 0 auto; */
+/* padding: 1em; */
+/* text-align: center; */
 /* } */
 /*  */
 /* .container>header h1 { */
-  /* font-weight: 600; */
-  /* font-size: 3em; */
-  /* margin: 0; */
+/* font-weight: 600; */
+/* font-size: 3em; */
+/* margin: 0; */
 /* } */
 /*  */
 /* .wrapper { */
-  /* line-height: 1.5em; */
-  /* margin: 0 auto; */
-  /* padding: 2em 0 3em; */
-  /* width: 90%; */
-  /* max-width: 2000px; */
-  /* overflow: hidden; */
+/* line-height: 1.5em; */
+/* margin: 0 auto; */
+/* padding: 2em 0 3em; */
+/* width: 90%; */
+/* max-width: 2000px; */
+/* overflow: hidden; */
 /* } */
 /*  */
 /* table { */
-  /* border-collapse: collapse; */
-  /* width: 100%; */
-  /* background: #fff; */
+/* border-collapse: collapse; */
+/* width: 100%; */
+/* background: #fff; */
 /* } */
 /*  */
 /* th { */
-  /* background-color: #326295; */
-  /* font-weight: bold; */
-  /* color: #fff; */
-  /* white-space: nowrap; */
+/* background-color: #326295; */
+/* font-weight: bold; */
+/* color: #fff; */
+/* white-space: nowrap; */
 /* } */
 /*  */
 /* td, */
 /* th { */
-  /* padding: 1em 1.5em; */
-  /* text-align: left; */
+/* padding: 1em 1.5em; */
+/* text-align: left; */
 /* } */
 /*  */
 /* tbody th { */
-  /* background-color: #2ea879; */
+/* background-color: #2ea879; */
 /* } */
 /*  */
 /* tbody tr:nth-child(2n-1) { */
-  /* background-color: #f5f5f5; */
-  /* transition: all .125s ease-in-out; */
+/* background-color: #f5f5f5; */
+/* transition: all .125s ease-in-out; */
 /* } */
 /*  */
 /* tbody tr:hover { */
-  /* background-color: rgba(50, 98, 149, .3); */
+/* background-color: rgba(50, 98, 149, .3); */
 /* } */
 /*  */
 /* td.rank { */
-  /* text-transform: capitalize; */
+/* text-transform: capitalize; */
 /* } */
 
 /* table styling */

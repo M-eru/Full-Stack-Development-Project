@@ -1,4 +1,5 @@
 <style>
+
     /* table styling */
     .container>header {
         margin: 0 auto;
@@ -60,10 +61,11 @@
     /* table styling */
 </style>
 
-{{> _studentNavBar }}
+
+{{> _tutorNavBar}}
 <div class="container">
     <div class="container row justify-content-center"
-        style="background-color: #96D4D4; color:black;width: 80%; height: 600px; margin: auto; 
+        style="background-color: #96D4D4; color:black;width: 85%; height: 600px; margin: auto; 
         margin-top: 50px; margin-bottom: 100px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
         <h4 class="mt-2 mb-1 mx-auto" style="color:#343a40">Score Board</h4>
         <div class="square centerd overflow-auto"
@@ -72,15 +74,15 @@
             <div style="margin:30px 75px 0 70px">
                 <div class="container one podium">
                     <div class="podium__item">
-                        <p id="Name2" class="podium__city"></p>
+                        <p id="Name2" class="podium__city">2</p>
                         <div class="podium__rank second">2</div>
                     </div>
                     <div class="podium__item">
-                        <p id="Name1" class="podium__city"></p>
+                        <p id="Name1" class="podium__city">1</p>
                         <div class="podium__rank first">1</div>
                     </div>
                     <div class="podium__item">
-                        <p id="Name3" class="podium__city"></p>
+                        <p id="Name3" class="podium__city">3</p>
                         <div class="podium__rank third">3</div>
                     </div>
                 </div>
@@ -103,21 +105,6 @@
                                 <td id="Rank {{Rank}}" class="team">{{Studname}}</td>
                                 <td class="points">{{Points}}</td>
                             </tr>
-                            {{!-- <tr> --}}
-                                {{!-- <td class="rank">2</td> --}}
-                                {{!-- <td class="team">Thomas Oh</td> --}}
-                                {{!-- <td class="points">485</td> --}}
-                                {{!-- </tr> --}}
-                            {{!-- <tr> --}}
-                                {{!-- <td class="rank">3</td> --}}
-                                {{!-- <td class="team">Nick Nelson</td> --}}
-                                {{!-- <td class="points">460</td> --}}
-                                {{!-- </tr> --}}
-                            {{!-- <tr> --}}
-                                {{!-- <td class="rank">4</td> --}}
-                                {{!-- <td class="team">Wendy Ang</td> --}}
-                                {{!-- <td class="points">450</td> --}}
-                                {{!-- </tr> --}}
                             {{/each}}
                         </tbody>
                     </table>
