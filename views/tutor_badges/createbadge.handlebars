@@ -28,7 +28,7 @@
                     <input id="posterURL" type="hidden" name="posterURL" value="{{badge.posterURL}}">
                     <div class="custom-file mb-2">
                         <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload"
-                            accept="image/png,image/jpeg,image/jpg,image/gif" onchange="loadFile(event)">
+                            accept="image/png,image/jpeg,image/jpg,image/gif" onchange="loadFile(event)" required>
                         <label class="custom-file-label" for="customFile">Choose File</label>
                     </div>
                     <div class="text-danger small mb-2" id="posterErr" style="display:none"></div>
