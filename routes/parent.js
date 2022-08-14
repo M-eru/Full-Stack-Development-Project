@@ -6,6 +6,7 @@ const Student = require('../models/Student');
 const ParentTutor = require('../models/ParentTutor');
 const Tutorial = require("../models/Tutorial");
 const Answer = require("../models/Answer");
+const Question = require("../models/Question");
 const Payment_Duration = require("../models/Payment_Duration");
 const ensureAuthenticated = require('../helpers/auth');
 const sequelize = require("sequelize");
@@ -19,8 +20,12 @@ router.get('/studentProfile_select', ensureAuthenticated.ensureParent, (req, res
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
-        console.log(students);
-        res.render("parent/studentProfile_select", { students });
+        if (students.length > 0) {
+            res.render("parent/studentProfile_select", { students });
+        }
+        else {
+            res.redirect("/children/addChildren");
+        }
     })
 });
 
@@ -56,13 +61,22 @@ router.get('/studentProgress_select', ensureAuthenticated.ensureParent, (req, re
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
-        res.render('parent/studentProgress_select', { students });
+        if (students.length > 0) {
+            res.render('parent/studentProgress_select', { students });
+        }
+        else {
+            res.redirect("/children/addChildren");
+        }
     })
 });
 
 
 // get --> studentProgress (selected)
 router.get('/studentProgress/:id', ensureAuthenticated.ensureParent, (req, res) => {
+    let rankings = {};
+    let rank = 0;
+    var studentPos;
+
     Student.findAll({
         include: { model: ParentTutor },
         where: { parentTutorId: req.user.id },
@@ -70,25 +84,38 @@ router.get('/studentProgress/:id', ensureAuthenticated.ensureParent, (req, res) 
     }).then((students) => {
         Tutorial.findAll().then((tutorials) => {
             Student.findByPk(req.params.id).then(async function (student) {
+                // student cannot be found
                 if (!student) {
                     flashMessage(res, 'error', 'Student not found');
                     res.redirect('/studentProgress');
                     return;
                 }
+                // get student's score for each tutorial
                 let scoreList = {};
                 tutorials.forEach(async function (tutorial) {
-                    await Answer.count({
+                    const score = await Answer.count({
                         where: {
                             studentId: req.params.id,
                             input: null,
                             tutorialId: tutorial.id,
                         }
-                    }).then((score) => {
-                        var tmp = {"tutName": tutorial.tutName, "score": score};
-                        scoreList[tutorial.tutName] = tmp;
                     })
+                    const totalQns = await Question.count({
+                        where: {tutorialId: tutorial.id}
+                    })
+                    var tmp = {"tutName": tutorial.tutName, "score": score, "total": totalQns};
+                    scoreList[tutorial.tutName] = tmp;
                 })
-                res.render('parent/studentProgress', { students, tutorials, student, scoreList });
+                // get student's scoreboard position
+                students.forEach(student1 => {
+                    rank += 1;
+                    var tmp = { "Rank": rank, "Studname": student1.name, "Points": student1.totalScore };
+                    if (student1.name == student.name) {
+                        studentPos = rank;
+                    }
+                    rankings[rank] = tmp;
+                })
+                res.render('parent/studentProgress', { students, tutorials, student, scoreList, studentPos });
             })
         })
     })
@@ -103,8 +130,12 @@ router.get('/tuitionFee_select', ensureAuthenticated.ensureParent, (req, res) =>
         where: { parentTutorId: req.user.id },
         order: [['name', 'ASC']]
     }).then((students) => {
-        console.log(students);
-        res.render('parent/tuitionFee_select', { students });
+        if (students.length > 0) {
+            res.render('parent/tuitionFee_select', { students });
+        }
+        else {
+            res.redirect("/children/addChildren");
+        }
     }).catch(err => console.log(err));
 });
 

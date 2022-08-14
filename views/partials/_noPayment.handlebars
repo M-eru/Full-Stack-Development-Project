@@ -1,6 +1,8 @@
 <div class="jumbotron text-center">
     <div class="container">
-        <h1 class="display-4">No Outstanding Payment</h1>
-        <p class="lead">Thank you for your timely payment!</p>
+        <h1 class="display-4"><b>No Outstanding Payment</b></h1>
+        <br>
+        <p class="lead">Successful payment for the following period:</p>
+        <p>{{formatDate duration.startDate 'DD MMM YYYY'}} - {{formatDate duration.endDate 'DD MMM YYYY'}}</p>
     </div>
 </div>
