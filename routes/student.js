@@ -75,6 +75,8 @@ router.get(
             include: [
               {
                 model: QnOption,
+              },
+              {
                 model: Answer,
                 where: { studentId: req.user.id },
               },
@@ -82,7 +84,7 @@ router.get(
           },
         ],
       }).then(async function (data) {
-        // console.log(JSON.stringify(data, null, 2));
+        console.log(JSON.stringify(data, null, 2));
         let status = "uncompleted";
         const score = await Answer.count({
           where: {

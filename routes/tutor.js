@@ -253,7 +253,6 @@ router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
         });
         await Answer.destroy({ where: { tutorialId: tutorialId } })
           .then((options) => {
-            console.log(options.toJSON());
             flashMessage(res, "success", "Multiple choice question created.");
             res.redirect("/tutor/qns/" + tutorialId);
           })
