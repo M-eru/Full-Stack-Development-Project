@@ -93,6 +93,9 @@ body {
 .podium__city {
   text-align: center;
   padding: 0 .5rem;
+  font-family: Tahoma;
+  font-size: 25px;
+  color:#343a40;
 }
 
 .podium__number {
