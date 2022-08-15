@@ -78,7 +78,7 @@ router.post("/signup/student", async function (req, res) {
     let student = await Student.findOne({ where: { admno: admno } });
     if (student) {
       // If student is found, that means admin number has already been registered
-      flashMessage(res, "error", admno + " alreay registered");
+      flashMessage(res, "error", admno + " already registered");
       res.render("user/signup_std", { name, admno });
     } else {
       // Set year according to admin no.

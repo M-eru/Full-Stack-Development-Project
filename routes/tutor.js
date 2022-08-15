@@ -253,6 +253,7 @@ router.post("/mcq", ensureAuthenticated.ensureTutor, async function (req, res) {
         });
         await Answer.destroy({ where: { tutorialId: tutorialId } })
           .then((options) => {
+            console.log(options.toJSON());
             flashMessage(res, "success", "Multiple choice question created.");
             res.redirect("/tutor/qns/" + tutorialId);
           })
@@ -404,6 +405,14 @@ router.post("/update-student", async function (req, res) {
       flashMessage(res, "error", "Passwords do not match");
       isValid = false;
     }
+  }
+
+  // If all is well, checks if student is already registered
+  let student = await Student.findOne({ where: { admno: admno } });
+  if (student) {
+    // If student is found, that means admin number has already been registered
+    flashMessage(res, "error", "The admin number " + admno + " has already been registered");
+    isValid = false;
   }
 
   if (!isValid) {
