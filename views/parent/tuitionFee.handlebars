@@ -13,9 +13,9 @@
             <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
             {{!-- Tuition Fee Information (right navbar) --}}
             <form action="" method="post">
-                <div class="col-4 float-right pt-4" style="height: 600px; background-color: #C4C4C4;">
+                <div class="col-4 float-right pt-3" style="height: 600px; background-color: #C4C4C4;">
                     <h5><u>Tuition Fee Information</u></h5>
-                    <table class="table table-borderless">
+                    <table class="table table-borderless mb-0">
                         <tbody>
                             <tr>
                                 <th>Subject</th>
@@ -30,21 +30,21 @@
                                             id="exampleRadios1" value="option1" checked>
                                         <label class="form-check-label" for="exampleRadios1">
                                             <b>1 month</b><br>{{formatDate duration.startDate 'DD MMM YYYY'}} until {{formatDate
-                                            duration.endDate1 'DD MMM YYYY'}}
+                                            duration.endDate1 'DD MMM YYYY'}}<br>S$ 30
                                         </label>
                                         <br>
                                         <input class="form-check-input" type="radio" name="periodRadios"
                                             id="exampleRadios2" value="option2">
                                         <label class="form-check-label" for="exampleRadios2">
                                             <b>3 month</b><br>{{formatDate duration.startDate 'DD MMM YYYY'}} until {{formatDate
-                                            duration.endDate3 'DD MMM YYYY'}}
+                                            duration.endDate3 'DD MMM YYYY'}}<br>S$ 90
                                         </label>
                                         <br>
                                         <input class="form-check-input" type="radio" name="periodRadios"
                                             id="exampleRadios3" value="option3">
                                         <label class="form-check-label" for="exampleRadios3">
                                             <b>6 month</b><br>{{formatDate duration.startDate 'DD MMM YYYY'}} until {{formatDate
-                                            duration.endDate6 'DD MMM YYYY'}}
+                                            duration.endDate6 'DD MMM YYYY'}}<br>S$ 180
                                         </label>
                                         <br>
                                     </div>
