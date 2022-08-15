@@ -145,43 +145,59 @@ router.get('/tuitionFee_select', ensureAuthenticated.ensureParent, (req, res) =>
 // get --> tuitionFee (selected)
 router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
     let currentTime = moment(new Date()).format('YYYY-MM-DD');
-    // get1 --> all cards
+    // Test cases
+    // let currentTime = '2022-09-16';
+    // let currentTime = '2022-11-16';
+    // let currentTime = '2023-02-16';
+// get1 --> all cards
     Card.findAll({
         where: { parentTutorId: req.user.id },
         order: [['expiryDate', 'DESC']],
         raw: true
     })
         .then((cards) => {
-            // get1 --> all students (leftNavbar)
+// get1 --> all students (leftNavbar)
             Student.findAll({
                 include: { model: ParentTutor },
                 where: { parentTutorId: req.user.id },
                 order: [['name', 'ASC']]
             }).then((students) => {
-                // get1 --> selected student
+// get1 --> selected student
                 Student.findByPk(req.params.id).then((student) => {
                     if (!student) {
                         flashMessage(res, 'error', 'Student not found');
                         res.redirect('/tuitionFee_select');
                         return;
                     }
-                    // get1 --> duration of payment
+// get1 --> duration of payment
                     Payment_Duration.findOne({
                         where: {studentId: student.id}
-                    }).then((duration) => {
-                        let myEndDate = moment(duration.endDate).format('YYYY-MM-DD');
-                        // if exceed time limit, change info
-                        if (currentTime > myEndDate) {
-                            let startDate1 = duration.endDate;
-                            let endDate1 = moment(startDate1).add(1, 'Y');
-                            Payment_Duration.update({
-                                startDate:startDate1, endDate:endDate1, payed: false
-                            },
-                            { where: {studentId: student.id} }).then((duration) => {
+                    }).then(async function (duration) {
+                        if (duration.actualEnd != null) {
+                            let myEndDate = moment(duration.actualEnd).format('YYYY-MM-DD');
+// if exceed time limit, change info
+                            if (currentTime > myEndDate) {
+                                let startDate1 = duration.actualEnd;
+                                let endDate1change = moment(startDate1).add(1, 'M');
+                                let endDate3change = moment(startDate1).add(3, 'M');
+                                let endDate6change = moment(startDate1).add(6, 'M');
+                                await Payment_Duration.update(
+                                    {
+                                    startDate:startDate1, endDate1:endDate1change, endDate3:endDate3change, endDate6:endDate6change, payed: false
+                                    },
+                                    {
+                                        where: { studentId: student.id } 
+                                    }
+                                )
+                                Payment_Duration.findOne({where: {studentId: student.id}}).then((duration) => {
+                                    res.render("parent/tuitionFee", { cards, student, students, duration });
+                                })
+                            }
+// else, render page normally
+                            else {
                                 res.render("parent/tuitionFee", { cards, student, students, duration });
-                            })
+                            }
                         }
-                        // else, render page normally
                         else {
                             res.render("parent/tuitionFee", { cards, student, students, duration });
                         }
@@ -196,6 +212,7 @@ router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
 // post --> tuitionFee (selected)
 router.post('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
     var card_id = req.body.tuition_card;
+    let periodRadio = req.body.periodRadios;
     let isValid = true;
     if (!card_id) {
         flashMessage(res, 'error', 'No payment card selected.');
@@ -205,17 +222,30 @@ router.post('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
         res.redirect('/parent/tuitionFee/' + req.params.id);
         return;
     }
-    Payment_Duration.update(
-        {
-            payed: true
-        },
-        { where: { studentId: req.params.id } }
-    )
-        .then((result) => {
-            flashMessage(res, 'success', 'Payment complete!');
-            res.redirect('/parent/tuitionFee/' + req.params.id);
-        })
-        .catch(err => console.log(err));
+    Payment_Duration.findOne({
+        where: {studentId: req.params.id}
+    }).then((student_payment) => {
+        if (periodRadio == 'option1') {
+            Payment_Duration.update(
+                { actualEnd: student_payment.endDate1, payed: true },
+                { where: { studentId: req.params.id } }
+            )
+        }
+        else if (periodRadio == 'option2') {
+            Payment_Duration.update(
+                { actualEnd: student_payment.endDate3, payed: true },
+                { where: { studentId: req.params.id } }
+            )
+        }
+        else if (periodRadio == 'option3') {
+            Payment_Duration.update(
+                { actualEnd: student_payment.endDate6, payed: true },
+                { where: { studentId: req.params.id } }
+            )
+        }
+    })
+    flashMessage(res, 'success', 'Payment complete!');
+    res.redirect('/parent/tuitionFee/' + req.params.id);
 });
 
 module.exports = router;
