@@ -12,33 +12,54 @@
             <h1>{{student.name}}</h1>
             <hr class="mt-4 mb-4" style="border: 2px solid black; background-color: black;">
             {{!-- Tuition Fee Information (right navbar) --}}
-            <div class="col-3 float-right pt-4" style="height: 600px; background-color: #C4C4C4;">
-                <h5><u>Tuition Fee Information</u></h5>
-                <table class="table table-borderless">
-                    <tbody>
-                        <tr>
-                            <th>Subject</th>
-                            <td>Mathematics</td>
-                        </tr>
-                        <tr>
-                            <th>Payment Period</th>
-                            <td class="text-left">{{formatDate duration.startDate 'DD MMM YYYY'}} -{{formatDate duration.endDate 'DD MMM YYYY'}}</td>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <td>S$ 3650</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <h5><u>Payment Procedure</u></h5>
-                <p>1. Select <b>one card</b> to pay for student's tuition fee.</p>
-                <p>2. Click "Confirm" button to complete payment.</p>
-            </div>
-            {{!-- Cards available (left content) --}}
-            <div class="container">
-                {{#if cards}}
-                <form action="" method="post">
+            <form action="" method="post">
+                <div class="col-4 float-right pt-4" style="height: 600px; background-color: #C4C4C4;">
+                    <h5><u>Tuition Fee Information</u></h5>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <th>Subject</th>
+                                <td>Mathematics</td>
+                            </tr>
+                            <!-- 1 month -->
+                            <tr>
+                                <th rowspan="3">Payment period</th>
+                                <td>
+                                    <div class="form-check text-left">
+                                        <input class="form-check-input" type="radio" name="periodRadios"
+                                            id="exampleRadios1" value="option1" checked>
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            <b>1 month</b><br>{{formatDate duration.startDate 'DD MMM YYYY'}} until {{formatDate
+                                            duration.endDate1 'DD MMM YYYY'}}
+                                        </label>
+                                        <br>
+                                        <input class="form-check-input" type="radio" name="periodRadios"
+                                            id="exampleRadios2" value="option2">
+                                        <label class="form-check-label" for="exampleRadios2">
+                                            <b>3 month</b><br>{{formatDate duration.startDate 'DD MMM YYYY'}} until {{formatDate
+                                            duration.endDate3 'DD MMM YYYY'}}
+                                        </label>
+                                        <br>
+                                        <input class="form-check-input" type="radio" name="periodRadios"
+                                            id="exampleRadios3" value="option3">
+                                        <label class="form-check-label" for="exampleRadios3">
+                                            <b>6 month</b><br>{{formatDate duration.startDate 'DD MMM YYYY'}} until {{formatDate
+                                            duration.endDate6 'DD MMM YYYY'}}
+                                        </label>
+                                        <br>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h5><u>Payment Procedure</u></h5>
+                    <p>1. Select <b>one payment period</b> to pay.</p>
+                    <p>2. Select <b>one card</b> to pay for student's tuition fee.</p>
+                    <p>3. Click "Confirm" button to complete payment.</p>
+                </div>
+                {{!-- Cards available (left content) --}}
+                <div class="container">
+                    {{#if cards}}
                     <div class="card card-body overflow-auto" style="height: 600px;">
                         {{#each cards}}
                         <input type="radio" name="tuition_card" id="{{id}}" style="display: none;"
@@ -52,12 +73,12 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-5">
                                             <p class="font-italic">Card Number</p>
                                             <p class="text-info">{{cardNo}}</p>
                                         </div>
                                         <div class="col-2">
-                                            <p class="font-italic">Card</p>
+                                            <p class="font-italic">Type</p>
                                             <p class="text-info">{{debitCredit}}</p>
 
                                         </div>
@@ -72,15 +93,15 @@
                         {{/each}}
                         <button id="tuition_submit" type="submit" class="btn btn-primary">Confirm</button>
                     </div>
-                </form>
-                {{else}}
-                <div class="text-center">
-                    <h3>No payment card saved</h3>
-                    <a class="btn btn-info text-white rounded mt-2" href="/card/addCard">Add payment card</a>
+                    {{else}}
+                    <div class="text-center">
+                        <h3>No payment card saved</h3>
+                        <a class="btn btn-info text-white rounded mt-2" href="/card/addCard">Add payment card</a>
+                    </div>
+                    {{/if}}
+                    {{/if}}
                 </div>
-                {{/if}}
-                {{/if}}
-            </div>
+            </form>
         </div>
     </div>
 </div>

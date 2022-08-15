@@ -101,16 +101,19 @@ router.post("/signup/student", async function (req, res) {
 
       // Adding payment_duration details to Payment_Duration model (Yee Jin)
       let myStudentId = student.id;
-      Payment_Duration.create({
-        studentId: myStudentId
-      });
-      // let startDate = moment(sequelize.fn('date', sequelize.col('createdAt'), '%Y-%m-%d'));
       let startDate1 = moment(new Date()).format('YYYY-MM-DD');
-      let endDate = moment(startDate1).add(1, 'Y');
-      let endDate1 = moment(endDate).format('YYYY-MM-DD');
-      Payment_Duration.update({
+      let endDate1 = moment(startDate1).add(1, 'M');
+      let endDate3 = moment(startDate1).add(3, 'M');
+      let endDate6 = moment(startDate1).add(6, 'M');
+      let endDate1Month = moment(endDate1).format('YYYY-MM-DD');
+      let endDate3Month = moment(endDate3).format('YYYY-MM-DD');
+      let endDate6Month = moment(endDate6).format('YYYY-MM-DD');
+      Payment_Duration.create({
+        studentId: myStudentId,
         startDate: startDate1,
-        endDate: endDate1
+        endDate1: endDate1Month,
+        endDate3: endDate3Month,
+        endDate6: endDate6Month
       },
       { where: {studentId: myStudentId} });
 
