@@ -144,8 +144,8 @@ router.get('/tuitionFee_select', ensureAuthenticated.ensureParent, (req, res) =>
 
 // get --> tuitionFee (selected)
 router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
-    // let currentTime = moment(new Date()).format('YYYY-MM-DD');
-    let currentTime = '2022-11-16';
+    let currentTime = moment(new Date()).format('YYYY-MM-DD');
+    // let currentTime = '2022-11-16';
 // get1 --> all cards
     Card.findAll({
         where: { parentTutorId: req.user.id },
