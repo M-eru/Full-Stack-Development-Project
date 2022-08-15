@@ -410,9 +410,11 @@ router.post("/update-student", async function (req, res) {
   // If all is well, checks if student is already registered
   let student = await Student.findOne({ where: { admno: admno } });
   if (student) {
-    // If student is found, that means admin number has already been registered
-    flashMessage(res, "error", "The admin number " + admno + " has already been registered");
-    isValid = false;
+    if (student.id != stdId) {
+      // If student is found, that means admin number has already been registered
+      flashMessage(res, "error", "The admin number " + admno + " has already been registered");
+      isValid = false;
+    }
   }
 
   if (!isValid) {

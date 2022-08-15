@@ -216,23 +216,23 @@ router.get('/badge', ensureAuthenticated.ensureStudent, async function (req, res
 
 router.get('/scoreboard', ensureAuthenticated.ensureStudent, async function (req, res) {
     // get total score
-    const score = await Answer.count({
-        where: {
-            studentId: req.user.id,
-            input: null,
-        },
-    });
+    // const score = await Answer.count({
+        // where: {
+            // studentId: req.user.id,
+            // input: null,
+        // },
+    // });
     // update student score
-    await Student.findOne({
-        where: { id: req.user.id }
-    }).then(async function (student) {
-        if (student.totalScore <= score) {
-            await Student.update(
-                { totalScore: score },
-                { where: { id: req.user.id } }
-            )
-        }
-    })
+    // await Student.findOne({
+        // where: { id: req.user.id }
+    // }).then(async function (student) {
+        // if (student.totalScore <= score) {
+            // await Student.update(
+                // { totalScore: score },
+                // { where: { id: req.user.id } }
+            // )
+        // }
+    // })
     let rankings = {};
     let rank = 0;
     Student.findAll({
@@ -259,23 +259,23 @@ router.get('/scoreboard', ensureAuthenticated.ensureStudent, async function (req
 
 router.get('/tutor_scoreboard', ensureAuthenticated.ensureTutor, async function(req, res) {
     // get total score
-    const score = await Answer.count({
-        where: {
-            studentId: req.user.id,
-            input: null,
-        },
-    });
+    // const score = await Answer.count({
+        // where: {
+            // studentId: req.user.id,
+            // input: null,
+        // },
+    // });
     // update student score
-    await Student.findOne({
-        where: { id: req.user.id }
-    }).then(async function (student) {
-        if (student.totalScore <= score) {
-            await Student.update(
-                { totalScore: score },
-                { where: { id: req.user.id } }
-            )
-        }
-    })
+    // await Student.findOne({
+        // where: { id: req.user.id }
+    // }).then(async function (student) {
+        // if (student.totalScore <= score) {
+            // await Student.update(
+                // { totalScore: score },
+                // { where: { id: req.user.id } }
+            // )
+        // }
+    // })
     let rankings = {};
     let rank = 0;
     Student.findAll({

@@ -5,6 +5,7 @@ const QnOption = require("../models/QnOption");
 const Tutorial = require("../models/Tutorial");
 const Answer = require("../models/Answer");
 const ensureAuthenticated = require("../helpers/auth");
+const Student = require("../models/Student");
 
 // Functions
 
@@ -107,6 +108,24 @@ router.get(
     } else {
       res.render("404");
     }
+    // get total score
+    const score1 = await Answer.count({
+      where: {
+        studentId: req.user.id,
+        input: null,
+      },
+    });
+    // update student score
+    Student.findOne({
+      where: { id: req.user.id }
+    }).then(async function (student) {
+      if (student.totalScore <= score1) {
+        await Student.update(
+          { totalScore: score1 },
+          { where: { id: req.user.id } }
+        )
+      }
+    })
   }
 );
 
@@ -217,6 +236,24 @@ router.post(
         }
       });
     }
+    // get total score
+    const score1 = await Answer.count({
+      where: {
+        studentId: req.user.id,
+        input: null,
+      },
+    });
+    // update student score
+    Student.findOne({
+      where: { id: req.user.id }
+    }).then(async function (student) {
+      if (student.totalScore <= score1) {
+        await Student.update(
+          { totalScore: score1 },
+          { where: { id: req.user.id } }
+        )
+      }
+    })
 
     // Redirect to result page
     res.redirect("/student/result/" + tutorialId);
