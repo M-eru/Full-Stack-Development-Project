@@ -160,7 +160,8 @@ router.get("/parent_details", ensureAuthenticated.ensureTutor, (req, res) => {
         var tmp = {
           "admno":student.admno, 
           "parent":student.parentTutorId ? student.parentTutor.name : "-", 
-          "startDate": duration.startDate, "endDate": duration.endDate, 
+          "startDate": duration.startDate, 
+          "endDate": duration.actualEnd, 
           "payed": duration.payed 
         }
         studentList[student.name] = tmp;

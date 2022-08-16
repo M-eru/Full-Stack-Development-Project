@@ -8,6 +8,7 @@ const Student = require("../models/Student");
 const Badge = require("../models/Badge");
 const Card = require("../models/Card");
 const Answer = require("../models/Answer");
+const Payment_Duration = require("../models/Payment_Duration");
 // const sequelize = require("sequelize");
 // const { Sequelize } = require("sequelize");
 const student_badge = require("../models/student_badge");
@@ -54,8 +55,9 @@ const setUpDB = (drop) => {
 
       ParentTutor.hasMany(Card);
       Card.belongsTo(ParentTutor);
-      // Student is just for my code to work. Will be changed to user accordingly.
-      // Student = User
+
+      Payment_Duration.hasMany(Student);
+      Student.belongsTo(Payment_Duration);
 
       mySQLDB.sync({
         force: drop,

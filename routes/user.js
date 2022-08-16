@@ -95,8 +95,7 @@ router.post("/signup/student", async function (req, res) {
         password: hash,
         year, 
         role: "student",
-        status: "active",
-        payed: false
+        status: "active"
       });
 
       // Adding payment_duration details to Payment_Duration model (Yee Jin)

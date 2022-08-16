@@ -145,10 +145,12 @@ router.get('/tuitionFee_select', ensureAuthenticated.ensureParent, (req, res) =>
 // get --> tuitionFee (selected)
 router.get('/tuitionFee/:id', ensureAuthenticated.ensureParent, (req, res) => {
     let currentTime = moment(new Date()).format('YYYY-MM-DD');
-    // Test cases
-    // let currentTime = '2022-09-16';
-    // let currentTime = '2022-11-16';
-    // let currentTime = '2023-02-16';
+
+// Test cases (1 day after the end date of the payment period)
+    // let currentTime = '2022-09-17';
+    // let currentTime = '2022-11-17';
+    // let currentTime = '2023-02-17';
+
 // get1 --> all cards
     Card.findAll({
         where: { parentTutorId: req.user.id },

@@ -5,7 +5,7 @@
             <tr class="text-center">
                 <th scope="col">Student Admin Number</th>
                 <th scope="col">Parent Name</th>
-                <th scope="col">Signed-up Period</th>
+                <th scope="col">Payment Period</th>
                 <th scope="col">Payed? (Y/N)</th>
             </tr>
         </thead>
@@ -14,10 +14,11 @@
             <tr class="text-center">
                 <th scope="row">{{admno}}</th>
                 <td>{{parent}}</td>
-                <td>{{formatDate startDate 'DD MMM YYYY'}} - {{formatDate endDate 'DD MMM YYYY'}}</td>
                 {{#if payed}}
+                <td>{{formatDate startDate 'DD MMM YYYY'}} - {{formatDate endDate 'DD MMM YYYY'}}</td>
                 <td>Y</td>
                 {{else}}
+                <td>{{formatDate startDate 'DD MMM YYYY'}} - ?</td>
                 <td>N</td>
                 {{/if}}
             </tr>
