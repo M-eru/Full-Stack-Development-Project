@@ -1,0 +1,91 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #96D4D4;">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none text-dark" href="/tutor/content"><i
+                        class='fas fa-angle-left'></i></a>
+            </li>
+        </ul>
+    </div>
+    <div class="mx-auto order-0">
+        {{#with data}}
+        <a class="navbar-brand mx-auto" href="#">{{tutName}}</a>
+        {{/with}}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".creationNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 creationNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
+    <form action="">
+        {{#with data}}
+        {{#if qns}}
+        {{#each qns}}
+        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+            <div class="row">
+                <div class="col d-flex align-items-center mt-2">
+                    <h5>Question {{qnOrder}}</h5>
+                </div>
+            </div>
+            <hr class="my-3 border border-dark" />
+            <p class="lead">{{question}}</p>
+            {{#if qnOption}}
+            {{#with qnOption}}
+            <fieldset class="form-group row">
+                <div class="col-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="options" id="option1" value="1">
+                        <label class="form-check-label" for="option1">
+                            {{ans1}}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="options" id="option2" value="2">
+                        <label class="form-check-label" for="option2">
+                            {{ans2}}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="options" id="option3" value="3">
+                        <label class="form-check-label" for="option3">
+                            {{ans3}}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="options" id="option4" value="4">
+                        <label class="form-check-label" for="option4">
+                            {{ans4}}
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            {{/with}}
+            {{else}}
+            <fieldset class="form-group row">
+                <div class="col-10">
+                    <label for="ans" class="col-form-label h4">Your Answer:</label>
+                    <textarea type="text" class="form-control" id="ans" name="ans"></textarea>
+                </div>
+            </fieldset>
+            {{/if}}
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+            <h5 class="mt-1">No questions added.</h5>
+        </div>
+        {{/if}}
+        {{/with}}
+
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-outline-light mr-2" href="/tutor/content">Exit</a>
+        </div>
+    </form>
+</div>

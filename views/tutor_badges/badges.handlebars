@@ -1,0 +1,108 @@
+{{> _tutorNavBar}}
+{{> _flashmsg }}
+<div class="container">
+    <div class="container row justify-content-center"
+        style="background-color: #96D4D4; color:black;width: 85%; height: 600px; margin: auto; 
+        margin-top: 50px; margin-bottom: 100px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+        <h4 class="mt-3 mb-0 mx-auto" style="color:#343a40">List of Badges</h4>
+        <div class="square centerd overflow-auto mb-4"
+            style="background-color: white; width:90%; height: 450px; border-radius: 10px ">
+            {{!-- <div class="card" style="background-color: #FCFCFC;"> --}}
+                <div class="container">
+                    <div class="row row-cols-2">
+                        {{#if badges}}
+                        {{#each badges}}
+                        <div class="col card card-body" style="">
+                            <div class="container">
+                                <div class="row row-cols-2">
+                                    <div class="col">
+                                        <div class="container" style="display:inline-block; height: 95px; width: 70px; background-color:{{color}}; border-radius: 10px; position: relative;
+                                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                                            <a href="{{posterURL}}" data-title="{{title}}" data-toggle="lightbox">
+                                                <div class="image" style="margin:0; position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%);
+                                            transform: translate(-50%, -50%);">
+                                                    <img src="{{posterURL}}" alt="Poster" class="img img-fluid mb-2"
+                                                        onerror="this.src='/img/no-image.jpg'">
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <p class="text-info" style="color:black">
+                                            {{badgename}}
+                                        </p>
+                                    </div>
+
+                                    <div class="col card"
+                                        style="height:100px; background-color:#F8F8F8; border-color:#F8F8F8;">
+                                        <p class="font" style="font-weight: 600;">Points Required</p>
+                                        <p class="text-info" style="color:black">
+                                            {{points}}
+                                        </p>
+                                    </div>
+
+                                    <div class="col mt-4">
+                                        <p>
+                                            <a href="/badge/editbadge/{{id}}" class="card-link mb-2">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
+                                            </a>
+                                        </p>
+                                    </div>
+                                    <div class="col mt-4">
+                                        <p>
+                                            <a href="/badge/deleteBadge/{{id}}" class="card-link"
+                                                data-toggle="confirmation" data-title="Confirm delete?"
+                                                style="color:red">
+                                                <i class="far fa-trash-alt"></i>
+                                                Delete
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            {{!-- </div> --}}
+        {{else}}
+        <h4
+            style="position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%); color:#343a40">
+            No Badges Created
+        </h4>
+        {{/if}}
+
+        <a href="/badge/createbadge" class="btn btn-primary"
+            style="background-color: #282A35; border-color: #282A35;">Create
+            New</a>
+
+        {{!-- <div> --}}
+            {{!-- <button data-modal-target="#modal" class="btn btn-primary px-4" type="submit" --}} {{!--
+                style="background-color: #282A35; border-color: #282A35">Create New</button> --}}
+            {{!-- </div> --}}
+
+
+    </div>
+</div>
+
+{{!-- <div class="modal" id="modal"> --}}
+    {{!-- <div class="modal-header"> --}}
+        {{!-- <button data-close-button class="close-button">&times;</button> --}}
+        {{!-- <div class="title">Create New Badge</div> --}}
+        {{!-- </div> --}}
+    {{!-- <div class="modal-body"> --}}
+        {{!-- Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis hic voluptatibus voluptatem quod
+        --}}
+        {{!-- eligendi aperiam rem doloremque tenetur eius dolor ullam assumenda deserunt, reprehenderit id
+        rerum --}}
+        {{!-- consequuntur, --}}
+        {{!-- impedit quaerat ipsum? --}}
+        {{!-- </div> --}}
+    {{!-- <div id="overlay"></div> --}}
+    {{!-- </div> --}}
+
+<script>
+    $('[data-toggle=confirmation]').confirmation({
+        rootSelector: '[data-toggle=confirmation]',
+    });
+</script>

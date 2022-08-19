@@ -1,0 +1,89 @@
+{{> _tutorNavBar}}
+<div class="container py-4">
+    {{> _flashmsg}}
+    <div class="container mt-5 p-4 rounded-lg" style="background-color: #96D4D4;">
+        <div class="container">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h1 class="display-4">Content</h1>
+                <button type="button" class="btn btn-outline-dark me-3" data-toggle="modal" data-target="#qnModal">
+                    New +
+                </button>
+            </div>
+        </div>
+        {{#if tutorials}}
+        {{#each tutorials}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>{{tutName}}</h4>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/tutor/qns/{{id}}">Edit</a>
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/tutor/tutorials/{{id}}" target="_blank">View</a>
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/tutor/deleteTut/{{id}}">Delete</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>No tutorials added!</h4>
+            </div>
+        </div>
+        {{/if}}
+        <div class="mt-5 mb-4 d-flex justify-content-center align-items-center">
+            <a href="#content" class="btn btn-outline-dark bg-light"><i class='fas fa-angle-up'></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="qnModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qnModalLabel">New Tutorial</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form action="" method="post" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="tutName" class="col-form-label">Tutorial Name</label>
+                        <input type="text" class="form-control" id="tutorial" name="tutorial"
+                            placeholder="Enter tutorial name..." required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter a valid tutorial name!
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Exit</button>
+                        <button type="submit" class="btn btn-outline-info">Save</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{!-- Bootstrap form validation --}}
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>

@@ -1,0 +1,39 @@
+{{> _studentNavBar}}
+<div class="container py-4">
+    {{> _flashmsg}}
+    <div class="container mt-5 p-4 rounded-lg" style="background-color: #96D4D4;">
+        <div class="container">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h1 class="display-4">Tutorials</h1>
+            </div>
+        </div>
+        {{#if data.tutorials}}
+        {{#each data.tutorials}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>{{tutName}}</h4>
+                <div class="btn-group" role="group">
+                    {{#if ../data.status}}
+                    {{#each ../data.status}}
+                    {{#when id 'eq' ../id}}
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/student/result/{{id}}">Results</a>
+                    {{/when}}
+                    {{/each}}
+                    {{/if}}
+                    <a class="btn btn-outline-dark mt-3 mb-2" href="/student/tutorials/{{id}}">View</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <div class="container mt-4">
+            <div class="p-4 bg-light text-dark rounded-lg text-center">
+                <h4>No tutorials available!</h4>
+            </div>
+        </div>
+        {{/if}}
+        <div class="mt-5 mb-4 d-flex justify-content-center align-items-center">
+            <a href="#tutorial" class="btn btn-outline-dark bg-light"><i class='fas fa-angle-up'></i></a>
+        </div>
+    </div>
+</div>

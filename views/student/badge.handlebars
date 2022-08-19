@@ -1,0 +1,78 @@
+{{> _studentNavBar }}
+<div class="container">
+    <div class="container mt-4"
+        style="width: 85%; height: 65px; background-color:#383a49; border-radius: 10px; font-family: 'Courier New', monospace;">
+        <p style="color: white; font-size: 40px;font-weight: 600; text-align:center;">
+            TOTAL SCORE: {{student.totalScore}}
+        </p>
+    </div>
+    <div class="container row justify-content-center "
+        style="background-color: #96D4D4; color:black;width: 85%; height: 600px; margin: auto; 
+        margin-top: 50px; margin-bottom: 100px; border-radius: 10px; display: flex; align-items: center; justify-content: center; ">
+        <h4 class="mt-3 mb-0 mx-auto" style="text-align:center; color:#343a40">Badges Earned</h4>
+        <div class="square centerd overflow-auto"
+            style="background-color: white; width:90%; height: 480px; border-radius: 10px; margin: 0 0 50px 0; ">
+            <div class="container">
+                <div class="row row-cols-4" style="margin: 20px 0 0 50px">
+                    {{#if badges}}
+                    {{#each badges}}
+                    {{!-- <div class="container" style="margin: 10px;"> --}}
+                        {{!-- <div class="row"> --}}
+                            <div class="col" style="margin: 40px 0px 0px 0px">
+                                <div class="container" style="display:inline-block; height: 95px; width: 70px; background-color:{{color}}; border-radius: 10px; position: relative;
+                                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+                                    <a href="{{posterURL}}" data-title="{{title}}" data-toggle="lightbox">
+                                        <div class="image" style="margin:0; position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%);
+                                        transform: translate(-50%, -50%);">
+                                            <img src="{{posterURL}}" alt="Poster" class="img img-fluid mb-2"
+                                                onerror="this.src='/img/no-image.jpg'">
+                                        </div>
+                                    </a>
+                                </div>
+                                <p class="text-info my-2" style="color:black;">
+                                    <a href="#" data-toggle="popover" title="Points Worth"
+                                        data-content="{{points}}">
+                                    {{badgename}}
+                                    </a>
+                                </p>
+                            </div>
+                            {{!--
+                        </div> --}}
+                        {{!-- </div> --}}
+                    {{/each}}
+                </div>
+            </div>
+
+            {{else}}
+            <h4
+                style="position:absolute; top:50%; left:50%; -ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%); color:#343a40">
+                No Badges Earned</h4>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+{{!-- <div class="modal" id="modal"> --}}
+    {{!-- <div class="modal-header"> --}}
+        {{!-- <button data-close-button class="close-button">&times;</button> --}}
+        {{!-- <div class="title">Create New Badge</div> --}}
+        {{!-- </div> --}}
+    {{!-- <div class="modal-body"> --}}
+        {{!-- Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quis hic voluptatibus voluptatem quod --}}
+        {{!-- eligendi aperiam rem doloremque tenetur eius dolor ullam assumenda deserunt, reprehenderit id rerum --}}
+        {{!-- consequuntur, --}}
+        {{!-- impedit quaerat ipsum? --}}
+        {{!-- </div> --}}
+    {{!-- <div id="overlay"></div> --}}
+    {{!-- </div> --}}
+
+<script>
+
+    $('[data-toggle=confirmation]').confirmation({
+        rootSelector: '[data-toggle=confirmation]',
+    });
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+
+</script>

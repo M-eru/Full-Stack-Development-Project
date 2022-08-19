@@ -1,0 +1,24 @@
+<ul class="navbar-nav ml-auto">
+{{#if user}}
+  <li class="nav-item dropdown">
+    <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fa-solid fa-user fa-xl"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+      <p class="dropdown-item disabled pb-0 mb-0 lead text-capitalize" style="color: #212529;" href="#">{{user.name}}</p>
+      <p class="dropdown-header pt-0 text-capitalize">{{user.role}}</p>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/user/profile">Change Password</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="/user/logout">Logout</a>
+    </div>
+  </li>
+{{else}}
+  <li class="nav-item">
+    <a class="nav-link" href="/user/signup/student">Sign Up</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/user/login/student">Login</a>
+  </li>
+{{/if}}
+</ul>

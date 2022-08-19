@@ -1,0 +1,108 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #96D4D4;">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 creationNav mx-2 my-2">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-decoration-none text-dark" href="/tutor/qns/{{id}}"><i
+                        class='fas fa-angle-left'></i></a>
+            </li>
+        </ul>
+    </div>
+    <div class="mx-auto order-0">
+        <a class="navbar-brand mx-auto" href="#">Open Ended Question Creation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".creationNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 creationNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4 p-4 rounded-lg" style="background-color: #282A35;">
+    <form action="/tutor/oe" method="post" class="needs-validation" novalidate>
+        <div class="container p-4 mb-4 bg-light rounded-lg qn1">
+            <div class="form-group">
+                <input type="hidden" name="id" value="{{id}}"> {{!-- Tutorial ID --}}
+                <label for="qnOrder" class="col-form-label h5">Question Number</label>
+                <input type="number" class="form-control" id="qnOrder" name="qnOrder" placeholder="Question number here..."
+                    required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter a valid number.
+                </div>
+                <label for="qn" class="col-form-label h5">Question:</label>
+                <textarea class="form-control" id="qn" name="qn" placeholder="Question here..." required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter a valid question.
+                </div>
+            </div>
+            <hr class="my-3 border border-dark" />
+            <div class="form-group mb-3">
+                <label for="correctAns" class="col-form-label h5">Correct Answer</label>
+                <textarea type="text" class="form-control" id="correctAns" name="correctAns"
+                    placeholder="Correct answer for question here..." required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter a valid answer.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-danger mr-3" data-toggle="modal"
+                data-target="#warningModal">Exit</button>
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="warningModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to exit?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"><a class="text-decoration-none text-light"
+                        href="/tutor/qns/{{id}}">Exit</a></button>
+                <button type="button" class="btn btn-success" data-dismiss="modal">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Bootstrap form validation --}}
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>

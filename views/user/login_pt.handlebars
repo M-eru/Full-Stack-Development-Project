@@ -1,0 +1,55 @@
+{{!-- Partials --}}
+{{!-- {{> _navbar }} --}}
+
+<div class="container mt-5">
+  {{> _flashmsg }}
+  <div class="row">
+    <div class="col-sm-3 rounded-left" style="background-color: #96D4D4;">
+      <!-- Left section header -->
+      <a href="/"><img src="/img/logo.png" class="mx-auto d-block mt-5" style="width:40%; height: auto;" alt=""></a>
+      <p class="text-center">Tuition Academy</p>
+      <p class="text-center">Simplify your Learning</p>
+    </div>
+    <div class="col-sm-9 rounded-right" style="background-color: #282A35;">
+      <!-- Top-Right Buttons -->
+      <div class="row justify-content-end my-4">
+        <div class="btn-group">
+          <a class="btn disabled" style="background-color: #96D4D4; opacity: 1;" href="#" role="button">Login</a>
+          <a class="btn btn-light mr-4" href="/user/signup/parent-tutor" role="button">Sign Up</a>
+        </div>
+      </div>
+
+      <!-- Form Header -->
+      <div class="row ml-5 my-3">
+        <h5 class="lead" style="color: white; font-size: 2.5rem;">Login</h5>
+      </div>
+
+      <!-- Form -->
+      <div class="row ml-5">
+        <form class="mb-5 needs-validation" method="post" action="" novalidate>
+          <div>
+            <input type="email" name="email" value="{{email}}" class="form-control mt-4" style="width: 300px;"
+              placeholder="Email Address" required>
+            <div class="invalid-feedback">
+              Please enter your email.
+            </div>
+          </div>
+          <div>
+            <input type="password" name="password" class="form-control mt-4" style="width: 300px;"
+              placeholder="Password" required>
+            <div class="invalid-feedback">
+              Please enter your password.
+            </div>
+          </div>
+          <div class="row mt-3 mb-5" style="margin-left: 0;">
+            <a style="color: white; text-decoration: underline;" href="/user/login/student">Login as a Student</a>
+          </div>
+          <button type="submit" class="btn btn-light mb-5">Confirm</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Bootstrap Form Validation --}}
+{{> _formValidate}}

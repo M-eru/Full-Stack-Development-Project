@@ -1,0 +1,28 @@
+{{> _tutorNavBar}}
+<div class="container mt-5">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr class="text-center">
+                <th scope="col">Student Admin Number</th>
+                <th scope="col">Parent Name</th>
+                <th scope="col">Payment Period</th>
+                <th scope="col">Payed? (Y/N)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each studentList}}
+            <tr class="text-center">
+                <th scope="row">{{admno}}</th>
+                <td>{{parent}}</td>
+                {{#if payed}}
+                <td>{{formatDate startDate 'DD MMM YYYY'}} - {{formatDate endDate 'DD MMM YYYY'}}</td>
+                <td>Y</td>
+                {{else}}
+                <td>{{formatDate startDate 'DD MMM YYYY'}} - ?</td>
+                <td>N</td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

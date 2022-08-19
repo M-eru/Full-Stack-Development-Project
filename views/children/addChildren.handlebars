@@ -1,0 +1,59 @@
+{{> _parentNavBar}}
+{{> _flashmsg }}
+<div class="container mt-5">
+    <div class="card card-body">
+        <h2 class="text-center">Add student(s) to view</h2>
+        <br>
+        <form action="" method="post">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-5">
+                        <label class="font-italic">Student's Admin Number</label>
+                    </div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-5">
+                        <label class="font-italic">Student's Password</label>
+                    </div>
+                </div>
+            </div>
+            {{@index}}<div class="input_fields_wrap">
+                <div class="form-group row mb-2">
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-5 mb-4">
+                        <input type="text" class="form-control" id="admNo" name="admNo" maxlength="7"
+                            placeholder="6 numbers + 1 letter" value="{{admNo}}"/>
+                    </div>
+                    <div class="col-10 col-sm-10 col-md-10 col-lg-5 mb-4">
+                        <input type="password" class="form-control" id="childPsd" name="childPsd"
+                            placeholder="Password" value="{{childPsd}}"/>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
+            <button id="add_more_fields" class="btn btn-info float-right">Add More Fields</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var max_fields = 7;                         //maximum input boxes allowed
+        var wrapper = $(".input_fields_wrap");      //Fields wrapper
+        var add_button = $("#add_more_fields");     //Add button ID
+
+        var x = 1;                                  //initlal text box count
+        $(add_button).click(function (e) {
+            e.preventDefault();
+            if (x < max_fields) {                   //max input box allowed
+                x++;                                //text box increment
+                // add input boxes.
+                $(wrapper).append('<div class="form-group row mb-2"><div class="col-10 col-sm-10 col-md-10 col-lg-5 mb-4"><input type="text" class="form-control" id="admNo" name="admNo" maxlength="7" placeholder="6 numbers + 1 letter" value="{{studentAdmNo}}"/></div><div class="col-10 col-sm-10 col-md-10 col-lg-5 mb-4"><input class="form-control" type="password"  id="childPsd" name="childPsd" placeholder="Password" value="{{studentPassword}}"/></div><button class="btn btn-danger col-2 col-sm-2 col-md-2 col-lg-1 mb-4" id="remove_field">Remove</button></div>'); 
+            }
+        });
+
+        //user click on remove text
+        $(wrapper).on("click", "#remove_field", function (e) { 
+            e.preventDefault(); 
+            $(this).parent('div').remove(); x--;
+        })
+    });
+</script>
